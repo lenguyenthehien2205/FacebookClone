@@ -1,0 +1,8 @@
+<div class="relative group cursor-pointer">
+    <ng-content />
+    @if(titleCustom() === 'Tài khoản'){
+        <div class="hidden group-hover:block absolute bg-slate-500 translate-x-1">{{ titleCustom() }}</div>
+    } @else{
+        <div class="hidden group-hover:block absolute bg-slate-500 translate-x-5">{{ titleCustom() }}</div>
+    }
+</div>
