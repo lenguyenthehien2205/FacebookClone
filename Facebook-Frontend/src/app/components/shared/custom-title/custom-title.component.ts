@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output, signal } from '@angular/core';
 
 @Component({
   selector: 'app-custom-title',
@@ -8,5 +8,5 @@ import { Component, input } from '@angular/core';
   styleUrl: './custom-title.component.css'
 })
 export class CustomTitleComponent {
-  titleCustom = input.required();
+  titleCustom = input.required<string>();
 }

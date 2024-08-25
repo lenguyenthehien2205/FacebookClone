@@ -1,8 +1,8 @@
 <div class="flex items-center justify-between h-14 shadow-md bg-white px-4">
-    <!-- search -->
+  <!-- search -->
   <div class="flex w-[300px]">
     <a href="#">
-      <img src="assets/logo.webp" alt="" class="w-10 h-10 mr-2" />
+      <img src="assets/logo.webp" alt="" class="min-w-[40px] h-[40px] mr-2" />
     </a>
     <div class="relative">
       <i
@@ -15,40 +15,61 @@
       />
     </div>
   </div>
-<!-- center-navbar -->
- <div class="flex w-[590px] gap-1">
-   <app-custom-title titleCustom="Trang chủ">
-     <div class="h-14 w-28 flex items-center justify-center">
-       <i class="fa-solid fa-house text-slate-500 text-[22px]"></i>
-     </div>
-   </app-custom-title>
-   <app-custom-title titleCustom="Trang chủ">
-    <div class="h-14 w-28 flex items-center justify-center">
-      <i class="fa-solid fa-house text-slate-500 text-[22px]"></i>
-    </div>
-  </app-custom-title>
-  <app-custom-title titleCustom="Trang chủ">
-    <div class="h-14 w-28 flex items-center justify-center">
-      <i class="fa-solid fa-house text-slate-500 text-[22px]"></i>
-    </div>
-  </app-custom-title>
-  <app-custom-title titleCustom="Trang chủ">
-    <div class="h-14 w-28 flex items-center justify-center">
-      <i class="fa-solid fa-house text-slate-500 text-[22px]"></i>
-    </div>
-  </app-custom-title>
-  <app-custom-title titleCustom="Trang chủ">
-    <div class="h-14 w-28 flex items-center justify-center">
-      <i class="fa-solid fa-house text-slate-500 text-[22px]"></i>
-    </div>
-  </app-custom-title>
- </div>
- <!-- right-navbar -->
- <div class="flex w-[300px]">
-  <app-custom-title titleCustom="Tài khoản">
-    <div class="h-14 w-28 flex items-center justify-center">
-      <i class="fa-solid fa-house"></i>
-    </div>
-  </app-custom-title>
-</div>
+  <!-- center-navbar -->
+  <div class="flex w-[590px] gap-1">
+    @for (item of navItems; track item.name) {
+    <app-custom-title [titleCustom]="item.name">
+      <a
+        href="#"
+        class="h-[50px] w-[100px] flex items-center justify-center"
+        (click)="onSelectNavItem(item.name)"
+        [ngClass]="{
+            'border-primary border-b-[3px]': activeItemNavItem === item.name,
+            'hover:bg-slate-200 rounded-md active:bg-slate-300': activeItemNavItem !== item.name,
+           }"
+      >
+        <i
+          class="text-[22px]"
+          [ngClass]="{
+            'text-primary': activeItemNavItem === item.name,
+            'text-[#65676b]': activeItemNavItem !== item.name
+          }"
+          [class]="item.icon"
+        ></i>
+      </a>
+    </app-custom-title>
+    }
+  </div>
+  <!-- right-navbar -->
+  <div class="flex gap-2 w-[300px] items-center justify-end">
+    @for(item of roundedButtons; track item.name){
+    <app-custom-title [titleCustom]="item.name">
+      <div
+        class="h-[40px] w-[40px] leading-14 flex items-center justify-center rounded-full overflow-hidden"
+        (click)="onSelectButton(item.name)"
+        [ngClass]="{
+          'bg-[#ebf5ff] hover:bg-[#dff0ff] active:bg-[#b4cce3]':
+            activeButton === item.name,
+          'bg-[#e4e6eb] hover:bg-[#dbdbdb] active:bg-[#c1c1c1]':
+            activeButton !== item.name
+        }"
+      >
+        <i
+          [class]="item.icon + ' text-[18px]'"
+          [ngClass]="{
+            'text-primary': activeButton === item.name,
+            'text-black': activeButton !== item.name
+          }"
+        ></i>
+      </div>
+    </app-custom-title>
+    }
+    <app-custom-title titleCustom="Tài khoản">
+      <div
+        class="h-[40px] w-[40px] leading-14 flex items-center justify-center rounded-full overflow-hidden hover:brightness-70"
+      >
+        <img src="assets/avatars/thehien.jpg" alt="" />
+      </div>
+    </app-custom-title>
+  </div>
 </div>
