@@ -29,6 +29,7 @@ export class HeaderComponent {
   ];
   activeItemNavItem: string | null = null;
   activeButton: string | null = null;
+  activeInputSearch: boolean = false;
   onSelectNavItem(name: string) {
     this.activeItemNavItem = name;
   }

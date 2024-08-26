@@ -1,17 +1,34 @@
-<div class="flex items-center justify-between h-14 shadow-md bg-white px-4">
+<div class="relative flex items-center justify-between h-14 shadow-md bg-white px-4">
   <!-- search -->
+   @if(activeInputSearch){
+     <div class="absolute w-[320px] h-[320px] bg-white shadow-lg rounded-md top-0 left-0">
+      <i class="fa-solid fa-arrow-left absolute top-5 left-5 w-[36px] h-[36px] rounded-full hover:bg-slate-300"></i>
+     </div>
+   }
   <div class="flex w-[300px]">
+
     <a href="#">
       <img src="assets/logo.webp" alt="" class="min-w-[40px] h-[40px] mr-2" />
     </a>
     <div class="relative">
-      <i
-        class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-      ></i>
+      @if(!activeInputSearch){
+        <label for="search" class="absolute w-10 h-10 rounded-full top-1/2 -translate-y-1/2 bg-[#f0f2f5]">
+          <i
+            class="fa-solid fa-magnifying-glass text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
+          ></i>
+        </label>
+      }
       <input
         type="text"
-        class="w-60 h-10 pl-9 bg-[#f0f2f5] rounded-full outline-none leading-[10] input-search tracking-tight"
+        id="search"
+        class="xl:block hidden w-60 h-10 pl-10 bg-[#f0f2f5] rounded-full outline-none leading-[10] input-search tracking-tight transition-all duration-200"
+        [ngClass]="{
+          'pl-10': !activeInputSearch,
+          'pl-5': activeInputSearch
+        }"
         placeholder="Tìm kiếm trên Facebook"
+        (focus)="activeInputSearch = true"
+        (blur)="activeInputSearch = false"
       />
     </div>
   </div>
@@ -32,7 +49,7 @@
           class="text-[22px]"
           [ngClass]="{
             'text-primary': activeItemNavItem === item.name,
-            'text-[#65676b]': activeItemNavItem !== item.name
+            'text-icon': activeItemNavItem !== item.name
           }"
           [class]="item.icon"
         ></i>
@@ -66,7 +83,7 @@
     }
     <app-custom-title titleCustom="Tài khoản">
       <div
-        class="h-[40px] w-[40px] leading-14 flex items-center justify-center rounded-full overflow-hidden hover:brightness-70"
+        class="h-[40px] w-[40px] leading-14 flex items-center justify-center rounded-full overflow-hidden hover:brightness-75"
       >
         <img src="assets/avatars/thehien.jpg" alt="" />
       </div>
