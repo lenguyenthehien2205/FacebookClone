@@ -5,6 +5,9 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/shared/header/header.component';
 import { HomeComponent } from './components/home/home.component';
 import { CustomTitleComponent } from "./components/shared/custom-title/custom-title.component";
+import { HistoryComponent } from "./components/shared/header/history/history.component";
+import { RouterOutlet } from '@angular/router';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
@@ -14,7 +17,10 @@ import { CustomTitleComponent } from "./components/shared/custom-title/custom-ti
   ],
   imports: [
     BrowserModule,
-    CustomTitleComponent
+    AppRoutingModule,
+    CustomTitleComponent,
+    HistoryComponent,
+    RouterOutlet
 ],
   providers: [],
   bootstrap: [AppComponent]
