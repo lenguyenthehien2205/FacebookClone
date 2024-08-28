@@ -3,11 +3,34 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
-    background-color: #F0F2F5;
+body {
+  background-color: #f0f2f5;
 }
+
 .input-search::placeholder {
-    @apply font-normal;
-    @apply text-slate-500;
-    @apply text-base;
+  @apply font-normal;
+  @apply text-slate-500;
+  @apply text-base;
+}
+
+.scroll-container {
+  overflow: hidden; 
+}
+
+.scroll-container:hover {
+  overflow: auto; 
+}
+
+.scroll-container::-webkit-scrollbar {
+  width: 8px; 
+  border-radius: 8px; 
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #bcc0c4; 
+  border-radius: 10px; 
 }

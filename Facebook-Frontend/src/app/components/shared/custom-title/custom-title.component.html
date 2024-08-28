@@ -1,4 +1,8 @@
 <div class="relative group cursor-pointer">
-    <ng-content />
-    <div class="invisible group-hover:visible absolute bg-[#0b0b0bcc] h-[33px] px-[10px] leading-[33px] text-center text-white text-[12px] left-1/2 -translate-x-1/2 translate-y-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] whitespace-nowrap">{{ titleCustom() }}</div>
+  <ng-content />
+  <div
+    class="invisible group-hover:visible absolute bg-[#0b0b0bcc] h-[33px] px-[10px] leading-[33px] text-center text-white text-[12px] left-1/2 -translate-x-1/2 translate-y-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-[400ms] whitespace-nowrap z-10"
+  >
+    {{ titleCustom() }}
+  </div>
 </div>

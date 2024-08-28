@@ -21,11 +21,11 @@ export class HeaderComponent {
     },
   ];
   navItems = [
-    { name: 'Trang chủ', icon: 'fa-solid fa-house' },
-    { name: 'Video', icon: 'fa-solid fa-video' },
-    { name: 'Marketplace', icon: 'fa-solid fa-shop' },
-    { name: 'Nhóm', icon: 'fa-solid fa-users' },
-    { name: 'Trò chơi', icon: 'fa-solid fa-gamepad' },
+    { name: 'Trang chủ', icon: 'fa-solid fa-house', url: '' },
+    { name: 'Video', icon: 'fa-solid fa-video', url: 'videos' },
+    { name: 'Marketplace', icon: 'fa-solid fa-shop',url: 'marketplace' },
+    { name: 'Nhóm', icon: 'fa-solid fa-users', url: 'groups' },
+    { name: 'Trò chơi', icon: 'fa-solid fa-gamepad', url: 'game' },
   ];
   activeItemNavItem: string | null = null;
   activeButton: string | null = null;

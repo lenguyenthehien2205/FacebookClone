@@ -1,0 +1,21 @@
+<div
+  class="lg:w-[360px] w-full h-full scroll-container overflow-y-scroll sticky top-0 lg:block hidden px-2"
+>
+  <a routerLink="/videos">
+    <div class="w-full h-[52px] hover:bg-hover flex items-center gap-3 px-2 rounded-lg">
+      <img src="assets/avatars/thehien.jpg" alt="Avatar" class="rounded-full w-[36px] h-[36px]"/>
+      <span class="font-medium text-[15px]">Thế Hiển</span>
+    </div>
+  </a>
+  @for(item of navItems; track item.name){
+    <a [routerLink]="item.url">
+        <div class="w-full h-[52px] hover:bg-hover flex items-center gap-3 px-2 rounded-lg">
+          <span class="size-[36px] flex items-center justify-center">
+              <i [class]="item.icon +' text-[22px] text-[#2da4d8]'"></i>
+          </span>
+          <span class="font-medium text-[15px]">{{ item.name }}</span>
+        </div>
+      </a>
+  }
+
+</div>

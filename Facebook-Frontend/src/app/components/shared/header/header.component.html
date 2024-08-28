@@ -4,8 +4,8 @@
     <app-history class="absolute w-[320px] h-[320px] bg-white shadow-lg rounded-md top-0 left-0 z-10" (closeHistory)="isHistoryVisible = false" id="history"/>
    }
   <div class="flex w-[300px]">
-    <a href="#">
-      <img src="assets/logo.webp" alt="" class="min-w-[40px] h-[40px] mr-2" />
+    <a routerLink="">
+      <img src="assets/logo.webp" alt="Facebook's logo" class="min-w-[40px] h-[40px] mr-2" />
     </a>
     <div class="relative">
       @if(!isHistoryVisible){
@@ -33,7 +33,7 @@
     @for (item of navItems; track item.name) {
     <app-custom-title [titleCustom]="item.name">
       <a
-        href="#"
+        [routerLink]="item.url"
         class="h-[50px] w-[100px] flex items-center justify-center"
         (click)="onSelectNavItem(item.name)"
         [ngClass]="{
