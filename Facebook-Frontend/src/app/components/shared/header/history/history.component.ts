@@ -6,6 +6,11 @@ import { Component, output } from '@angular/core';
   styleUrl: './history.component.css'
 })
 export class HistoryComponent {
+  dataArray: string[] = Array.from({ length: 100 }, (_, i) => `Item #${i + 1}`); // Mảng dữ liệu gốc
+
+  handleItemsLoaded(items: string[]): void {
+    console.log('Items loaded:', items); // Xử lý dữ liệu đã tải
+  }
   closeHistory = output<void>();
   onClose(){
     this.closeHistory.emit();
