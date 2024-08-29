@@ -1,19 +1,32 @@
-<div class="relative flex items-center justify-between h-14 shadow-md bg-white px-4">
+<div
+  class="relative flex items-center justify-between h-14 shadow-md bg-white px-4"
+>
   <!-- search -->
-   @if(isHistoryVisible){
-    <app-history class="absolute w-[320px] h-[320px] bg-white shadow-lg rounded-md top-0 left-0 z-10" (closeHistory)="isHistoryVisible = false" id="history"/>
-   }
-  <div class="flex w-[300px]">
+  @if(isHistoryVisible){
+  <app-history
+    class="absolute w-[320px] h-[320px] bg-white shadow-lg rounded-md top-0 left-0 z-10"
+    (closeHistory)="isHistoryVisible = false"
+    id="history"
+  />
+  }
+  <div class="flex w-[360px]">
     <a routerLink="">
-      <img src="assets/logo.webp" alt="Facebook's logo" class="min-w-[40px] h-[40px] mr-2" />
+      <img
+        src="assets/logo.webp"
+        alt="Facebook's logo"
+        class="min-w-[40px] h-[40px] mr-2"
+      />
     </a>
     <div class="relative">
       @if(!isHistoryVisible){
-        <label for="search" class="absolute w-10 h-10 rounded-full top-1/2 -translate-y-1/2 bg-[#f0f2f5] z-10">
-          <i
-            class="fa-solid fa-magnifying-glass text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
-          ></i>
-        </label>
+      <label
+        for="search"
+        class="absolute w-10 h-10 rounded-full top-1/2 -translate-y-1/2 bg-[#f0f2f5] z-10"
+      >
+        <i
+          class="fa-solid fa-magnifying-glass text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
+        ></i>
+      </label>
       }
       <input
         type="text"
@@ -28,33 +41,36 @@
       />
     </div>
   </div>
-  <!-- center-navbar -->
-  <div class="md:flex w-[590px] gap-1 hidden">
-    @for (item of navItems; track item.name) {
-    <app-custom-title [titleCustom]="item.name">
-      <a
-        [routerLink]="item.url"
-        class="h-[50px] w-[100px] flex items-center justify-center"
-        (click)="onSelectNavItem(item.name)"
+<!-- center-navbar -->
+<div class="lg:flex w-[590px] gap-1 hidden mr-4">
+  @for (item of navItems; track item.name) {
+  <app-custom-title [titleCustom]="item.name">
+    <app-button
+      [routerLink]="item.url"
+      [isActive]="activeItemNavItem === item.name"
+      (buttonClick)="onSelectNavItem(item.name)"
+      styleClass="w-[115px] h-[50px] relative"
+    >
+      <i
+        class="text-[22px]"
         [ngClass]="{
-            'border-primary border-b-[3px]': activeItemNavItem === item.name,
-            'hover:bg-slate-200 rounded-md active:bg-slate-300': activeItemNavItem !== item.name,
-           }"
-      >
-        <i
-          class="text-[22px]"
-          [ngClass]="{
-            'text-primary': activeItemNavItem === item.name,
-            'text-icon': activeItemNavItem !== item.name
-          }"
-          [class]="item.icon"
-        ></i>
-      </a>
-    </app-custom-title>
-    }
-  </div>
+          'text-primary': activeItemNavItem === item.name,
+          'text-grey': activeItemNavItem !== item.name
+        }"
+        [class]="item.icon"
+      ></i>
+      <div
+        class="absolute -bottom-1 left-0 w-full h-[4px] transition-all duration-200"
+        [ngClass]="{
+          'bg-primary': activeItemNavItem === item.name
+        }"
+      ></div>
+    </app-button>
+  </app-custom-title>
+  }
+</div>
   <!-- right-navbar -->
-  <div class="flex gap-2 w-[300px] items-center justify-end">
+  <div class="flex gap-2 w-[360px] items-center justify-end">
     @for(item of roundedButtons; track item.name){
     <app-custom-title [titleCustom]="item.name">
       <div
@@ -63,7 +79,7 @@
         [ngClass]="{
           'bg-[#ebf5ff] hover:bg-[#dff0ff] active:bg-[#b4cce3]':
             activeButton === item.name,
-          'bg-[#e4e6eb] hover:bg-[#dbdbdb] active:bg-[#c1c1c1]':
+          'bg-grey2 hover:bg-[#dbdbdb] active:bg-[#c1c1c1]':
             activeButton !== item.name
         }"
       >

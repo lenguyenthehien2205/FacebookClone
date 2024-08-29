@@ -14,23 +14,20 @@ body {
 }
 
 .scroll-container {
-  overflow: hidden; 
-}
-
-.scroll-container:hover {
-  overflow: auto; 
+  overflow: auto;
 }
 
 .scroll-container::-webkit-scrollbar {
-  width: 8px; 
-  border-radius: 8px; 
-}
-
-.scroll-container::-webkit-scrollbar-track {
-  background: transparent; 
+  width: 8px;
+  border-radius: 8px;
 }
 
 .scroll-container::-webkit-scrollbar-thumb {
-  background: #bcc0c4; 
-  border-radius: 10px; 
+  background: transparent;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.scroll-container:hover::-webkit-scrollbar-thumb {
+  background: #bcc0c4;
 }

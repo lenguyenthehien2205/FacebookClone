@@ -1,4 +1,5 @@
-import { Component, computed, ElementRef, HostListener, inject, input, signal, ViewChild } from '@angular/core';
+import { Component, HostListener} from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -27,6 +28,7 @@ export class HeaderComponent {
     { name: 'Nhóm', icon: 'fa-solid fa-users', url: 'groups' },
     { name: 'Trò chơi', icon: 'fa-solid fa-gamepad', url: 'game' },
   ];
+  
   activeItemNavItem: string | null = null;
   activeButton: string | null = null;
   // showHistory: boolean = false;
@@ -53,6 +55,15 @@ export class HeaderComponent {
       this.isHistoryVisible = true;
     } else {
       this.isHistoryVisible = false;
+    }
+  }
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    // Lấy phần đường dẫn phía sau hostname (ví dụ: /path/to/page)
+    const pathAfterHostname = this.router.url;
+    if(pathAfterHostname === ''){
+      this.activeItemNavItem = 'Trang chủ';
     }
   }
 }

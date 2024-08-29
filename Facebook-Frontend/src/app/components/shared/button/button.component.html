@@ -1,0 +1,10 @@
+<a
+  [routerLink]="routerLink()"
+  class="flex items-center justify-center {{ styleClass() }}"
+  (click)="onClick()"
+  [ngClass]="{
+    'hover:bg-slate-200 rounded-md active:bg-slate-300': !isActive()
+  }"
+>
+  <ng-content></ng-content>
+</a>
