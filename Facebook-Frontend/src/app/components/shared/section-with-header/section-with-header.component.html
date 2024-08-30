@@ -1,6 +1,6 @@
-<div class="border-slate-300 border-t-[1px] my-[10px]">
-    <div class="flex items-center justify-between">
-        <h1 class="text-grey text-[17px] font-medium pl-[9px] my-3">{{ header() }}</h1>
+<div>
+    <div class="flex items-center justify-between mt-[8px]">
+        <ng-content select="[header]"></ng-content>
         <ng-content select="[options]"></ng-content>
     </div>
     <ng-content select="[content]"></ng-content>

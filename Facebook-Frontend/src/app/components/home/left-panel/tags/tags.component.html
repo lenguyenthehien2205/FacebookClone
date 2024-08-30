@@ -1,0 +1,17 @@
+<div class="pb-[10px]">
+    <a routerLink="/account">
+      <app-card styleClass="h-[52px] gap-3 px-2">
+        <img visual src="assets/avatars/thehien.jpg" alt="Avatar" class="rounded-full w-[36px] h-[36px]"/>
+        <span text class="font-medium text-[15px]">Thế Hiển</span>
+      </app-card>
+    </a>
+    @for(item of navItems; track item.name){
+        <app-tag-item [url]="item.url" [name]="item.name" [icon]="item.icon"/>
+    }
+    <app-card styleClass="h-[52px] gap-3 px-2">
+      <span visual class="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-grey2 shadow-lg">
+        <i class="fa-solid fa-angle-down text-[17px] text-text"></i>
+      </span>
+      <span text class="font-medium text-[15px]">Xem thêm</span>
+    </app-card>
+  </div>

@@ -14,6 +14,13 @@ import { SectionWithHeaderComponent } from './components/shared/section-with-hea
 import { PostPanelComponent } from './components/home/post-panel/post-panel.component';
 import { StoryComponent } from './components/home/post-panel/story/story.component';
 import { ButtonComponent } from './components/shared/button/button.component';
+import { NewStoryComponent } from './components/home/post-panel/new-story/new-story.component';
+import { RightPanelComponent } from './components/home/right-panel/right-panel.component';
+import { RoundedButtonComponent } from './components/shared/header/rounded-button/rounded-button.component';
+import { SponsoredComponent } from './components/home/right-panel/sponsored/sponsored.component';
+import { SponsoredItemComponent } from './components/home/right-panel/sponsored/sponsored-item/sponsored-item.component';
+import { TagItemComponent } from './components/home/left-panel/tags/tag-item/tag-item.component';
+import { TagsComponent } from './components/home/left-panel/tags/tags.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +36,13 @@ import { ButtonComponent } from './components/shared/button/button.component';
     ButtonComponent,
     CardComponent,
     StoryComponent,
+    NewStoryComponent,
+    RightPanelComponent,
+    RoundedButtonComponent,
+    SponsoredComponent,
+    SponsoredItemComponent,
+    TagItemComponent,
+    TagsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-story',
@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrl: './story.component.css'
 })
 export class StoryComponent {
-
+  avatar = input.required<string>();
+  name = input.required<string>();
+  routerLink = input.required<string>();
+  isOnline = input.required<boolean>();
 }

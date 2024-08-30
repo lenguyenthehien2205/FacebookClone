@@ -1,5 +1,6 @@
 import { Component, HostListener} from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -57,13 +58,46 @@ export class HeaderComponent {
       this.isHistoryVisible = false;
     }
   }
+  private routerSubscription!: Subscription;
+
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    // Lấy phần đường dẫn phía sau hostname (ví dụ: /path/to/page)
-    const pathAfterHostname = this.router.url;
-    if(pathAfterHostname === ''){
-      this.activeItemNavItem = 'Trang chủ';
+    // Lắng nghe sự kiện điều hướng hoàn tất
+    this.routerSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        const pathAfterHostname = this.router.url;
+        console.log(pathAfterHostname);
+
+        // Cập nhật activeItemNavItem dựa trên URL
+        switch (pathAfterHostname) {
+          case '/':
+            this.activeItemNavItem = 'Trang chủ';
+            break;
+          case '/videos':
+            this.activeItemNavItem = 'Video';
+            break;
+          case '/marketplace':
+            this.activeItemNavItem = 'Marketplace';
+            break;
+          case '/groups':
+            this.activeItemNavItem = 'Nhóm';
+            break;
+          case '/game':
+            this.activeItemNavItem = 'Trò chơi';
+            break;
+          default:
+            this.activeItemNavItem = '';
+            break;
+        }
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    // Hủy đăng ký để tránh rò rỉ bộ nhớ
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
     }
   }
 }

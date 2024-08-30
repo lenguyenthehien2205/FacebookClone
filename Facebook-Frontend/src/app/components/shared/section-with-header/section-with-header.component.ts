@@ -6,5 +6,4 @@ import { Component, input } from '@angular/core';
   styleUrl: './section-with-header.component.css'
 })
 export class SectionWithHeaderComponent {
-  header = input<string>();
 }
