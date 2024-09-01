@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter, input, output } from '@angular/core';
 
 @Component({
-  selector: 'app-button',
-  templateUrl: './button.component.html',
-  styleUrls: ['./button.component.css']
+  selector: 'app-navbar-button',
+  templateUrl: './navbar-button.component.html',
+  styleUrls: ['./navbar-button.component.css']
 })
-export class ButtonComponent {
+export class NavbarButtonComponent {
    routerLink = input.required<string>();
    isActive = input.required<boolean>();
    styleClass = input<string>();

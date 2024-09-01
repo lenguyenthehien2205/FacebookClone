@@ -1,0 +1,13 @@
+<div class="flex justify-between px-4 pt-[12px] pb-[10px] border-t-[1px] border-[#e0e3e7]">
+    <div class="flex items-center gap-[22px]">   
+        <div class="flex relative">
+            <img src="assets/icons/like.svg" alt="" class="size-[22px] z-10 border-[2px] border-white rounded-full cursor-pointer">
+            <img src="assets/icons/haha.svg" alt="" class="size-[22px] absolute left-[18px] z-0 border-[2px] border-white rounded-full cursor-pointer">
+        </div>
+        <div class="text-[15px] text-grey hover:underline cursor-pointer">{{interactionCount()}}</div>
+    </div>
+    <div class="flex items-center gap-[12px]">
+        <span class="text-[15px] text-grey hover:underline cursor-pointer">{{commentCount()}} bình luận</span>
+        <span class="text-[15px] text-grey hover:underline cursor-pointer">{{shareCount()}} lượt chia sẻ</span>
+    </div>
+</div>

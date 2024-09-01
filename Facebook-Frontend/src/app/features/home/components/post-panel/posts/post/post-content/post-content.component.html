@@ -1,0 +1,10 @@
+<div class="px-4 pb-3 border-b-[1px] border-[#e0e3e7]">
+    {{ content() }}
+</div>
+<div>
+    @for (media of media(); track media) {
+        <a routerLink="/account">
+            <img [src]="'assets/post-image/'+media" alt="" class="w-full object-contain">
+        </a>
+    }
+</div>

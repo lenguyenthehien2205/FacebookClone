@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { VideosComponent } from './components/videos/videos.component';
-import { NotFoundComponent } from './components/not-found/not-found.component';
-import { HomeComponent } from './components/home/home.component';
-import { HistoryComponent } from './components/shared/header/history/history.component';
+import { VideosComponent } from './features/videos/videos.component';
+import { NotFoundComponent } from './features/not-found/not-found.component';
+import { HomeComponent } from './features/home/home.component';
+import { HistoryComponent } from './core/header/components/history/history.component';
 
 export const routes: Routes = [
   {

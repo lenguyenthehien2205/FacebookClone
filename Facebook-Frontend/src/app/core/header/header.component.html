@@ -45,7 +45,7 @@
 <div class="lg:flex w-[590px] gap-1 hidden mr-4">
   @for (item of navItems; track item.name) {
   <app-custom-title [titleCustom]="item.name">
-    <app-button
+    <app-navbar-button
       [routerLink]="item.url"
       [isActive]="activeItemNavItem === item.name"
       (buttonClick)="onSelectNavItem(item.name)"
@@ -65,7 +65,7 @@
           'bg-primary': activeItemNavItem === item.name
         }"
       ></div>
-    </app-button>
+    </app-navbar-button>
   </app-custom-title>
   }
 </div>

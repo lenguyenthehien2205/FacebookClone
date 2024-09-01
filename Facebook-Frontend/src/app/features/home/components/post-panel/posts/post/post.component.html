@@ -1,0 +1,7 @@
+<div class="w-full bg-white rounded-lg shadow-md">
+    <app-post-header [avatar]="avatar()" [username]="username()" [time]="time()" [privacy]="privacy()"></app-post-header>
+    <app-post-content [content]="content()" [media]="media()"></app-post-content>
+    <app-post-interactions [interactionCount]="interactionCount()" [commentCount]="commentCount()" [shareCount]="shareCount()"></app-post-interactions>
+    <div class="w-[calc(100%-28px)] h-[1px] bg-[#e0e3e7] mx-auto"></div>
+    <app-post-actions></app-post-actions>
+</div>

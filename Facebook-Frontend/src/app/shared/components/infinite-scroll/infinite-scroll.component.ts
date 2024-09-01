@@ -25,9 +25,18 @@ export class InfiniteScrollComponent implements OnInit {
     this.currentIndex = this.initialLoad; // Cập nhật chỉ số hiện tại sau khi tải dữ liệu ban đầu
   }
 
+  // onScroll(event: Event): void {
+  //   const element = event.target as HTMLElement;
+  //   if (element.scrollHeight - element.scrollTop <= element.clientHeight + 1) {
+  //     this.loadMoreData();
+  //   }
+  // }
   onScroll(event: Event): void {
     const element = event.target as HTMLElement;
-    if (element.scrollHeight - element.scrollTop <= element.clientHeight + 1) {
+    const scrollPosition = element.scrollTop + element.clientHeight;
+    const scrollThreshold = element.scrollHeight / 2;
+  
+    if (scrollPosition >= scrollThreshold) {
       this.loadMoreData();
     }
   }

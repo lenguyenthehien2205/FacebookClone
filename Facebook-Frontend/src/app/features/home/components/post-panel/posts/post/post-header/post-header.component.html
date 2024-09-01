@@ -1,0 +1,19 @@
+<div class="w-full flex items-center justify-between px-4 pt-3 pb-2">
+    <div class="flex items-center gap-2">
+        <a routerLink="/account" class="group">
+            <img [src]="'assets/avatars/' + avatar()" alt="" class="w-[40px] h-[40px] rounded-full group-hover:brightness-[0.85]">
+        </a>
+        <div class="flex flex-col">
+            <a routerLink="/account" class="text-text text-[15px] font-medium hover:underline">{{ username() }}</a>
+            <span class="text-grey text-[13px] font-medium">{{ time() }} · <i [ngClass]="getPrivacyIcon(privacy()) + ' text-[12px]'"></i></span>
+        </div>
+    </div>
+    <div class="flex items-center">
+        <span class="size-[36px] leading-[36px] text-center hover:bg-hover rounded-full cursor-pointer">
+            <i class="fa-solid fa-ellipsis text-grey text-[20px]"></i>
+        </span>
+        <span class="size-[36px] leading-[36px] text-center hover:bg-hover rounded-full cursor-pointer">
+            <i class="fa-solid fa-xmark text-grey text-[20px]"></i>
+        </span>
+    </div>
+</div>
