@@ -1,0 +1,12 @@
+<app-section-with-header class="shortcuts">
+    <span header class="text-grey text-[17px] font-medium pl-[9px] leading-[37px]">Lối tắt của bạn</span>
+    <span options class="edit text-primary h-[37px] px-2 hover:bg-hover leading-[37px] rounded-md cursor-pointer tracking-tight hidden" >
+      Chỉnh sửa
+    </span>
+    <div content>
+      @for (item of groupItems; track item.name) {
+        <app-shortcut-item [url]="item.url" [image]="item.image" [name]="item.name"></app-shortcut-item>
+      }
+      <app-more-action-item [iconClass]="'fa-solid fa-angle-down'" [actionTitle]="'Xem thêm'" ></app-more-action-item>
+    </div>
+  </app-section-with-header>

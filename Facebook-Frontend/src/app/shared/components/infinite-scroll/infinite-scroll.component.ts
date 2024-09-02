@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { Post } from 'src/app/features/home/components/post-panel/posts/post/post-model';
 
 @Component({
   selector: 'app-infinite-scroll',
@@ -6,12 +7,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrl: './infinite-scroll.component.css'
 })
 export class InfiniteScrollComponent implements OnInit {
-  @Input() itemsArray: string[] = []; // Mảng dữ liệu
+  @Input() itemsArray: any[] = []; // Mảng dữ liệu
   @Input() initialLoad: number = 20; // Số lượng giá trị ban đầu
   @Input() itemsPerLoad: number = 5; // Số lượng giá trị mỗi lần tải
-  @Output() itemsLoaded = new EventEmitter<string[]>(); // Sự kiện để phát ra dữ liệu đã tải
+  @Input() itemTemplate!: TemplateRef<any>; 
+  @Output() itemsLoaded = new EventEmitter<any[]>(); // Sự kiện để phát ra dữ liệu đã tải
 
-  items: string[] = []; // Danh sách các mục được hiển thị
+  items: any[] = []; // Danh sách các mục được hiển thị
   isLoading: boolean = false; // Biến để kiểm soát trạng thái tải thêm dữ liệu
   currentIndex: number = 0; // Chỉ số theo dõi vị trí hiện tại trong mảng `itemsArray`
 
@@ -47,7 +49,7 @@ export class InfiniteScrollComponent implements OnInit {
     this.isLoading = true;
     setTimeout(() => {
       // Lấy thêm các mục từ `itemsArray`
-      const newItems: string[] = this.itemsArray.slice(this.currentIndex, this.currentIndex + this.itemsPerLoad);
+      const newItems: any[] = this.itemsArray.slice(this.currentIndex, this.currentIndex + this.itemsPerLoad);
       this.items = [...this.items, ...newItems]; // Kết hợp các mục mới với danh sách hiện tại
       this.currentIndex += this.itemsPerLoad; // Cập nhật chỉ số hiện tại
       this.isLoading = false; // Đặt lại trạng thái sau khi tải xong

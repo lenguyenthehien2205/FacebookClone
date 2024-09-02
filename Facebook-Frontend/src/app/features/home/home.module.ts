@@ -11,9 +11,6 @@ import { SponsoredComponent } from "./components/right-panel/sponsored/sponsored
 import { TagsComponent } from "./components/left-panel/tags/tags.component";
 import { TagItemComponent } from "./components/left-panel/tags/tag-item/tag-item.component";
 import { SponsoredItemComponent } from "./components/right-panel/sponsored/sponsored-item/sponsored-item.component";
-import { CardComponent } from "../../shared/components/card/card.component";
-import { SectionWithHeaderComponent } from "../../shared/components/section-with-header/section-with-header.component";
-import { InfiniteScrollComponent } from '../../shared/components/infinite-scroll/infinite-scroll.component';
 import { YourMindComponent } from './components/post-panel/your-mind/your-mind.component';
 import { StoriesComponent } from './components/post-panel/stories/stories.component';
 import { PostsComponent } from './components/post-panel/posts/posts.component';
@@ -22,6 +19,14 @@ import { PostHeaderComponent } from './components/post-panel/posts/post/post-hea
 import { PostContentComponent } from './components/post-panel/posts/post/post-content/post-content.component';
 import { PostInteractionsComponent } from './components/post-panel/posts/post/post-interactions/post-interactions.component';
 import { PostActionsComponent } from './components/post-panel/posts/post/post-actions/post-actions.component';
+import { ShortcutsComponent } from './components/left-panel/shortcuts/shortcuts.component';
+import { ShortcutItemComponent } from './components/left-panel/shortcuts/shortcut-item/shortcut-item.component';
+import { ContactsComponent } from './components/right-panel/contacts/contacts.component';
+import { ContactItemComponent } from './components/right-panel/contacts/contact-item/contact-item.component';
+import { BirthdayComponent } from './components/right-panel/birthday/birthday.component';
+import { GroupChatComponent } from './components/right-panel/group-chat/group-chat.component';
+import { GroupChatItemComponent } from './components/right-panel/group-chat/group-chat-item/group-chat-item.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -35,9 +40,6 @@ import { PostActionsComponent } from './components/post-panel/posts/post/post-ac
         TagsComponent,
         TagItemComponent,
         SponsoredItemComponent,
-        CardComponent,
-        SectionWithHeaderComponent,
-        InfiniteScrollComponent,
         YourMindComponent,
         StoriesComponent,
         PostsComponent,
@@ -45,11 +47,19 @@ import { PostActionsComponent } from './components/post-panel/posts/post/post-ac
         PostHeaderComponent,
         PostContentComponent,
         PostInteractionsComponent,
-        PostActionsComponent
+        PostActionsComponent,
+        ShortcutsComponent,
+        ShortcutItemComponent,
+        ContactsComponent,
+        ContactItemComponent,
+        BirthdayComponent,
+        GroupChatComponent,
+        GroupChatItemComponent
     ],
     imports: [
         CommonModule,
-        RouterModule
+        RouterModule,
+        SharedModule
     ],
     exports: [
         HomeComponent

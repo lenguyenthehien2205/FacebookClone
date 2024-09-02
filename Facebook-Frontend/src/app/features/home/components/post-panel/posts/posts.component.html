@@ -1,5 +1,15 @@
 <div class="flex flex-col gap-4">
-    @for (post of posts(); track post.id) {
-        <app-post [avatar]="post.avatar" [username]="post.username" [time]="post.time" [media]="post.media" [content]="post.content" [privacy]="post.privacy" [interactionCount]="post.interactionCount" [commentCount]="post.commentCount" [shareCount]="post.shareCount"></app-post>
-    }
+  @for (post of posts(); track post.id) {
+  <app-post
+    [avatar]="post.avatar"
+    [username]="post.username"
+    [time]="post.time"
+    [media]="post.media"
+    [content]="post.content"
+    [privacy]="post.privacy"
+    [interactionCount]="post.interactionCount"
+    [commentCount]="post.commentCount"
+    [shareCount]="post.shareCount"
+  ></app-post>
+  }
 </div>

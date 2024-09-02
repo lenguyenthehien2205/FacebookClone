@@ -1,0 +1,11 @@
+<app-section-with-header>
+    <span header class="text-[17px] text-grey font-medium pl-2 pb-2">
+        Nhóm chat
+    </span>
+    <div content>
+        <app-group-chat-item image="thehien.jpg" groupName="Thế Hiển" [isOnline]="true"></app-group-chat-item>
+        <app-group-chat-item image="thanhkhiem.jpg" groupName="Thành Khiêm" [isOnline]="true"></app-group-chat-item>
+        <app-group-chat-item image="thanhkhiem.jpg" groupName="Thành Khiêm" [isOnline]="false"></app-group-chat-item>
+        <app-more-action-item [iconClass]="'fa-solid fa-plus'" [actionTitle]="'Tạo nhóm chat'" ></app-more-action-item>
+    </div>
+</app-section-with-header>

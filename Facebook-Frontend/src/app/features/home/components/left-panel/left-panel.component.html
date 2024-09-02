@@ -1,29 +1,7 @@
 <div
-  class="h-full scroll-container overflow-y-scroll lg:block hidden px-2 sticky top-0"
+  class="h-full scroll-container overflow-y-scroll lg:block hidden px-2 sticky top-0 pt-4"
 >
- <app-tags />
- <div class="w-[calc(100%-16px)] h-[1px] bg-slate-300 mx-auto"></div>
-<!-- shortcuts -->
-  <app-section-with-header class="shortcuts">
-    <span header class="text-grey text-[17px] font-medium pl-[9px] leading-[37px]">Lối tắt của bạn</span>
-    <span options class="edit text-primary h-[37px] px-2 hover:bg-hover leading-[37px] rounded-md cursor-pointer tracking-tight hidden" >
-      Chỉnh sửa
-    </span>
-    <div content>
-      @for (item of groupItems; track item.name) {
-        <a [routerLink]="item.url">
-          <app-card styleClass="h-[52px] gap-3 px-2">
-            <img visual [src]="item.image" alt="Avatar" class="rounded-lg w-[36px] h-[36px]"/>
-            <span text class="font-medium text-[15px]">{{ item.name }}</span>
-          </app-card>
-        </a>
-      }
-      <app-card styleClass="h-[52px] gap-3 px-2">
-        <span visual class="w-[36px] h-[36px] flex items-center justify-center rounded-full bg-grey2 shadow-lg">
-          <i class="fa-solid fa-angle-down text-[17px] text-text"></i>
-        </span>
-        <span text class="font-medium text-[15px]">Xem thêm</span>
-      </app-card>
-    </div>
-  </app-section-with-header>
+  <app-tags />
+  <div class="w-[calc(100%-16px)] h-[1px] bg-slate-300 mx-auto"></div>
+  <app-shortcuts />
 </div>

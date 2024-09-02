@@ -6,5 +6,5 @@ import { Component, input, Input } from '@angular/core';
   styleUrls: ['./card.component.css']
 })
 export class CardComponent {
-  styleClass = input.required<string>();
+  styleClass = input<string>();
 }
