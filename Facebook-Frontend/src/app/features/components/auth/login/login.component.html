@@ -1,0 +1,9 @@
+<div class="relative flex lg:flex-row flex-col gap-[24px] lg:gap-[245px] mt-[20px] lg:mt-0 mb-[100px] lg:mb-0 justify-center items-center w-full h-screen">
+    <app-recent-account></app-recent-account>
+    <app-login-form (createNewAccount)="onShowRegisterForm()"></app-login-form>
+    <app-register 
+        class="absolute top-0 left-0 bottom-0 right-0 transition-all duration-300" 
+        [ngClass]="{'opacity-0 pointer-events-none': !showRegisterForm, 'opacity-100': showRegisterForm}"
+        (closeRegisterForm)="onHideRegisterForm()">
+    </app-register>
+</div>

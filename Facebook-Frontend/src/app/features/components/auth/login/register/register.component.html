@@ -1,0 +1,57 @@
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center justify-center h-screen bg-white/50" [ngClass]="{'invalid-date': registerForm.errors?.['invalidDate'] || registerForm.errors?.['invalidLeapYear'] }">
+    <div class="w-[432px] h-[550px] bg-white rounded-lg shadow-around">
+        <div class="flex justify-between px-[16px] py-[10px] pb-[12px] border-b border-slate-200">
+            <div>
+                <h1 class="text-text text-[32px] font-bold">Đăng ký</h1>
+                <span class="text-[#606770] text-[15px] font-normal">Nhanh chóng và dễ dàng.</span>
+            </div>
+            <i class="fa-solid fa-xmark text-[25px] text-grey cursor-pointer" (click)="onCloseRegisterForm()"></i>
+        </div>
+        <div class="flex flex-col items-center justify-center p-[16px] gap-[10px]">
+            <div class="w-full h-[40px] rounded-lg flex gap-[17px] items-center justify-center">
+                <input formControlName="lastName" type="text" class="w-full h-[40px] border border-slate-200 rounded-md px-[10px] bg-[#f5f6f7] outline-none" placeholder="Họ">
+                <input formControlName="firstName" type="text" class="w-full h-[40px] border border-slate-200 rounded-md px-[10px] bg-[#f5f6f7] outline-none" placeholder="Tên">
+            </div>
+            <input formControlName="phoneNumberOrEmail" type="text" class="w-full h-[40px] border border-slate-200 rounded-md px-[10px] bg-[#f5f6f7] outline-none" placeholder="Số di động hoặc email">
+            <input formControlName="password" type="password" class="w-full h-[40px] border border-slate-200 rounded-md px-[10px] bg-[#f5f6f7] outline-none" placeholder="Mật khẩu mới">
+            <div class="w-full h-[40px] rounded-lg flex flex-col justify-center mt-[12px]">
+                <label for="" class="text-[12px] font-normal text-grey mb-[2px]">Ngày sinh</label>
+                <div class="flex gap-[17px] items-center justify-center">
+                    <select formControlName="day" id="day" class="flex-1 w-[100px] h-[36px] border border-slate-200 rounded-md px-[10px] outline-none">
+                        @for (day of days; track day) { 
+                            <option [value]="day">{{ day }}</option>
+                        }
+                    </select>
+                    <select formControlName="month" id="month" class="flex-1 w-[100px] h-[36px] border border-slate-200 rounded-md px-[10px] outline-none">
+                        @for (month of months; track month) { 
+                            <option [value]="month.value">{{ month.name }}</option>
+                        }
+                    </select>
+                    <select formControlName="year" id="year" class="flex-1 w-[100px] h-[36px] border border-slate-200 rounded-md px-[10px] outline-none">
+                        @for (year of years; track year) { 
+                            <option [value]="year">{{ year }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="w-full h-[40px] rounded-lg flex flex-col justify-center mt-[12px] mb-[6px]">
+                <label for="" class="text-[12px] font-normal text-grey mb-[2px]">Giới tính</label>
+                <div class="flex gap-[17px] items-center justify-center">
+                    <label for="" class="flex items-center justify-between w-[100px] h-[36px] border border-slate-200 rounded-md px-[10px] outline-none w-[105px]">Nữ
+                        <input formControlName="gender" type="radio" value="female">
+                    </label>
+                    <label for="" class="flex items-center justify-between w-[100px] h-[36px] border border-slate-200 rounded-md px-[10px] outline-none w-[105px]">Nam
+                        <input formControlName="gender" type="radio" value="male">
+                    </label>
+                    <label for="" class="flex flex-1 items-center justify-between w-[100px] h-[36px] border border-slate-200 rounded-md px-[10px] outline-none">Tùy chỉnh
+                        <input formControlName="gender" type="radio" value="custom">
+                    </label>
+                </div>
+            </div>
+            <p class="text-[11px] text-grey leading-[14px]">Những người dùng dịch vụ của chúng tôi có thể đã tải thông tin liên hệ của bạn lên Facebook. Tìm hiểu thêm.</p>
+            <p class="text-[11px] text-grey leading-[14px]">Bằng cách nhấp vào Đăng ký, bạn đồng ý với Điều khoản, Chính sách quyền riêng tư và Chính sách cookie của chúng tôi. Bạn có thể nhận được thông báo của chúng tôi qua SMS và hủy nhận bất kỳ lúc nào.
+            </p>
+            <button class="w-[194px] h-[36px] bg-green hover:bg-green/90 font-bold text-[20px] text-white rounded-md mt-[12px]">Đăng ký</button>
+        </div>
+    </div>
+</form>

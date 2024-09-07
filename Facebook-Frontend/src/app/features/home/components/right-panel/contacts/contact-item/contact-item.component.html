@@ -1,9 +1,0 @@
-<app-card styleClass="h-[52px] gap-3 px-2">
-    <span visual class="relative w-[36px] h-[36px] flex items-center justify-center rounded-full bg-grey2 shadow-lg">
-        <img [src]="'assets/avatars/'+image()" alt="Avatar" class="w-full h-full object-cover rounded-full">
-        @if (isOnline()) {
-            <span class="absolute bottom-0 right-0 w-[12px] h-[12px] bg-green-500 rounded-full border-[3px] border-background"></span>
-        }
-    </span>
-    <span text class="font-medium text-[15px]">{{username()}}</span>
-</app-card>

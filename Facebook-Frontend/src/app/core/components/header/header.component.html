@@ -1,0 +1,90 @@
+<div
+  class="relative flex items-center justify-between h-14 shadow-md bg-white px-4"
+>
+  <!-- search -->
+  @if(isHistoryVisible){
+  <app-history
+    class="absolute w-[320px] min-h-[135px] max-h-[600px] bg-white shadow-lg rounded-md top-0 left-0 z-20"
+    (closeHistory)="isHistoryVisible = false"
+    id="history"
+  />
+  }
+  <div class="flex w-[360px]">
+    <a routerLink="">
+      <img
+        src="assets/logos/logo.webp"
+        alt="Facebook's logo"
+        class="min-w-[40px] h-[40px] mr-2"
+      />
+    </a>
+    <div class="relative">
+      @if(!isHistoryVisible){
+      <label
+        for="search"
+        class="absolute w-10 h-10 rounded-full top-1/2 -translate-y-1/2 bg-[#f0f2f5] z-10"
+      >
+        <i
+          class="fa-solid fa-magnifying-glass text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
+        ></i>
+      </label>
+      }
+      <input
+        type="text"
+        id="search"
+        class="w-60 h-10 pl-10 bg-[#f0f2f5] rounded-full outline-none leading-[10] input-search tracking-tight transition-all duration-200 z-20"
+        [ngClass]="{
+          'pl-10 xl:block hidden': !isHistoryVisible,
+          'pl-5 absolute': isHistoryVisible
+        }"
+        placeholder="Tìm kiếm trên Facebook"
+        (focus)="isHistoryVisible = true"
+      />
+    </div>
+  </div>
+<!-- center-navbar -->
+<div class="lg:flex w-[590px] gap-1 hidden mr-4">
+  @for (item of navItems; track item.name) {
+  <app-custom-title [titleCustom]="item.name">
+    <app-navbar-button
+      [routerLink]="item.url"
+      [isActive]="activeItemNavItem === item.name"
+      (buttonClick)="onSelectNavItem(item.name)"
+      styleClass="w-[115px] h-[50px] relative"
+    >
+      <i
+        class="text-[22px]"
+        [ngClass]="{
+          'text-primary': activeItemNavItem === item.name,
+          'text-grey': activeItemNavItem !== item.name
+        }"
+        [class]="item.icon"
+      ></i>
+      <div
+        class="absolute -bottom-1 left-0 w-full h-[4px] transition-all duration-200"
+        [ngClass]="{
+          'bg-primary': activeItemNavItem === item.name
+        }"
+      ></div>
+    </app-navbar-button>
+  </app-custom-title>
+  }
+</div>
+  <!-- right-navbar -->
+  <div class="flex gap-2 w-[360px] items-center justify-end">
+    @for(item of roundedButtons; track item.name){
+      <app-rounded-button
+        [icon]="item.icon"
+        [name]="item.name"
+        [isActive]="activeButton === item.name"
+        (buttonClick)="onSelectButton(item.name)"
+      ></app-rounded-button>
+    }
+    <app-custom-title titleCustom="Tài khoản">
+      <div
+        class="h-[40px] w-[40px] leading-14 flex items-center justify-center rounded-full overflow-hidden hover:brightness-75"
+      >
+        <img src="assets/avatars/thehien.jpg" alt="" />
+      </div>
+    </app-custom-title>
+  </div>
+</div>

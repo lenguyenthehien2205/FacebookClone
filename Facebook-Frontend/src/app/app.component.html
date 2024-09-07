@@ -1,6 +1,8 @@
-<header>
-    <app-header />
-</header>
+@if(isAuthenticated) {
+    <header>
+        <app-header />
+    </header>
+}
 <main>
     <router-outlet />
 </main>
