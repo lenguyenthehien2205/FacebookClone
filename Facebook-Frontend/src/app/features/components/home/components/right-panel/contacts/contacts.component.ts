@@ -12,16 +12,16 @@ export class ContactsComponent {
   constructor(private userService: UserService) {
 
   }
-  // ngOnInit() {
-  //   this.loadUsers();
-  // }
+  ngOnInit() {
+    this.loadUsers();
+  }
 
-  // loadUsers() {
-  //   this.userService.getUsers().subscribe((users) => {
-  //     this.users = users;
-  //   },
-  //   (error) => {
-  //     console.error('Lỗi khi tải danh sách người dùng:', error);
-  //   });
-  // }
+  loadUsers() {
+    this.userService.getUsers().subscribe((users) => {
+      this.users = users;
+    },
+    (error) => {
+      console.error('Lỗi khi tải danh sách người dùng:', error);
+    });
+  }
 }

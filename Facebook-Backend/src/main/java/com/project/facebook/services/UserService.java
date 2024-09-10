@@ -1,10 +1,15 @@
 package com.project.facebook.services;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.project.facebook.components.JwtTokenUtil;
 import com.project.facebook.exceptions.DataNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.project.facebook.dtos.UserDTO;
@@ -21,6 +26,10 @@ import lombok.RequiredArgsConstructor;
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    // Da duoc cau hinh Bcrypt trong UserDetail
+    private final PasswordEncoder passwordEncoder;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final AuthenticationManager authenticationManager;
     @Override
     public List<User> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -43,9 +52,12 @@ public class UserService implements IUserService {
         if(role.getRoleName().equals("ADMIN")){
             throw new PermissionDenyException("Permission denied");
         }
+        String password = userDTO.getPassword();
+        // ma hoa password da cau hinh trong UserDetail
+        String encodedPassword = passwordEncoder.encode(password);
         User user = User.builder()
                 .username(userDTO.getUsername())
-                .password(userDTO.getPassword())
+                .password(encodedPassword)
                 .avatar(userDTO.getAvatar())
                 .phoneNumber(userDTO.getPhoneNumber())
                 .build();
@@ -53,4 +65,22 @@ public class UserService implements IUserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public String login(String phoneNumber, String password) throws Exception {
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
+        if (optionalUser.isEmpty()){
+            throw new DataNotFoundException("Invalid phone number / password");
+        }
+        User existingUser = optionalUser.get();
+        // authenticate roi moi tra ve token khi thanh cong
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                phoneNumber, password, existingUser.getAuthorities()
+        );
+        authenticationManager.authenticate(authenticationToken); // su dung AuthenticationProvider da cau hinh de xac thuc khi authenticate
+        return jwtTokenUtil.genarateToken(existingUser);
+    }
+    @Override
+    public Optional<User> getUserByPhoneNumber(String phoneNumber){
+        return userRepository.findByPhoneNumber(phoneNumber);
+    }
 }

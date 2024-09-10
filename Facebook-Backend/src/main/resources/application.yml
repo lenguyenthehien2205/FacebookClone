@@ -26,4 +26,4 @@ api:
   base-path: api/v1
 jwt:
   expiration: 2592000 #30 days = 30 * 24 * 60 * 60
-  secretKey: TaqlmGv1iEDMRiFp/pHuID1+T84IABfuA0xXh4GhiUI=
+  secretKey: 7nRXxG0kbWl2xBNTrv4Scrn4dDujMiYtMOUBvk7RDVw=

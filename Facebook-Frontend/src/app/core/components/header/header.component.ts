@@ -23,7 +23,7 @@ export class HeaderComponent {
     },
   ];
   navItems = [
-    { name: 'Trang chủ', icon: 'fa-solid fa-house', url: '' },
+    { name: 'Trang chủ', icon: 'fa-solid fa-house', url: 'home' },
     { name: 'Video', icon: 'fa-solid fa-video', url: 'videos' },
     { name: 'Marketplace', icon: 'fa-solid fa-shop',url: 'marketplace' },
     { name: 'Nhóm', icon: 'fa-solid fa-users', url: 'groups' },
@@ -71,7 +71,7 @@ export class HeaderComponent {
 
         // Cập nhật activeItemNavItem dựa trên URL
         switch (pathAfterHostname) {
-          case '/':
+          case '/home':
             this.activeItemNavItem = 'Trang chủ';
             break;
           case '/videos':

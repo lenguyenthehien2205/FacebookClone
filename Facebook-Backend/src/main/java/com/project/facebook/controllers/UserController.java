@@ -1,8 +1,10 @@
 package com.project.facebook.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.project.facebook.dtos.UserDTO;
+import com.project.facebook.dtos.UserLoginDTO;
 import com.project.facebook.responses.UserResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<?> createUser(
             @Valid @RequestBody UserDTO userDTO,
             BindingResult result
@@ -39,9 +41,35 @@ public class UserController {
                         .toList();
                 return ResponseEntity.badRequest().body(errorMessages);
             }
+            if(userDTO.getPassword().equals(userDTO.getRetypePassword())){
+                return ResponseEntity.badRequest().body("Password does not match");
+            }
             User newUser = userService.createUser(userDTO);
             return ResponseEntity.ok(UserResponse.fromUser(newUser));
         } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(
+            @Valid @RequestBody UserLoginDTO userLoginDTO
+            ){
+        try{
+            String token = userService.login(userLoginDTO.getPhoneNumber(), userLoginDTO.getPassword());
+            return ResponseEntity.ok(token);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    @GetMapping("/{phone}")
+    public ResponseEntity<?> getUserByPhoneNumber(
+            @PathVariable("phone") String phoneNumber
+    ) {
+        try{
+            Optional<User> user = userService.getUserByPhoneNumber(phoneNumber);
+            return ResponseEntity.ok(user);
+        }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
