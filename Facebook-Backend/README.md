@@ -59,9 +59,9 @@ The project supports multiple languages with English as the default. To change t
 ```
 yaml:src/main/resources/application.yml
 messages:
-basename: i18n/messages
-encoding: UTF-8
-default-locale: en
+    basename: i18n/messages
+    encoding: UTF-8
+    default-locale: en
 ```
 
 ## Contributing
