@@ -2,6 +2,7 @@ package com.project.facebook.controllers;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.project.facebook.dtos.UserDTO;
 import com.project.facebook.dtos.UserLoginDTO;
@@ -28,8 +29,12 @@ public class UserController {
     private final IUserService userService;
     private final LocalizationUtils localizationUtils;
     @GetMapping("")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserResponse> getAllUsers() {
+        List<UserResponse> users = userService.getAllUsers()
+                .stream()
+                .map(UserResponse::fromUser)
+                .collect(Collectors.toList());
+        return users;
     }
 
     @PostMapping("/register")

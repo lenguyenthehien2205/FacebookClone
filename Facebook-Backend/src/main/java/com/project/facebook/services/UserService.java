@@ -2,10 +2,12 @@ package com.project.facebook.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.project.facebook.components.JwtTokenUtils;
 import com.project.facebook.exceptions.DataNotFoundException;
 
+import com.project.facebook.responses.UserResponse;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,13 +34,8 @@ public class UserService implements IUserService {
     private final AuthenticationManager authenticationManager;
     @Override
     public List<User> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        for (User user : users) {
-            System.out.println("User ID: " + user.getUserId());
-            System.out.println("Created At: " + user.getCreatedAt());
-            System.out.println("Updated At: " + user.getUpdatedAt());
-        }
-        return users;
+        //chuyen sang stream de co the map, sau do chuyen lai list
+        return userRepository.findAll();
     }
 
     @Override

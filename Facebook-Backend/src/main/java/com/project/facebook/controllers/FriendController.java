@@ -2,6 +2,7 @@ package com.project.facebook.controllers;
 
 import com.project.facebook.models.Friend;
 import com.project.facebook.models.User;
+import com.project.facebook.responses.UserResponse;
 import com.project.facebook.services.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.base-path}/friends")
@@ -34,7 +36,10 @@ public class FriendController {
     @GetMapping("{user_id}")
     public ResponseEntity<?> getFriends(@PathVariable("user_id") Long userId){
         try {
-            List<User> friends = friendService.getAllFriendsByUserId(userId);
+            List<UserResponse> friends = friendService.getAllFriendsByUserId(userId)
+                    .stream()
+                    .map(UserResponse::fromUser)
+                    .collect(Collectors.toList());
             return ResponseEntity.ok(friends);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());

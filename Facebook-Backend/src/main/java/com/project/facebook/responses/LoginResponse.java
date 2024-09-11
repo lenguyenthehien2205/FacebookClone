@@ -9,9 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LoginResponse {
-    @JsonProperty("message")
     private String message;
-
-    @JsonProperty("token")
     private String token;
 }
