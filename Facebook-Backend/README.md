@@ -57,7 +57,6 @@ The project uses Spring Security and JWT for authentication and authorization. T
 ## Multilingual Support
 The project supports multiple languages with English as the default. To change the default language, edit the configuration in the `application.yml` file:
 ```
-yaml:src/main/resources/application.yml
 messages:
     basename: i18n/messages
     encoding: UTF-8
