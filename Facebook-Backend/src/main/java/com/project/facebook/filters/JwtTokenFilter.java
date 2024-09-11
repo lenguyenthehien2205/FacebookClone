@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.project.facebook.components.JwtTokenUtil;
+import com.project.facebook.components.JwtTokenUtils;
 import com.project.facebook.models.User;
 
 import jakarta.servlet.FilterChain;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtTokenFilter extends OncePerRequestFilter {
     @Value("${api.base-path}")
     private String apiBasePath;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtils jwtTokenUtil;
     private final UserDetailsService userDetailsService;
     // nhu the nao kiem tra, cho di qua
     // login va register thi khong kiem tra token

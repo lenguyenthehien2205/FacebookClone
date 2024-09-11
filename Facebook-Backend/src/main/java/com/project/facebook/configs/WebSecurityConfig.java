@@ -21,8 +21,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 //@EnableMethodSecurity
@@ -44,10 +43,12 @@ public class WebSecurityConfig {
                             .requestMatchers(
                                     String.format("/%s/users/register", apiBasePath),
                                     String.format("/%s/users/login", apiBasePath),
-                                    String.format("/%s/users", apiBasePath)
+                                    String.format("/%s/users", apiBasePath),
+                                    String.format("/%s/friends/{user_id}", apiBasePath)
                             )
                             .permitAll()
                             .requestMatchers(GET, String.format("/%s/users/{phone}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(POST, String.format("/%s/friends/{first_user_id}/{second_user_id}", apiBasePath)).hasRole("USER")
 //                            .requestMatchers(GET,
 //                                    String.format("/%s/users", apiBasePath)).hasRole("ADMIN")
                             .anyRequest().authenticated();

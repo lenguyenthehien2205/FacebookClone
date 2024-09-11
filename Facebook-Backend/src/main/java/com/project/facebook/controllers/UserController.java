@@ -5,7 +5,11 @@ import java.util.Optional;
 
 import com.project.facebook.dtos.UserDTO;
 import com.project.facebook.dtos.UserLoginDTO;
+import com.project.facebook.responses.LoginResponse;
 import com.project.facebook.responses.UserResponse;
+import com.project.facebook.components.LocalizationUtils;
+import com.project.facebook.utils.MessageKeys;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -22,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
     private final IUserService userService;
-
+    private final LocalizationUtils localizationUtils;
     @GetMapping("")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
@@ -52,14 +56,21 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(
-            @Valid @RequestBody UserLoginDTO userLoginDTO
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody UserLoginDTO userLoginDTO,
+            HttpServletRequest request
             ){
         try{
             String token = userService.login(userLoginDTO.getPhoneNumber(), userLoginDTO.getPassword());
-            return ResponseEntity.ok(token);
+            return ResponseEntity.ok(LoginResponse.builder()
+                            .message(localizationUtils.getLocalizedMessage(MessageKeys.LOGIN_SUCCESSFULLY))
+                            .token(token)
+                    .build());
         }catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    LoginResponse.builder()
+                            .message(e.getMessage())
+                            .build());
         }
     }
     @GetMapping("/{phone}")

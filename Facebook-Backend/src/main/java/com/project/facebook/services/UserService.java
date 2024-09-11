@@ -3,7 +3,7 @@ package com.project.facebook.services;
 import java.util.List;
 import java.util.Optional;
 
-import com.project.facebook.components.JwtTokenUtil;
+import com.project.facebook.components.JwtTokenUtils;
 import com.project.facebook.exceptions.DataNotFoundException;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,7 +28,7 @@ public class UserService implements IUserService {
     private final RoleRepository roleRepository;
     // Da duoc cau hinh Bcrypt trong UserDetail
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtils jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
     @Override
     public List<User> getAllUsers() {
@@ -60,6 +60,8 @@ public class UserService implements IUserService {
                 .password(encodedPassword)
                 .avatar(userDTO.getAvatar())
                 .phoneNumber(userDTO.getPhoneNumber())
+                .isOnline(false)
+                .isActive(true)
                 .build();
         user.setRole(role);
         return userRepository.save(user);
@@ -80,7 +82,15 @@ public class UserService implements IUserService {
         return jwtTokenUtil.genarateToken(existingUser);
     }
     @Override
-    public Optional<User> getUserByPhoneNumber(String phoneNumber){
+    public Optional<User> getUserByPhoneNumber(String phoneNumber) throws DataNotFoundException{
+        if (userRepository.findByPhoneNumber(phoneNumber).isEmpty()){
+            throw new DataNotFoundException("Phone number is not found");
+        }
         return userRepository.findByPhoneNumber(phoneNumber);
+    }
+    @Override
+    public User getUserById(Long id) throws DataNotFoundException{
+        return userRepository.findById(id).orElseThrow(
+                () -> new DataNotFoundException("User not found"));
     }
 }

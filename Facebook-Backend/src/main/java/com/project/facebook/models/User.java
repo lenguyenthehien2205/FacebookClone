@@ -55,6 +55,14 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
+    @Column(name = "is_online")
+    @JsonProperty("is_online")
+    private boolean isOnline;
+
+    @Column(name = "is_active")
+    @JsonProperty("is_active")
+    private boolean isActive;
+
     // lay ra danh sac quyen
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
