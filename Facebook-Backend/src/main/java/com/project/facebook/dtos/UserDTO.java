@@ -1,38 +1,38 @@
 package com.project.facebook.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.facebook.components.LocalizationUtils;
 
+import com.project.facebook.utils.MessageKeys;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
+@NoArgsConstructor(force = true)
 public class UserDTO {
+    private final LocalizationUtils localizationUtils;
     @JsonProperty("username")
-    @NotBlank(message = "Username is required")
+    @NotBlank(message = MessageKeys.USERNAME_IS_REQUIRED)
     private String username;
 
     @JsonProperty("password")
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = MessageKeys.PASSWORD_IS_REQUIRED)
     private String password;
 
-    @JsonProperty("retype_password")
-    private String retypePassword;
-
     @JsonProperty("role_id")
-    @NotNull(message = "Role is required")
+    @NotNull(message = MessageKeys.ROLE_IS_REQUIRED)
     private Long roleId;
 
     @JsonProperty("avatar")
     private String avatar;
 
     @JsonProperty("phone_number")
-    @NotBlank(message = "Phone number is required")
+    @NotBlank(message = MessageKeys.PHONE_NUMBER_IS_REQUIRED)
     private String phoneNumber;
 }

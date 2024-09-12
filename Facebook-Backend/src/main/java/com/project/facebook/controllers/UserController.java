@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.project.facebook.dtos.UserDTO;
 import com.project.facebook.dtos.UserLoginDTO;
 import com.project.facebook.responses.LoginResponse;
+import com.project.facebook.responses.RegisterResponse;
 import com.project.facebook.responses.UserResponse;
 import com.project.facebook.components.LocalizationUtils;
 import com.project.facebook.utils.MessageKeys;
@@ -29,34 +30,37 @@ public class UserController {
     private final IUserService userService;
     private final LocalizationUtils localizationUtils;
     @GetMapping("")
-    public List<UserResponse> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<UserResponse> users = userService.getAllUsers()
                 .stream()
                 .map(UserResponse::fromUser)
                 .collect(Collectors.toList());
-        return users;
+        return ResponseEntity.ok(users);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(
+    public ResponseEntity<RegisterResponse> createUser(
             @Valid @RequestBody UserDTO userDTO,
             BindingResult result
     ) {
+        RegisterResponse registerResponse = new RegisterResponse();
         try {
             if(result.hasErrors()){
                 List<String> errorMessages = result.getFieldErrors()
                         .stream()
-                        .map(FieldError::getDefaultMessage)
+                        .map(error -> localizationUtils.getLocalizedMessage(error.getDefaultMessage()))
                         .toList();
-                return ResponseEntity.badRequest().body(errorMessages);
-            }
-            if(userDTO.getPassword().equals(userDTO.getRetypePassword())){
-                return ResponseEntity.badRequest().body("Password does not match");
+                String errorMessage = String.join(", ", errorMessages);
+                registerResponse.setMessage(errorMessage);
+                return ResponseEntity.badRequest().body(registerResponse);
             }
             User newUser = userService.createUser(userDTO);
-            return ResponseEntity.ok(UserResponse.fromUser(newUser));
+            registerResponse.setMessage(localizationUtils.getLocalizedMessage(MessageKeys.REGISTER_SUCCESSFULLY));
+            registerResponse.setUser(newUser);
+            return ResponseEntity.ok(registerResponse);
         } catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            registerResponse.setMessage(e.getMessage());
+            return ResponseEntity.badRequest().body(registerResponse);
         }
     }
 
@@ -74,7 +78,7 @@ public class UserController {
         }catch (Exception e){
             return ResponseEntity.badRequest().body(
                     LoginResponse.builder()
-                            .message(e.getMessage())
+                            .message(localizationUtils.getLocalizedMessage(MessageKeys.LOGIN_FAILED, e.getMessage()))
                             .build());
         }
     }

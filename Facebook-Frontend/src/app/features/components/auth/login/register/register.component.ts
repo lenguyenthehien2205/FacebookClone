@@ -1,6 +1,9 @@
-import { Component, OnInit, output } from '@angular/core';
+import { Component, inject, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { UserService } from 'src/app/core/services/user.service';
+import { RegisterDTO } from './register.dto';
+import { Router } from '@angular/router';
 
 function emailOrPhoneValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -58,10 +61,29 @@ function dateValidator(): ValidatorFn {
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
+  userService = inject(UserService);
+  router = inject(Router);
   registerForm!: FormGroup;
   onSubmit() {
     if (this.registerForm.valid) {
-      console.log(this.registerForm.value);
+      const formData = {
+        username: this.registerForm.value.firstName +" "+ this.registerForm.value.lastName,
+        password: this.registerForm.value.password,
+        avatar: "myduyen.jpg",
+        phone_number: this.registerForm.value.phoneNumberOrEmail,
+        role_id: 1
+      }
+      const registerDTO: RegisterDTO = new RegisterDTO(formData);
+      this.userService.register(registerDTO).subscribe({
+        next: (response: any) => {
+          alert(response.message);
+          this.onCloseRegisterForm();
+          // this.router.navigate(['/login']);          
+        },
+        error: (error: any) => {          
+          alert(`Cannot register, error: ${error.message}`)          
+        }
+    })   
     }
   }
 

@@ -5,9 +5,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.project.facebook.components.JwtTokenUtils;
+import com.project.facebook.components.LocalizationUtils;
 import com.project.facebook.exceptions.DataNotFoundException;
 
 import com.project.facebook.responses.UserResponse;
+import com.project.facebook.utils.MessageKeys;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +34,7 @@ public class UserService implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtils jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
+    private final LocalizationUtils localizationUtils;
     @Override
     public List<User> getAllUsers() {
         //chuyen sang stream de co the map, sau do chuyen lai list
@@ -42,12 +45,12 @@ public class UserService implements IUserService {
     public User createUser(UserDTO userDTO) throws Exception {
         String phoneNumber = userDTO.getPhoneNumber();
         if(userRepository.existsByPhoneNumber(phoneNumber)){
-            throw new DataIntegrityViolationException("Phone number already exists");
+            throw new DataIntegrityViolationException(localizationUtils.getLocalizedMessage(MessageKeys.PHONE_NUMBER_ALREADY_EXISTS));
         }
         Role role = roleRepository.findById(userDTO.getRoleId())
-            .orElseThrow(() -> new DataNotFoundException("Role not found"));
+            .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ROLE_NOT_EXISTS)));
         if(role.getRoleName().equals("ADMIN")){
-            throw new PermissionDenyException("Permission denied");
+            throw new PermissionDenyException(localizationUtils.getLocalizedMessage(MessageKeys.PERMISSION_DENIED));
         }
         String password = userDTO.getPassword();
         // ma hoa password da cau hinh trong UserDetail
@@ -68,7 +71,7 @@ public class UserService implements IUserService {
     public String login(String phoneNumber, String password) throws Exception {
         Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
         if (optionalUser.isEmpty()){
-            throw new DataNotFoundException("Invalid phone number / password");
+            throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_PHONE_NUMBER_PASSWORD));
         }
         User existingUser = optionalUser.get();
         // authenticate roi moi tra ve token khi thanh cong
