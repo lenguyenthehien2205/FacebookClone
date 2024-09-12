@@ -4,7 +4,7 @@ import { RoundedButtonComponent } from "./rounded-button/rounded-button.componen
 import { HistoryComponent } from "./history/history.component";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
-import { SharedModule } from "src/app/shared/shared.module"; // Import SharedModule
+import { SharedModule } from "src/app/shared/shared.module"; 
 import { HistoryItemComponent } from "./history/history-item/history-item.component";
 
 @NgModule({

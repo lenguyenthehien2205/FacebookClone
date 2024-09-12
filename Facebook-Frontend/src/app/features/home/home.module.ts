@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HomeComponent } from "./home.component";
+import { HomeComponent } from "./page/home.component";
 import { LeftPanelComponent } from "./components/left-panel/left-panel.component";
 import { RightPanelComponent } from "./components/right-panel/right-panel.component";
 import { PostPanelComponent } from "./components/post-panel/post-panel.component";

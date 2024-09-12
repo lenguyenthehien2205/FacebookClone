@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { PostPanelComponent } from './components/post-panel/post-panel.component';
+import { PostPanelComponent } from '../components/post-panel/post-panel.component';
 
 @Component({
   selector: 'app-home',

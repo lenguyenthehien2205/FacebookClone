@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { VideosComponent } from './features/components/videos/videos.component';
-import { NotFoundComponent } from './features/components/not-found/not-found.component';
-import { HomeComponent } from './features/components/home/home.component';
-import { LoginComponent } from './features/components/auth/login/login.component';
+import { VideosComponent } from './features/videos/page/videos.component';
+import { NotFoundComponent } from './features/not-found/page/not-found.component';
+import { HomeComponent } from './features/home/page/home.component';
+import { LoginComponent } from './features/auth/page/login.component';
 
 export const routes: Routes = [
   {

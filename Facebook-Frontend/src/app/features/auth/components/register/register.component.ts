@@ -2,7 +2,7 @@ import { Component, inject, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
-import { RegisterDTO } from './register.dto';
+import { RegisterDTO } from '../../dtos/register.dto';
 import { Router } from '@angular/router';
 
 function emailOrPhoneValidator(): ValidatorFn {
@@ -77,11 +77,11 @@ export class RegisterComponent implements OnInit {
       this.userService.register(registerDTO).subscribe({
         next: (response: any) => {
           alert(response.message);
-          this.onCloseRegisterForm();
-          // this.router.navigate(['/login']);          
+          // this.onCloseRegisterForm();
+          this.router.navigate(['/home']);          
         },
         error: (error: any) => {          
-          alert(`Cannot register, error: ${error.message}`)          
+          alert(`Cannot register, error: ${error.message}`);          
         }
     })   
     }
