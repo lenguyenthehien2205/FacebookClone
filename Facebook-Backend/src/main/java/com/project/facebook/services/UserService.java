@@ -2,13 +2,11 @@ package com.project.facebook.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.project.facebook.components.JwtTokenUtils;
 import com.project.facebook.components.LocalizationUtils;
 import com.project.facebook.exceptions.DataNotFoundException;
 
-import com.project.facebook.responses.UserResponse;
 import com.project.facebook.utils.MessageKeys;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;

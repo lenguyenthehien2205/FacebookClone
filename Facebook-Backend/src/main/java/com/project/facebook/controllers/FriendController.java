@@ -1,13 +1,10 @@
 package com.project.facebook.controllers;
 
 import com.project.facebook.models.Friend;
-import com.project.facebook.models.User;
-import com.project.facebook.responses.UserResponse;
+import com.project.facebook.responses.user.UserResponse;
 import com.project.facebook.services.FriendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

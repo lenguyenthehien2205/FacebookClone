@@ -1,4 +1,4 @@
-package com.project.facebook.responses;
+package com.project.facebook.responses.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

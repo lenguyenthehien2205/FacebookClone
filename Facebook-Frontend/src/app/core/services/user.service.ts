@@ -4,9 +4,10 @@ import { Observable } from 'rxjs';
 import { RegisterDTO } from 'src/app/features/auth/dtos/register.dto';
 import { environment } from 'src/app/environments/environment';
 import { LoginDTO } from 'src/app/features/auth/dtos/login.dto';
+import { ApiResponse } from 'src/app/features/auth/responses/api.response';
 
 export interface User {
-  id: number;
+  user_id: number;
   username: string;
   avatar: string;
   isOnline: boolean;
@@ -31,8 +32,8 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl, this.apiConfig);
+  getUsers(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(this.apiUrl, this.apiConfig);
   }
   register(registerData: RegisterDTO):Observable<any>{
     const headers = this.createHeaders();

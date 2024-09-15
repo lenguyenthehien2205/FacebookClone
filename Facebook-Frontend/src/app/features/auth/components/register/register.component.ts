@@ -4,6 +4,7 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
 import { RegisterDTO } from '../../dtos/register.dto';
 import { Router } from '@angular/router';
+import { ApiResponse } from '../../responses/api.response';
 
 function emailOrPhoneValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -75,7 +76,7 @@ export class RegisterComponent implements OnInit {
       }
       const registerDTO: RegisterDTO = new RegisterDTO(formData);
       this.userService.register(registerDTO).subscribe({
-        next: (response: any) => {
+        next: (response: ApiResponse) => {
           alert(response.message);
           // this.onCloseRegisterForm();
           this.router.navigate(['/home']);          

@@ -43,11 +43,12 @@ public class WebSecurityConfig {
                             .requestMatchers(
                                     String.format("/%s/users/register", apiBasePath),
                                     String.format("/%s/users/login", apiBasePath),
-                                    String.format("/%s/users", apiBasePath),
                                     String.format("/%s/friends/{user_id}", apiBasePath)
                             )
                             .permitAll()
                             .requestMatchers(GET, String.format("/%s/users/{phone}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(GET, String.format("/%s/users", apiBasePath)).hasRole("USER")
+                            .requestMatchers(GET, String.format("/%s/users/images/*", apiBasePath)).permitAll()
                             .requestMatchers(POST, String.format("/%s/friends/{first_user_id}/{second_user_id}", apiBasePath)).hasRole("USER")
 //                            .requestMatchers(GET,
 //                                    String.format("/%s/users", apiBasePath)).hasRole("ADMIN")

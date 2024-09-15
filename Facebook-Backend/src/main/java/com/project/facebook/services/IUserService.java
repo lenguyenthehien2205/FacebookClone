@@ -3,7 +3,6 @@ package com.project.facebook.services;
 import com.project.facebook.dtos.UserDTO;
 import com.project.facebook.exceptions.DataNotFoundException;
 import com.project.facebook.models.User;
-import com.project.facebook.responses.UserResponse;
 
 import java.util.List;
 import java.util.Optional;
