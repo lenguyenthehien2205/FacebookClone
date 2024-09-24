@@ -6,14 +6,13 @@ import com.project.facebook.components.LocalizationUtils;
 import com.project.facebook.utils.MessageKeys;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+@Data//toString
 @Getter
 @Setter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor(force = true)
 public class UserDTO {
     private final LocalizationUtils localizationUtils;

@@ -13,5 +13,6 @@ public interface IUserService {
     User getUserById(Long id) throws DataNotFoundException;
     User createUser(UserDTO userDTO) throws Exception;
     String login(String phoneNumber, String password) throws Exception;
-
+    User updateUser(Long userId, UserDTO userDTO) throws Exception;
+    User updateUserAvatar(Long userId, String avatarFileName) throws Exception;
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { UserService } from 'src/app/core/services/user.service';
@@ -59,7 +59,8 @@ function dateValidator(): ValidatorFn {
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
+  styleUrl: './register.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterComponent implements OnInit {
   userService = inject(UserService);

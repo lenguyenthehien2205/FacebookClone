@@ -48,8 +48,10 @@ public class WebSecurityConfig {
                             .permitAll()
                             .requestMatchers(GET, String.format("/%s/users/{phone}", apiBasePath)).hasRole("USER")
                             .requestMatchers(GET, String.format("/%s/users", apiBasePath)).hasRole("USER")
-                            .requestMatchers(GET, String.format("/%s/users/images/*", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/users/images/{imageName}", apiBasePath)).permitAll()
+                            .requestMatchers(POST, String.format("/%s/users/upload_avatar/{user_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/friends/{first_user_id}/{second_user_id}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(POST, String.format("/%s/friends/contacts/{user_id}", apiBasePath)).hasRole("USER")
 //                            .requestMatchers(GET,
 //                                    String.format("/%s/users", apiBasePath)).hasRole("ADMIN")
                             .anyRequest().authenticated();

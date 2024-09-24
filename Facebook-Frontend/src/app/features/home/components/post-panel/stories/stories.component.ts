@@ -1,9 +1,10 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-stories',
   templateUrl: './stories.component.html',
-  styleUrl: './stories.component.css'
+  styleUrl: './stories.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StoriesComponent implements AfterViewInit {
   @ViewChild('scrollableContainer') scrollableContainer!: ElementRef<HTMLDivElement>;

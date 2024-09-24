@@ -91,4 +91,28 @@ public class UserService implements IUserService {
         return userRepository.findById(id).orElseThrow(
                 () -> new DataNotFoundException("User not found"));
     }
+
+    @Override
+    public User updateUser(Long userId, UserDTO userDTO) throws Exception {
+        User existingUser = getUserById(userId);
+        if(existingUser != null){
+            Role role = roleRepository.findById(userDTO.getRoleId())
+                    .orElseThrow(() -> new DataNotFoundException(
+                        "Cannot find role with id: "+userDTO.getRoleId()
+                    ));
+            existingUser.setRole(role);
+            existingUser.setUsername(userDTO.getUsername());
+            existingUser.setPassword(userDTO.getPassword());
+            existingUser.setAvatar(userDTO.getAvatar());
+            existingUser.setPhoneNumber(userDTO.getPhoneNumber());
+            return userRepository.save(existingUser);
+        }
+        return null;
+    }
+    @Override
+    public User updateUserAvatar(Long userId, String avatarFileName) throws Exception{
+        User existingUser = getUserById(userId);
+        existingUser.setAvatar(avatarFileName);
+        return userRepository.save(existingUser);
+    }
 }

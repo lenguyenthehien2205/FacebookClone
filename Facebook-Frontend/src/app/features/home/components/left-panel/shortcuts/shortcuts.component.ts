@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'app-shortcuts',
   templateUrl: './shortcuts.component.html',
-  styleUrl: './shortcuts.component.css'
+  styleUrl: './shortcuts.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ShortcutsComponent {
   groupItems = [
@@ -13,4 +14,5 @@ export class ShortcutsComponent {
     { name: 'Java Viet Nam For Developers', image: 'assets/avatars/thehien.jpg', url: '' },
     { name: 'ĐỀ THI KHOA CNTT SGU', image: 'assets/avatars/thehien.jpg', url: '' },
   ]
+
 }

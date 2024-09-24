@@ -1,9 +1,10 @@
-import { Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
-  styleUrl: './history.component.css'
+  styleUrl: './history.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HistoryComponent {
   dataArray: string[] = Array.from({ length: 100 }, (_, i) => `Item #${i + 1}`); // Mảng dữ liệu gốc

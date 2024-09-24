@@ -1,9 +1,10 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-post-header',
   templateUrl: './post-header.component.html',
-  styleUrl: './post-header.component.css'
+  styleUrl: './post-header.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostHeaderComponent {
   avatar = input.required<string>();

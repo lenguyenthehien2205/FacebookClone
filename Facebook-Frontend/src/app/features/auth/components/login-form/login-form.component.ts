@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginDTO } from '../../dtos/login.dto';
 import { UserService } from 'src/app/core/services/user.service';
@@ -9,7 +9,8 @@ import { ApiResponse } from '../../responses/api.response';
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
-  styleUrl: './login-form.component.css'
+  styleUrl: './login-form.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginFormComponent {
   router = inject(Router);

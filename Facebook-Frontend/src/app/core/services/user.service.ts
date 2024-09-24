@@ -20,6 +20,7 @@ export class UserService {
   private apiRegister = `${environment.apiBaseUrl}/users/register`;
   private apiLogin = `${environment.apiBaseUrl}/users/login`;
   private apiUrl = 'http://localhost:8088/api/v1/users'; // Thay thế bằng URL API thực tế
+  private apiContacts = `${environment.apiBaseUrl}/friends/contacts/1`;
   private apiConfig = {
     headers: this.createHeaders()
   }
@@ -32,8 +33,8 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  getUsers(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.apiUrl, this.apiConfig);
+  getContacts(): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(this.apiContacts, this.apiConfig);
   }
   register(registerData: RegisterDTO):Observable<any>{
     const headers = this.createHeaders();

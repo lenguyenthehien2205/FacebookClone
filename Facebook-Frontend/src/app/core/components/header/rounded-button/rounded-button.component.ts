@@ -1,9 +1,10 @@
-import { Component, input, output, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, Output } from '@angular/core';
 
 @Component({
   selector: 'app-rounded-button',
   templateUrl: './rounded-button.component.html',
-  styleUrl: './rounded-button.component.css'
+  styleUrl: './rounded-button.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RoundedButtonComponent {
   icon = input.required<string>();

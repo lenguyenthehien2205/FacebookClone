@@ -1,9 +1,14 @@
 package com.project.facebook.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import com.project.facebook.dtos.UserDTO;
@@ -20,6 +25,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +33,7 @@ import com.project.facebook.models.User;
 import com.project.facebook.services.IUserService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("${api.base-path}/users")
@@ -134,5 +141,53 @@ public class UserController {
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PostMapping(value = "/upload_avatar/{user_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadAvatar(
+            @PathVariable("user_id") Long userId,
+            @ModelAttribute("file") MultipartFile file
+            ){
+        try{
+            User existingUser = userService.getUserById(userId);
+            if(file.getSize() > 10 * 1024 * 1024){
+                return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
+                        .body(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMAGE_FILE_LARGE));
+            }
+            String contentType = file.getContentType();
+            if(contentType == null || !contentType.startsWith("image/")){
+                return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+                        .body(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMAGE_FILE_MUST_BE_IMAGE));
+            }
+            String fileName = storeFile(file, "uploads/user_images/avatars");
+            User userAfterUpdate = userService.updateUserAvatar(userId, fileName);
+            return ResponseEntity.ok(userAfterUpdate);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    private String storeFile(MultipartFile file, String path) throws IOException {
+        if (!isImageFile(file) || file.getOriginalFilename() == null) {
+            throw new IOException("Invalid image format");
+        }
+        // kiem tra có null không và sau đó làm sạch dữ liệu
+        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        // Thêm UUID vào trước tên file để đảm bảo tên file là duy nhất
+        String uniqueFilename = UUID.randomUUID().toString() + "_" + filename;
+        // Đường dẫn đến thư mục mà bạn muốn lưu file
+        java.nio.file.Path uploadDir = Paths.get(path);
+        // Kiểm tra và tạo thư mục nếu nó không tồn tại
+        if (!Files.exists(uploadDir)) {
+            Files.createDirectories(uploadDir);
+        }
+        // Đường dẫn đầy đủ đến file
+        java.nio.file.Path destination = Paths.get(uploadDir.toString(), uniqueFilename);
+        // Sao chép file vào thư mục đích file.getInputStream() -> destination
+        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+        return uniqueFilename;
+    }
+    private boolean isImageFile(MultipartFile file) {
+        String contentType = file.getContentType();
+        return contentType != null && contentType.startsWith("image/");
     }
 }

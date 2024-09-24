@@ -1,4 +1,4 @@
-import { Component, HostListener} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
   roundedButtons = [
@@ -50,9 +51,7 @@ export class HeaderComponent {
     const historyElement = document.getElementById('history');
     const inputElement = document.getElementById('search');
 
-    if (inputElement && inputElement.contains(target)) {
-      this.isHistoryVisible = true;
-    } else if (historyElement && historyElement.contains(target)) {
+    if ((inputElement && inputElement.contains(target)) || (historyElement && historyElement.contains(target))) {
       this.isHistoryVisible = true;
     } else {
       this.isHistoryVisible = false;

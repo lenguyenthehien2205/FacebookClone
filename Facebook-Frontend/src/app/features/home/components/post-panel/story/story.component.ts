@@ -1,9 +1,10 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-story',
   templateUrl: './story.component.html',
-  styleUrl: './story.component.css'
+  styleUrl: './story.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StoryComponent {
   avatar = input.required<string>();

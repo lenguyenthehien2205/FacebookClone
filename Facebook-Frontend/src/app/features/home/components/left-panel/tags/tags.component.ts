@@ -1,9 +1,10 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-tags',
   templateUrl: './tags.component.html',
-  styleUrl: './tags.component.css'
+  styleUrl: './tags.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TagsComponent {
   navItems = [
@@ -15,4 +16,5 @@ export class TagsComponent {
     { name: 'Marketplace', icon: 'fa-solid fa-shop', url: 'marketplace' },
     { name: 'Bảng feed', icon: 'fa-solid fa-radio', url: 'feed' }
   ];
+
 }

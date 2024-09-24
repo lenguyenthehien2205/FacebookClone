@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from '@angular/core';
 import { Post } from './post/post-model';
 
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
-  styleUrl: './posts.component.css'
+  styleUrl: './posts.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostsComponent {
   private allPosts: Post[] = [

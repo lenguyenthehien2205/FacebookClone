@@ -14,4 +14,8 @@ public class MessageKeys {
     public static final String ROLE_IS_REQUIRED = "user.register.role_is_required";
     public static final String PHONE_NUMBER_IS_REQUIRED = "user.register.phone_number_is_required";
     public static final String GET_USER_LIST_SUCCESSFULLY = "user.get.get_user_list_successfully";
+    public static final String UPLOAD_IMAGE_FILE_LARGE = "user.upload_image.file_large";
+    public static final String UPLOAD_IMAGE_FILE_MUST_BE_IMAGE = "user.upload_image.file_must_be_image";
+    public static final String GET_QUICK_CONTACT_SUCCESSFULLY = "friend.get.get_quick_contact_by_id_successfully";
+    public static final String GET_QUICK_CONTACT_FAILED = "friend.get.get_quick_contact_by_id_failed";
 }
