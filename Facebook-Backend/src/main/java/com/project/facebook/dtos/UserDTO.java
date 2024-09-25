@@ -13,7 +13,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @Builder
-@NoArgsConstructor(force = true)
+@NoArgsConstructor(force = true) // có thể khởi tạo LocalizationUtils mà không cần gán giá trị mặc định
 public class UserDTO {
     private final LocalizationUtils localizationUtils;
     @JsonProperty("username")

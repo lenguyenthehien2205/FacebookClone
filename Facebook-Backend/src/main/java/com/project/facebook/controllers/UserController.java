@@ -88,7 +88,7 @@ public class UserController {
                 return ResponseEntity.badRequest().body(ResponseObject.builder()
                                 .data(null)
                                 .status(HttpStatus.BAD_REQUEST)
-                                .message(localizationUtils.getLocalizedMessage(MessageKeys.REGISTER_FAILED))
+                                .message(errorMessage)
                         .build());
             }
             User newUser = userService.createUser(userDTO);
