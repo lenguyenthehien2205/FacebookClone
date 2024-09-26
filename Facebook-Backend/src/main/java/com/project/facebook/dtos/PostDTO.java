@@ -19,15 +19,12 @@ import lombok.*;
 @NoArgsConstructor
 public class PostDTO {
     @JsonProperty("author_id")
-    @NotNull(message = MessageKeys.AUTHOR_IS_REQUIRED)
     private Long authorId;
 
     @JsonProperty("author_type")
-    @NotBlank(message = MessageKeys.AUTHOR_TYPE_IS_REQUIRED)
     private String authorType;
 
     @JsonProperty("privacy")
-    @NotBlank(message = MessageKeys.PRIVACY_IS_REQUIRED)
     private String privacy;
 
     @JsonProperty("content")

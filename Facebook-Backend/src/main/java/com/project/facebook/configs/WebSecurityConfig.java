@@ -53,6 +53,11 @@ public class WebSecurityConfig {
                             .requestMatchers(POST, String.format("/%s/friends/{first_user_id}/{second_user_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/friends/contacts/{user_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/posts", apiBasePath)).hasRole("USER")
+                            .requestMatchers(PUT, String.format("/%s/posts/{post_id}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(GET, String.format("/%s/posts/friend-posts/{user_id}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(POST, String.format("/%s/posts/upload_medias/{post_id}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(GET, String.format("/%s/posts/images/{image_name}", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/posts/videos/{video_name}", apiBasePath)).permitAll()
 //                            .requestMatchers(GET,
 //                                    String.format("/%s/users", apiBasePath)).hasRole("ADMIN")
                             .anyRequest().authenticated();

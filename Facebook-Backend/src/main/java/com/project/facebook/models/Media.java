@@ -2,10 +2,7 @@ package com.project.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "medias")
@@ -13,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Media {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +29,6 @@ public class Media {
     @JsonProperty("media_type")
     @Column(name = "media_type")
     private String mediaType;
+
+    public static final int MAXIMUM_MEDIA_PER_POST = 10;
 }

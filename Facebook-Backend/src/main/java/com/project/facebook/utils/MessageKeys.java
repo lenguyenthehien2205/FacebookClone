@@ -23,4 +23,8 @@ public class MessageKeys {
     public static final String PRIVACY_IS_REQUIRED = "post.dto.privacy_is_required";
     public static final String CREATE_POST_SUCCESSFULLY = "post.create_post.successfully";
     public static final String CREATE_POST_FAILED = "post.create_post.failed";
+    public static final String UPDATE_POST_SUCCESSFULLY = "post.update_post.successfully";
+    public static final String DELETE_POST_SUCCESSFULLY = "post.delete_post.successfully";
+    public static final String GET_FRIEND_POSTS_SUCCESSFULLY = "post.get_friend_posts.successfully";
+
 }
