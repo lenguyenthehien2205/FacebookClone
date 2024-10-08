@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HomeComponent } from "./page/home.component";
-import { LeftPanelComponent } from "./components/left-panel/left-panel.component";
-import { RightPanelComponent } from "./components/right-panel/right-panel.component";
-import { PostPanelComponent } from "./components/post-panel/post-panel.component";
-import { StoryComponent } from "./components/post-panel/story/story.component";
-import { NewStoryComponent } from "./components/post-panel/new-story/new-story.component";
-import { SponsoredComponent } from "./components/right-panel/sponsored/sponsored.component";
-import { TagsComponent } from "./components/left-panel/tags/tags.component";
-import { TagItemComponent } from "./components/left-panel/tags/tag-item/tag-item.component";
-import { SponsoredItemComponent } from "./components/right-panel/sponsored/sponsored-item/sponsored-item.component";
+import { HomeComponent } from './page/home.component';
+import { LeftPanelComponent } from './components/left-panel/left-panel.component';
+import { RightPanelComponent } from './components/right-panel/right-panel.component';
+import { PostPanelComponent } from './components/post-panel/post-panel.component';
+import { StoryComponent } from './components/post-panel/story/story.component';
+import { NewStoryComponent } from './components/post-panel/new-story/new-story.component';
+import { SponsoredComponent } from './components/right-panel/sponsored/sponsored.component';
+import { TagsComponent } from './components/left-panel/tags/tags.component';
+import { TagItemComponent } from './components/left-panel/tags/tag-item/tag-item.component';
+import { SponsoredItemComponent } from './components/right-panel/sponsored/sponsored-item/sponsored-item.component';
 import { YourMindComponent } from './components/post-panel/your-mind/your-mind.component';
 import { StoriesComponent } from './components/post-panel/stories/stories.component';
 import { PostsComponent } from './components/post-panel/posts/posts.component';
@@ -29,40 +29,34 @@ import { GroupChatItemComponent } from './components/right-panel/group-chat/grou
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
-    declarations: [
-        HomeComponent,
-        LeftPanelComponent,
-        RightPanelComponent,
-        PostPanelComponent,
-        StoryComponent,
-        NewStoryComponent,
-        SponsoredComponent,
-        TagsComponent,
-        TagItemComponent,
-        SponsoredItemComponent,
-        YourMindComponent,
-        StoriesComponent,
-        PostsComponent,
-        PostComponent,
-        PostHeaderComponent,
-        PostContentComponent,
-        PostInteractionsComponent,
-        PostActionsComponent,
-        ShortcutsComponent,
-        ShortcutItemComponent,
-        ContactsComponent,
-        ContactItemComponent,
-        BirthdayComponent,
-        GroupChatComponent,
-        GroupChatItemComponent
-    ],
-    imports: [
-        CommonModule,
-        RouterModule,
-        SharedModule
-    ],
-    exports: [
-        HomeComponent
-    ]
+  declarations: [
+    HomeComponent,
+    LeftPanelComponent,
+    RightPanelComponent,
+    PostPanelComponent,
+    StoryComponent,
+    NewStoryComponent,
+    SponsoredComponent,
+    TagsComponent,
+    TagItemComponent,
+    SponsoredItemComponent,
+    YourMindComponent,
+    StoriesComponent,
+    PostsComponent,
+    PostComponent,
+    PostHeaderComponent,
+    PostContentComponent,
+    PostInteractionsComponent,
+    PostActionsComponent,
+    ShortcutsComponent,
+    ShortcutItemComponent,
+    ContactsComponent,
+    ContactItemComponent,
+    BirthdayComponent,
+    GroupChatComponent,
+    GroupChatItemComponent,
+  ],
+  imports: [CommonModule, RouterModule, SharedModule],
+  exports: [HomeComponent],
 })
-export class HomeModule { }
+export class HomeModule {}

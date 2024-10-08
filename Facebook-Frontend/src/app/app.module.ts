@@ -8,6 +8,8 @@ import { HeaderModule } from './core/components/header/header.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthModule } from './features/auth/auth.module';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
+import { RouteReuseStrategy } from '@angular/router';
+import { CustomReuseStrategy } from './core/router/custom-reuse-strategy';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { TokenInterceptor } from './core/interceptors/token.interceptor';
     provide: HTTP_INTERCEPTORS,
     useClass: TokenInterceptor,
     multi: true
-  }],
+  },
+  { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

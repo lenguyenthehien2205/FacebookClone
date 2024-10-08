@@ -3,6 +3,7 @@ package com.project.facebook.controllers;
 import com.project.facebook.components.LocalizationUtils;
 import com.project.facebook.dtos.MediaDTO;
 import com.project.facebook.dtos.PostDTO;
+import com.project.facebook.dtos.PostFetchDTO;
 import com.project.facebook.models.Media;
 import com.project.facebook.models.Post;
 import com.project.facebook.models.User;
@@ -27,10 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("${api.base-path}/posts")
@@ -267,5 +265,22 @@ public class PostController {
     private boolean isImageOrVideoFile(MultipartFile file){
         String contentType = file.getContentType();
         return contentType != null && (contentType.startsWith("image/") || contentType.startsWith("video/"));
+    }
+
+    @PostMapping("/random-authors-latest")
+    public ResponseEntity<ResponseObject> getLatestRandomFriendPosts(@RequestBody PostFetchDTO postFetchDTO, Authentication authentication) {
+        User currentUser = (User) authentication.getPrincipal();
+        // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
+        if (!currentUser.getUserId().equals(postFetchDTO.getUserId())) {
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .message("Unauthorized")
+                    .status(HttpStatus.FORBIDDEN).build());
+        }
+        List<PostResponse> posts = postService.getLatestRandomFriendPosts(postFetchDTO.getUserId(), postFetchDTO.getLimit(), postFetchDTO.getFetchedIds());
+        return ResponseEntity.ok().body(ResponseObject.builder()
+                .status(HttpStatus.OK)
+                .data(posts)
+                .message(localizationUtils.getLocalizedMessage(MessageKeys.GET_FRIEND_POSTS_SUCCESSFULLY))
+                .build());
     }
 }

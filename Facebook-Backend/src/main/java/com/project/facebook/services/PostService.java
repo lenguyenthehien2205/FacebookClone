@@ -1,21 +1,21 @@
 package com.project.facebook.services;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.project.facebook.dtos.MediaDTO;
-import com.project.facebook.exceptions.InvalidParamException;
-import com.project.facebook.models.Media;
+import com.project.facebook.repositories.*;
+import com.project.facebook.responses.reaction.ReactionResponse;
 import org.springframework.stereotype.Service;
 
+import com.project.facebook.dtos.MediaDTO;
 import com.project.facebook.dtos.PostDTO;
 import com.project.facebook.exceptions.DataNotFoundException;
+import com.project.facebook.exceptions.InvalidParamException;
+import com.project.facebook.models.Media;
 import com.project.facebook.models.Post;
 import com.project.facebook.models.User;
-import com.project.facebook.repositories.FriendRepository;
-import com.project.facebook.repositories.MediaRepository;
-import com.project.facebook.repositories.PostRepository;
-import com.project.facebook.repositories.UserRepository;
 import com.project.facebook.responses.media.MediaResponse;
 import com.project.facebook.responses.post.PostResponse;
 
@@ -28,6 +28,7 @@ public class PostService implements IPostService{
     private final PostRepository postRepository;
     private final FriendRepository friendRepository;
     private final MediaRepository mediaRepository;
+    private final ReactionRepository reactionRepository;
     @Override
     public Post createPost(PostDTO postDTO) throws Exception {
         User author = userRepository.findById(postDTO.getAuthorId())
@@ -93,7 +94,11 @@ public class PostService implements IPostService{
                             .stream()
                             .map(MediaResponse::fromMedia)
                             .collect(Collectors.toList());
-                    return PostResponse.fromPost(post, mediaResponses);
+                    List<ReactionResponse> reactionResponses = reactionRepository.findByPost_PostId(post.getPostId())
+                            .stream()
+                            .map(ReactionResponse::fromReaction)
+                            .collect(Collectors.toList());
+                    return PostResponse.fromPost(post, mediaResponses, reactionResponses);
                 })
                 .collect(Collectors.toList());
     }
@@ -111,5 +116,30 @@ public class PostService implements IPostService{
             throw new InvalidParamException("Number of media must be <= "+size);
         }
         return mediaRepository.save(postMedia);
+    }
+
+
+    public List<PostResponse> getLatestRandomFriendPosts(Long userId, int limit, List<Long> fetchedIds) {
+        List<Post> posts;
+        if (fetchedIds == null || fetchedIds.isEmpty()) {
+            // Nếu fetchedIds rỗng, gọi truy vấn không có điều kiện NOT IN
+            posts = postRepository.getLatestRandomFriendPosts(userId, limit);
+        } else {
+            // Nếu fetchedIds không rỗng, gọi truy vấn với điều kiện NOT IN
+            posts = postRepository.getLatestRandomFetchedFriendPosts(userId, limit, fetchedIds);
+        }
+        return posts.stream()
+                .map(post -> {
+                    List<MediaResponse> mediaResponses = mediaRepository.findByPost_PostId(post.getPostId())
+                            .stream()
+                            .map(MediaResponse::fromMedia)
+                            .collect(Collectors.toList());
+                    List<ReactionResponse> reactionResponses = reactionRepository.findByPost_PostId(post.getPostId())
+                            .stream()
+                            .map(ReactionResponse::fromReaction)
+                            .collect(Collectors.toList());
+                    return PostResponse.fromPost(post, mediaResponses, reactionResponses);
+                })
+                .collect(Collectors.toList());
     }
 }

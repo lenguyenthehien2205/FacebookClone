@@ -8,4 +8,5 @@ import { ChangeDetectionStrategy, Component, input, output, signal } from '@angu
 })
 export class CustomTitleComponent {
   titleCustom = input.required<string>();
+  position = input.required<string>();
 }

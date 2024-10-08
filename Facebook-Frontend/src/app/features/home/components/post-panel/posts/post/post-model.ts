@@ -10,4 +10,3 @@ export interface Post {
     commentCount: number;
     shareCount: number;
 }
-  

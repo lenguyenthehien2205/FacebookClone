@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, HostListener} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, ViewChild} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { PostPanelComponent } from 'src/app/features/home/components/post-panel/post-panel.component';
 
 @Component({
   selector: 'app-header',
@@ -62,6 +63,7 @@ export class HeaderComponent {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
+    this.activeItemNavItem = 'Trang chủ';
     // Lắng nghe sự kiện điều hướng hoàn tất
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
@@ -86,7 +88,7 @@ export class HeaderComponent {
             this.activeItemNavItem = 'Trò chơi';
             break;
           default:
-            this.activeItemNavItem = '';
+            this.activeItemNavItem = 'Trang chủ';
             break;
         }
       }

@@ -1,15 +1,14 @@
 <div class="flex flex-col gap-4">
-  @for (post of posts(); track post.id) {
+  @for (post of posts; track post.post_id) {
   <app-post
-    [avatar]="post.avatar"
-    [username]="post.username"
-    [time]="post.time"
-    [media]="post.media"
+    [username]="getDisplayName(post)"
+    [media]="post.medias"
     [content]="post.content"
     [privacy]="post.privacy"
-    [interactionCount]="post.interactionCount"
-    [commentCount]="post.commentCount"
-    [shareCount]="post.shareCount"
+    [avatar]="post.avatar"
+    [time]="formatDate(post.created_at)"
+    [timeAgo]="getTimeAgo(post.created_at)"
+    [isOnline]="post.is_online"
   ></app-post>
   }
 </div>

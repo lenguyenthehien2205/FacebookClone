@@ -58,6 +58,8 @@ public class WebSecurityConfig {
                             .requestMatchers(POST, String.format("/%s/posts/upload_medias/{post_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(GET, String.format("/%s/posts/images/{image_name}", apiBasePath)).permitAll()
                             .requestMatchers(GET, String.format("/%s/posts/videos/{video_name}", apiBasePath)).permitAll()
+                            .requestMatchers(POST, String.format("/%s/posts/random-authors-latest", apiBasePath)).permitAll()
+
 //                            .requestMatchers(GET,
 //                                    String.format("/%s/users", apiBasePath)).hasRole("ADMIN")
                             .anyRequest().authenticated();

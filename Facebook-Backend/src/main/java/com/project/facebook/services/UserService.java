@@ -56,6 +56,9 @@ public class UserService implements IUserService {
         User user = User.builder()
                 .username(userDTO.getUsername())
                 .password(encodedPassword)
+                .firstName(userDTO.getFirstName())
+                .lastName(userDTO.getLastName())
+                .displayFormat("firstname_lastname")
                 .avatar(userDTO.getAvatar())
                 .phoneNumber(userDTO.getPhoneNumber())
                 .isOnline(false)
@@ -103,6 +106,8 @@ public class UserService implements IUserService {
             existingUser.setRole(role);
             existingUser.setUsername(userDTO.getUsername());
             existingUser.setPassword(userDTO.getPassword());
+            existingUser.setFirstName(userDTO.getFirstName());
+            existingUser.setLastName(userDTO.getLastName());
             existingUser.setAvatar(userDTO.getAvatar());
             existingUser.setPhoneNumber(userDTO.getPhoneNumber());
             return userRepository.save(existingUser);

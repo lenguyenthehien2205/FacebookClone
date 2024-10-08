@@ -5,7 +5,7 @@ import com.project.facebook.models.Friend;
 import com.project.facebook.models.User;
 import com.project.facebook.responses.ResponseObject;
 import com.project.facebook.responses.user.UserResponse;
-import com.project.facebook.responses.user.UserSummaryResponse;
+import com.project.facebook.responses.user.UserTagResponse;
 import com.project.facebook.services.FriendService;
 import com.project.facebook.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
@@ -64,9 +64,9 @@ public class FriendController {
                         .status(HttpStatus.FORBIDDEN).build());
             }
 
-            List<UserSummaryResponse> quickContacts = friendService.getAllFriendsByUserId(userId)
+            List<UserTagResponse> quickContacts = friendService.getAllFriendsByUserId(userId)
                     .stream()
-                    .map(UserSummaryResponse::fromUser)
+                    .map(UserTagResponse::fromUser)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(ResponseObject.builder()
                             .data(quickContacts)

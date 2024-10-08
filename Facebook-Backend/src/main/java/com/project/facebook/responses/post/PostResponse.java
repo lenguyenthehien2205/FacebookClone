@@ -6,6 +6,7 @@ import com.project.facebook.models.Post;
 import com.project.facebook.repositories.MediaRepository;
 import com.project.facebook.responses.BaseResponse;
 import com.project.facebook.responses.media.MediaResponse;
+import com.project.facebook.responses.reaction.ReactionResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,15 @@ public class PostResponse extends BaseResponse {
     @JsonProperty("author_name")
     private String authorName;
 
+    @JsonProperty("first_name")
+    private String firstName;
+
+    @JsonProperty("last_name")
+    private String lastName;
+
+    @JsonProperty("display_format")
+    private String displayFormat;
+
     private String content;
 
     private String privacy;
@@ -34,16 +44,29 @@ public class PostResponse extends BaseResponse {
     @JsonProperty("author_type")
     private String authorType;
 
+    private String avatar;
+
     private List<MediaResponse> medias;
-    public static PostResponse fromPost(Post post, List<MediaResponse> mediaResponses) {
+
+    private List<ReactionResponse> reactions;
+
+    @JsonProperty("is_online")
+    private Boolean isOnline;
+    public static PostResponse fromPost(Post post, List<MediaResponse> mediaResponses, List<ReactionResponse> reactionResponses) {
         PostResponse postResponse = PostResponse.builder()
                 .postId(post.getPostId())
                 .content(post.getContent())
                 .authorId(post.getAuthor().getUserId())
                 .authorName(post.getAuthor().getUsername())
+                .firstName(post.getAuthor().getFirstName())
+                .lastName(post.getAuthor().getLastName())
+                .displayFormat(post.getAuthor().getDisplayFormat())
                 .privacy(post.getPrivacy())
                 .authorType(post.getAuthorType())
+                .avatar(post.getAuthor().getAvatar())
                 .medias(mediaResponses)
+                .reactions(reactionResponses)
+                .isOnline(post.getAuthor().isOnline())
                 .build();
         postResponse.setCreatedAt(post.getCreatedAt());
         postResponse.setUpdatedAt(post.getUpdatedAt());

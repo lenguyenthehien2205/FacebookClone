@@ -1,206 +1,91 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output, signal } from '@angular/core';
-import { Post } from './post/post-model';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  OnInit,
+  Output,
+  signal,
+} from '@angular/core';
+import { Media } from 'src/app/core/models/media.model';
+import { PostFetchData } from 'src/app/core/models/post-fetch-data.model';
+import { Post } from 'src/app/core/models/post.model';
+import { PostService } from 'src/app/core/services/post.service';
+import { formatDate, getDayOfWeek, getTimeAgo } from 'src/app/core/utils/date-format-utils';
+import { getName } from 'src/app/core/utils/name-format-utils';
+import { environment } from 'src/app/environments/environment';
+import { ApiResponse } from 'src/app/features/auth/responses/api.response';
 
 @Component({
   selector: 'app-posts',
   templateUrl: './posts.component.html',
   styleUrl: './posts.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostsComponent {
-  private allPosts: Post[] = [
-    {
-      id: 1,
-      avatar: 'thehien.jpg',
-      username: 'Right Music',
-      time: '24 phút',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'public',
-      interactionCount: 92,
-      commentCount: 6,
-      shareCount: 2,
-    },
-    {
-      id: 2,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image-2.jpg'],
-      content: 'Bạn bè mà không tặng nhau được cái Iphone 16 thì đừng gọi nhau 2 tiếng bạn thân',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 3,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 4,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 5,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 6,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 7,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 8,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 9,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 10,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 11,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 12,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 13,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-    {
-      id: 14,
-      avatar: 'thehien.jpg',
-      username: 'Thúy Nga',
-      time: '1 giờ',
-      media: ['post-image.jpg'],
-      content: 'Nhà hiền triết Tun Phạm lại có phát ngôn khó hiểu 🙂',
-      privacy: 'only me',
-      interactionCount: 9,
-      commentCount: 6,
-      shareCount: 22,
-    },
-  ];
-  posts = signal<Post[]>(this.allPosts.slice(0, 2)); // Bắt đầu với 2 bài đăng đầu tiên
-  private currentIndex = 2;
-  private isLoading = false;
+export class PostsComponent implements OnInit {
+  // posts = signal<Post[]>([]);
+  postService = inject(PostService);
+  postFetchData: PostFetchData = {
+    user_id: 1,
+    limit: 3,
+    fetched_ids: [],
+  };
+  posts: Post[] = [];
+  ngOnInit() {
+    this.loadPosts();
+  }
+  constructor(private cdRef: ChangeDetectorRef) {}
 
-  // Phương thức để tải thêm bài đăng
-  loadMorePosts() {
-    if (this.isLoading || this.currentIndex >= this.allPosts.length) return;
-    this.isLoading = true;
-    setTimeout(() => {
-      const newPosts = this.allPosts.slice(this.currentIndex, this.currentIndex + 2);
-      this.posts.update(posts => [...posts, ...newPosts]);
-      this.currentIndex += 2;
-      this.isLoading = false;
-    }, 200); // Giả lập thời gian tải dữ liệu (0.2 giây)
+  loadPosts() {
+    this.postFetchData.fetched_ids = this.postService.getFetchedIds();
+    this.postService.fetchPosts(this.postFetchData).subscribe({
+      next: (response: ApiResponse) => {
+        if (
+          response &&
+          response.data.length > 0 &&
+          Array.isArray(response.data)
+        ) {
+          const newPosts = response.data as Post[];
+          // Xử lý bài viết mới
+          newPosts.forEach((post: Post) => {
+            if (post) {
+              post.medias.forEach((media: Media) => {
+                if (media.media_type === 'image') {
+                  media.url = `${environment.apiBaseUrl}/posts/images/${media.url}`;
+                } else if (media.media_type === 'video') {
+                  media.url = `${environment.apiBaseUrl}/posts/videos/${media.url}`;
+                }
+              });
+              post.avatar = `${environment.apiBaseUrl}/users/images/${post.avatar}`;
+            }
+          });
+
+          const newFetchedIds = newPosts.map((post) => post.post_id);
+          this.postService.updateFetchedIds(newFetchedIds);
+
+          this.postService.addPosts(newPosts);
+          this.posts = this.postService.getPosts();
+          this.cdRef.detectChanges();
+        }
+      },
+      error: (error) => {
+        console.error('Lỗi khi tải danh sách bài đăng:', error);
+      },
+    });
   }
 
-  // // Phương thức để cập nhật danh sách posts
-  // updatePosts(newPosts: Post[]) {
-  //   this.posts.set(newPosts); // Giả định rằng signal có phương thức set để cập nhật giá trị
-  // }
+  getDayOfWeek(date: Date): string {
+    return getDayOfWeek(date);
+  }
 
-  // addPost(newPost: Post) {
-  //   const currentPosts = this.posts();
-  //   this.updatePosts([...currentPosts, newPost]);
-  // }
+  formatDate(inputDate: number[]): string {
+    return formatDate(inputDate);
+  }
+  getTimeAgo(inputDate: number[]): string {
+    return getTimeAgo(inputDate);
+  }
+  getDisplayName(post: Post): string {
+    return getName(post.first_name, post.last_name, post.display_format);
+  }
 }

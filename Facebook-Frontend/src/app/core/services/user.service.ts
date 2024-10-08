@@ -6,13 +6,6 @@ import { environment } from 'src/app/environments/environment';
 import { LoginDTO } from 'src/app/features/auth/dtos/login.dto';
 import { ApiResponse } from 'src/app/features/auth/responses/api.response';
 
-export interface User {
-  user_id: number;
-  username: string;
-  avatar: string;
-  isOnline: boolean;
-}
-
 @Injectable({
   providedIn: 'root'
 })

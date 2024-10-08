@@ -1,11 +1,24 @@
 <div class="w-full flex items-center justify-between px-4 pt-3 pb-2">
     <div class="flex items-center gap-2">
-        <a routerLink="/account" class="group">
-            <img [src]="'assets/avatars/' + avatar()" alt="" class="w-[40px] h-[40px] rounded-full group-hover:brightness-[0.85]">
-        </a>
+        <span visual class="relative w-[40px] h-[40px] flex items-center justify-center rounded-full bg-grey2 shadow-lg">
+            <a routerLink="['/', 'thehien']" class="group">
+                <img [src]="avatar()" alt="" class="w-[40px] h-[40px] rounded-full group-hover:brightness-[0.85]">
+            </a>
+            @if (isOnline()) {
+                <span class="absolute bottom-0 right-0 w-[12px] h-[12px] bg-green rounded-full border-[3px] border-background"></span>
+            }
+        </span>
         <div class="flex flex-col">
-            <a routerLink="/account" class="text-text text-[15px] font-medium hover:underline">{{ username() }}</a>
-            <span class="text-grey text-[13px] font-medium">{{ time() }} · <i [ngClass]="getPrivacyIcon(privacy()) + ' text-[12px]'"></i></span>
+            <a [routerLink]="['/', 'thehien']" class="text-text text-[15px] font-medium hover:underline">{{ username() }}</a>
+            <div class="text-grey text-[13px] flex items-center">
+                <app-custom-title [titleCustom]="time()" position="bottom">
+                    <span class="font-medium hover:underline cursor-pointer">{{ timeAgo() }}</span>
+                </app-custom-title>
+                <span class="px-[3px]"> · </span>
+                <app-custom-title [titleCustom]="getConvertedPrivacy(privacy())" [position]="'top'">
+                    <i [ngClass]="getPrivacyIcon(privacy()) + ' text-[12px] cursor-auto'"></i>
+                </app-custom-title>
+            </div>
         </div>
     </div>
     <div class="flex items-center">

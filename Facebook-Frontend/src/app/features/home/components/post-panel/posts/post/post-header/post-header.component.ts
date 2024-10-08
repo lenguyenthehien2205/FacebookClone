@@ -10,6 +10,8 @@ export class PostHeaderComponent {
   avatar = input.required<string>();
   username = input.required<string>();
   time = input.required<string>();
+  timeAgo = input.required<string>();
+  isOnline = input.required<boolean>();
   privacyIcons = [
     {
       mode: 'public',
@@ -27,5 +29,14 @@ export class PostHeaderComponent {
   privacy = input.required<string>();
   getPrivacyIcon(privacy: string) {
     return this.privacyIcons.find(icon => icon.mode === privacy)?.icon;
+  }
+  getConvertedPrivacy(privacy: string){
+    if(privacy === 'friends'){
+      return 'Bạn bè';
+    }else if(privacy === 'public'){
+      return 'Công khai';
+    }else {
+      return 'Chỉ mình tôi';
+    }
   }
 }

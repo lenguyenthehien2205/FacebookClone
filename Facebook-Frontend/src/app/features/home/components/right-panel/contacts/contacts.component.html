@@ -10,7 +10,7 @@
     </div>
     <div content class="mb-[10px]">
         @for (user of users(); track user.user_id) {
-            <app-contact-item [image]="user.avatar" [username]="user.username" [isOnline]="user.isOnline"></app-contact-item>
+            <app-contact-item [image]="user.avatar" [username]="getDisplayName(user)" [isOnline]="user.is_online"></app-contact-item>
         }
         <!-- <app-contact-item [image]="'thehien.jpg'" [username]="'Thế Hiển'" [isOnline]="true"></app-contact-item>
         <app-contact-item [image]="'thanhkhiem.jpg'" [username]="'Thành Khiêm'" [isOnline]="true"></app-contact-item>

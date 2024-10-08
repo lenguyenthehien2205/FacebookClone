@@ -12,6 +12,6 @@ export class PostPanelComponent {
 
 
   loadMorePosts() {
-    this.postsComponent.loadMorePosts();
+    this.postsComponent.loadPosts();
   }
 }

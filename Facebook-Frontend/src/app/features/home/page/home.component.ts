@@ -13,7 +13,7 @@ export class HomeComponent {
   handleScroll(event: Event): void {
     const element = event.target as HTMLElement;
     const scrollPosition = element.scrollTop + element.clientHeight;
-    const scrollThreshold = element.scrollHeight*0.7;
+    const scrollThreshold = element.scrollHeight*0.5;
     console.log('scrollPosition', scrollPosition);
     console.log('scrollThreshold', scrollThreshold);
     if (scrollPosition >= scrollThreshold) {

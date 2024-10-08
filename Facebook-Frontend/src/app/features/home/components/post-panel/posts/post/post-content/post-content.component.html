@@ -1,10 +1,14 @@
-<div class="px-4 pb-3 border-b-[1px] border-[#e0e3e7]">
+<div class="px-4 pb-3 border-[#e0e3e7]">
     {{ content() }}
 </div>
-<div>
-    @for (media of media(); track media) {
-        <a routerLink="/account">
-            <img [src]="'assets/post-image/'+media" alt="" class="w-full object-contain">
-        </a>
-    }
-</div>
+@if(media().length > 0){
+    <div class="pb-3">
+        @for (media of media(); track media) {
+            @if (media.media_type === "image") {
+                <img [src]="media.url" alt="" class="w-full object-contain">
+            } @else if(media.media_type === "video"){
+                <video [src]="media.url" alt="" class="w-full object-contain" controls class="video-post"></video>
+            }
+        }
+    </div>
+}

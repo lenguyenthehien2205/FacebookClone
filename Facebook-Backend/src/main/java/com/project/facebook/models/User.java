@@ -43,6 +43,18 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "password", length = 200, nullable = false)
     private String password;
 
+    @JsonProperty("first_name")
+    @Column(name = "first_name", length = 200, nullable = false)
+    private String firstName;
+
+    @JsonProperty("last_name")
+    @Column(name = "last_name", length = 100, nullable = false)
+    private String lastName;
+
+    @JsonProperty("display_format")
+    @Column(name = "display_format", length = 200, nullable = false)
+    private String displayFormat;
+
     @ManyToOne
     @JsonProperty("role_id")
     @JoinColumn(name = "role_id", nullable = false)

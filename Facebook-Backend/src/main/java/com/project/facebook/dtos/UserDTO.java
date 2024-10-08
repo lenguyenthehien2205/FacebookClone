@@ -24,6 +24,14 @@ public class UserDTO {
     @NotBlank(message = MessageKeys.PASSWORD_IS_REQUIRED)
     private String password;
 
+    @JsonProperty("first_name")
+    @NotBlank(message = "first name is required")
+    private String firstName;
+
+    @JsonProperty("last_name")
+    @NotBlank(message = "last name is required")
+    private String lastName;
+
     @JsonProperty("role_id")
     @NotNull(message = MessageKeys.ROLE_IS_REQUIRED)
     private Long roleId;
