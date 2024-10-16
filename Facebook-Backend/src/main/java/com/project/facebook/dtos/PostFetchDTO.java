@@ -11,8 +11,8 @@ import java.util.List;
 @Setter
 @Builder
 public class PostFetchDTO {
-    @JsonProperty("user_id")
-    private Long userId;
+    @JsonProperty("author_id")
+    private Long authorId;
 
     @JsonProperty("limit")
     private int limit;

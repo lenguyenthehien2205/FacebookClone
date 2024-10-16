@@ -24,6 +24,9 @@ public class PostDTO {
     @JsonProperty("author_type")
     private String authorType;
 
+    @JsonProperty("post_type")
+    private String postType;
+
     @JsonProperty("privacy")
     private String privacy;
 

@@ -5,9 +5,14 @@ import java.util.Optional;
 
 import com.project.facebook.components.JwtTokenUtils;
 import com.project.facebook.components.LocalizationUtils;
+import com.project.facebook.dtos.UserCreateDTO;
 import com.project.facebook.exceptions.DataNotFoundException;
 
+import com.project.facebook.models.PageBase;
+import com.project.facebook.models.Profile;
+import com.project.facebook.repositories.*;
 import com.project.facebook.utils.MessageKeys;
+import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,10 +23,9 @@ import com.project.facebook.dtos.UserDTO;
 import com.project.facebook.exceptions.PermissionDenyException;
 import com.project.facebook.models.Role;
 import com.project.facebook.models.User;
-import com.project.facebook.repositories.RoleRepository;
-import com.project.facebook.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Isolation;
 
 @Service
 @RequiredArgsConstructor
@@ -33,44 +37,59 @@ public class UserService implements IUserService {
     private final JwtTokenUtils jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
     private final LocalizationUtils localizationUtils;
+    private final PageRepository pageRepository;
+    private final PageBaseRepository pageBaseRepository;
+    private final ProfileRepository profileRepository;
     @Override
     public List<User> getAllUsers() {
         //chuyen sang stream de co the map, sau do chuyen lai list
         return userRepository.findAll();
     }
-
+    // ok
     @Override
-    public User createUser(UserDTO userDTO) throws Exception {
-        String phoneNumber = userDTO.getPhoneNumber();
-        if(userRepository.existsByPhoneNumber(phoneNumber)){
+    public User createUser(UserCreateDTO userCreateDTO) throws Exception {
+        String phoneNumber = userCreateDTO.getPhoneNumber();
+        if(userRepository.existsByUsername(phoneNumber)){
             throw new DataIntegrityViolationException(localizationUtils.getLocalizedMessage(MessageKeys.PHONE_NUMBER_ALREADY_EXISTS));
         }
-        Role role = roleRepository.findById(userDTO.getRoleId())
+        Role role = roleRepository.findById(userCreateDTO.getRoleId())
             .orElseThrow(() -> new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.ROLE_NOT_EXISTS)));
         if(role.getRoleName().equals("ADMIN")){
             throw new PermissionDenyException(localizationUtils.getLocalizedMessage(MessageKeys.PERMISSION_DENIED));
         }
-        String password = userDTO.getPassword();
+        String password = userCreateDTO.getPassword();
         // ma hoa password da cau hinh trong UserDetail
         String encodedPassword = passwordEncoder.encode(password);
         User user = User.builder()
-                .username(userDTO.getUsername())
+                .username(userCreateDTO.getPhoneNumber())
                 .password(encodedPassword)
-                .firstName(userDTO.getFirstName())
-                .lastName(userDTO.getLastName())
-                .displayFormat("firstname_lastname")
-                .avatar(userDTO.getAvatar())
-                .phoneNumber(userDTO.getPhoneNumber())
-                .isOnline(false)
                 .isActive(true)
                 .build();
         user.setRole(role);
-        return userRepository.save(user);
+        userRepository.save(user);
+        System.out.println(user.getUserId());
+        PageBase pageBase = PageBase.builder()
+                .pathName(userCreateDTO.getPathName())
+                .avatar(userCreateDTO.getAvatar())
+                .coverPhoto(userCreateDTO.getCoverPhoto())
+                .biography(userCreateDTO.getBiography())
+                .build();
+        pageBaseRepository.save(pageBase);
+        Profile profile = Profile.builder()
+                .user(user)
+                .pageBase(pageBase)
+                .firstName(userCreateDTO.getFirstName())
+                .lastName(userCreateDTO.getLastName())
+                .gender(userCreateDTO.getGender())
+                .dateOfBirth(userCreateDTO.getDateOfBirth())
+                .build();
+        profileRepository.save(profile);
+        return user;
     }
-
+    // ok
     @Override
     public String login(String phoneNumber, String password) throws Exception {
-        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
+        Optional<User> optionalUser = userRepository.findByUsername(phoneNumber);
         if (optionalUser.isEmpty()){
             throw new DataNotFoundException(localizationUtils.getLocalizedMessage(MessageKeys.INVALID_PHONE_NUMBER_PASSWORD));
         }
@@ -82,13 +101,15 @@ public class UserService implements IUserService {
         authenticationManager.authenticate(authenticationToken); // su dung AuthenticationProvider da cau hinh de xac thuc khi authenticate
         return jwtTokenUtil.genarateToken(existingUser);
     }
+    // ok
     @Override
     public Optional<User> getUserByPhoneNumber(String phoneNumber) throws DataNotFoundException{
-        if (userRepository.findByPhoneNumber(phoneNumber).isEmpty()){
+        if (userRepository.findByUsername(phoneNumber).isEmpty()){
             throw new DataNotFoundException("Phone number is not found");
         }
-        return userRepository.findByPhoneNumber(phoneNumber);
+        return userRepository.findByUsername(phoneNumber);
     }
+    // ok
     @Override
     public User getUserById(Long id) throws DataNotFoundException{
         return userRepository.findById(id).orElseThrow(
@@ -104,20 +125,10 @@ public class UserService implements IUserService {
                         "Cannot find role with id: "+userDTO.getRoleId()
                     ));
             existingUser.setRole(role);
-            existingUser.setUsername(userDTO.getUsername());
+            existingUser.setUsername(userDTO.getPhoneNumber());
             existingUser.setPassword(userDTO.getPassword());
-            existingUser.setFirstName(userDTO.getFirstName());
-            existingUser.setLastName(userDTO.getLastName());
-            existingUser.setAvatar(userDTO.getAvatar());
-            existingUser.setPhoneNumber(userDTO.getPhoneNumber());
             return userRepository.save(existingUser);
         }
         return null;
-    }
-    @Override
-    public User updateUserAvatar(Long userId, String avatarFileName) throws Exception{
-        User existingUser = getUserById(userId);
-        existingUser.setAvatar(avatarFileName);
-        return userRepository.save(existingUser);
     }
 }

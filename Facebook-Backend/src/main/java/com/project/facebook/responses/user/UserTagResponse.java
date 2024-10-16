@@ -1,6 +1,8 @@
 package com.project.facebook.responses.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.facebook.models.PageBase;
+import com.project.facebook.models.Profile;
 import com.project.facebook.models.Role;
 import com.project.facebook.models.User;
 import lombok.Builder;
@@ -28,14 +30,14 @@ public class UserTagResponse {
     @JsonProperty("is_online")
     private boolean isOnline;
 
-    public static UserTagResponse fromUser(User user) {
+    public static UserTagResponse fromUser(Profile profile, PageBase pageBase) {
         UserTagResponse userTagResponse = UserTagResponse.builder()
-                .userId(user.getUserId())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .displayFormat(user.getDisplayFormat())
-                .avatar(user.getAvatar())
-                .isOnline(user.isOnline())
+                .userId(profile.getUser().getUserId())
+                .firstName(profile.getFirstName())
+                .lastName(profile.getLastName())
+                .displayFormat(profile.getDisplayFormat())
+                .avatar(pageBase.getAvatar())
+                .isOnline(profile.getIsOnline())
                 .build();
         return userTagResponse;
     }

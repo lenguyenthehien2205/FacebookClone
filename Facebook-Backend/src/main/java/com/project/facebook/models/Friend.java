@@ -21,14 +21,14 @@ public class Friend {
     private Long friendId;
 
     @ManyToOne
-    @JsonProperty("first_user_id")
-    @JoinColumn(name = "first_user_id")
-    private User firstUser;
+    @JsonProperty("first_profile_id")
+    @JoinColumn(name = "first_profile_id")
+    private Profile firstProfile;
 
     @ManyToOne
-    @JoinColumn(name = "second_user_id")
-    @JsonProperty("second_user_id")
-    private User secondUser;
+    @JoinColumn(name = "second_profile_id")
+    @JsonProperty("second_profile_id")
+    private Profile secondProfile;
 
     @Column(name = "is_active")
     @JsonProperty("is_active")

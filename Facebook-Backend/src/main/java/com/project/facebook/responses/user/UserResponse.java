@@ -15,7 +15,6 @@ public class UserResponse extends BaseResponse {
     @JsonProperty("user_id")
     private Long userId;
     private String username;
-    private String avatar;
 
     @JsonProperty("phone_number")
     private String phoneNumber;
@@ -28,8 +27,7 @@ public class UserResponse extends BaseResponse {
                 .userId(user.getUserId())
                 .username(user.getUsername())
                 .role(user.getRole())
-                .phoneNumber(user.getPhoneNumber())
-                .avatar(user.getAvatar())
+                .phoneNumber(user.getUsername())
                 .build();
         userResponse.setCreatedAt(user.getCreatedAt());
         userResponse.setUpdatedAt(user.getUpdatedAt());

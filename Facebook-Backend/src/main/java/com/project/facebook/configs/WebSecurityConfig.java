@@ -46,8 +46,8 @@ public class WebSecurityConfig {
                                     String.format("/%s/friends/{user_id}", apiBasePath)
                             )
                             .permitAll()
-                            .requestMatchers(GET, String.format("/%s/users/{phone}", apiBasePath)).hasRole("USER")
-                            .requestMatchers(GET, String.format("/%s/users", apiBasePath)).hasRole("USER")
+                            .requestMatchers(GET, String.format("/%s/users/{phone}", apiBasePath)).hasRole("ADMIN")
+                            .requestMatchers(GET, String.format("/%s/users", apiBasePath)).hasRole("ADMIN")
                             .requestMatchers(GET, String.format("/%s/users/images/{imageName}", apiBasePath)).permitAll()
                             .requestMatchers(POST, String.format("/%s/users/upload_avatar/{user_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/friends/{first_user_id}/{second_user_id}", apiBasePath)).hasRole("USER")
@@ -55,11 +55,14 @@ public class WebSecurityConfig {
                             .requestMatchers(POST, String.format("/%s/posts", apiBasePath)).hasRole("USER")
                             .requestMatchers(PUT, String.format("/%s/posts/{post_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(GET, String.format("/%s/posts/friend-posts/{user_id}", apiBasePath)).hasRole("USER")
-                            .requestMatchers(POST, String.format("/%s/posts/upload_medias/{post_id}", apiBasePath)).hasRole("USER")
-                            .requestMatchers(GET, String.format("/%s/posts/images/{image_name}", apiBasePath)).permitAll()
-                            .requestMatchers(GET, String.format("/%s/posts/videos/{video_name}", apiBasePath)).permitAll()
+                            .requestMatchers(POST, String.format("/%s/posts/upload_medias/{post_id}/{note}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/posts/random-authors-latest", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/posts/media/{mediaId}/interaction", apiBasePath)).permitAll()
+                            .requestMatchers(POST, String.format("/%s/medias/image_post/{image_name}", apiBasePath)).permitAll()
+                            .requestMatchers(POST, String.format("/%s/medias/video_post/{video_name}", apiBasePath)).permitAll()
 
+                            .requestMatchers(POST, String.format("/%s/profiles/upload_avatar/{profile_id}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(POST, String.format("/%s/profiles/upload_cover_photo/{profile_id}", apiBasePath)).hasRole("USER")
 //                            .requestMatchers(GET,
 //                                    String.format("/%s/users", apiBasePath)).hasRole("ADMIN")
                             .anyRequest().authenticated();

@@ -1,26 +1,33 @@
 package com.project.facebook.repositories;
 
-import com.project.facebook.models.Friend;
-import com.project.facebook.models.User;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import com.project.facebook.models.Friend;
+import com.project.facebook.models.Profile;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
-    @Query("SELECT COUNT(f) > 0 FROM Friend f " +
-            "WHERE (f.firstUser.id = :firstUserId AND f.secondUser.id = :secondUserId) " +
-            "OR (f.firstUser.id = :secondUserId AND f.secondUser.id = :firstUserId)")
-    boolean existsFriendship(@Param("firstUserId") Long firstUserId, @Param("secondUserId") Long secondUserId);
+    @Query(value = "SELECT COUNT(f) > 0 FROM friends f " +
+            "WHERE (f.first_profile_id = :firstProfileId AND f.second_profile_id = :secondProfileId) " +
+            "OR (f.first_profile_id = :secondProfileId AND f.second_profile_id = :firstProfileId)", nativeQuery = true)
+    boolean existsFriendship(@Param("firstProfileId") Long firstProfileId, @Param("secondProfileId") Long secondProfileId);
 
-    @Query("SELECT u FROM User u WHERE u.id IN (" +
-            "SELECT CASE " +
-            "WHEN f.firstUser.id = :userId THEN f.secondUser.id " +
-            "WHEN f.secondUser.id = :userId THEN f.firstUser.id " +
-            "END " +
-            "FROM Friend f " +
-            "WHERE f.firstUser.id = :userId OR f.secondUser.id = :userId)")
-    List<User> findAllFriendsByUserId(@Param("userId") Long userId);
+    @Query("SELECT p FROM Profile p WHERE p.id IN " +
+            "(SELECT CASE WHEN f.firstProfile.id = :profileId THEN f.secondProfile.id " +
+            "            WHEN f.secondProfile.id = :profileId THEN f.firstProfile.id END " +
+            "FROM Friend f WHERE f.firstProfile.id = :profileId OR f.secondProfile.id = :profileId)")
+    List<Profile> findAllFriendsByProfileId(@Param("profileId") Long profileId);
+//    @Query(value = "SELECT p.* FROM profiles p WHERE p.id IN (" +
+//            "SELECT CASE " +
+//            "    WHEN f.first_profile_id = :profileId THEN f.second_profile_id " +
+//            "    WHEN f.second_profile_id = :profileId THEN f.first_profile_id " +
+//            "END " +
+//            "FROM friends f " +
+//            "WHERE f.first_profile_id = :profileId OR f.second_profile_id = :profileId)",
+//            nativeQuery = true)
+//    List<Profile> findAllFriendsByProfileId(@Param("profileId") Long profileId);
 }

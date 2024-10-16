@@ -2,14 +2,7 @@ package com.project.facebook.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +12,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,50 +25,35 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User extends BaseEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("user_id")
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "username", length = 100, nullable = false)
+    @JsonProperty("phone_number")
+    @Column(name = "phone_number", length = 20, nullable = false)
     private String username;
 
     @Column(name = "password", length = 200, nullable = false)
     private String password;
-
-    @JsonProperty("first_name")
-    @Column(name = "first_name", length = 200, nullable = false)
-    private String firstName;
-
-    @JsonProperty("last_name")
-    @Column(name = "last_name", length = 100, nullable = false)
-    private String lastName;
-
-    @JsonProperty("display_format")
-    @Column(name = "display_format", length = 200, nullable = false)
-    private String displayFormat;
 
     @ManyToOne
     @JsonProperty("role_id")
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @Column(name = "avatar", length = 350)
-    private String avatar;
-
-    @JsonProperty("phone_number")
-    @Column(name = "phone_number", length = 20)
-    private String phoneNumber;
-
-    @Column(name = "is_online")
-    @JsonProperty("is_online")
-    private boolean isOnline;
-
     @Column(name = "is_active")
     @JsonProperty("is_active")
     private boolean isActive;
+
+    @PrePersist
+    protected void onCreate() {
+        isActive = true;
+        setCreatedAt(LocalDateTime.now());
+        setUpdatedAt(LocalDateTime.now());
+    }
 
     // lay ra danh sac quyen
     @Override

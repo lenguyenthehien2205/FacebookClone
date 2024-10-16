@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MediaRepository extends JpaRepository<Media, Long> {
-    List<Media> findByPost_PostId(Long postId);
+    int countByPostId(Long postId);
+    List<Media> findByPostId(Long postId);
 }

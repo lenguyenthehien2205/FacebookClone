@@ -13,6 +13,6 @@ public interface IPostService {
     Post updatePost(Long postId, PostDTO postDTO) throws Exception;
     void deletePost(Long postId) throws Exception;
     Post getPostById(Long postId) throws Exception;
-    List<PostResponse> getFriendPosts(Long userId) throws Exception;
+//    List<PostResponse> getFriendPosts(Long userId) throws Exception;
     Media createPostMedia(Long id, MediaDTO mediaDTO) throws Exception;
 }

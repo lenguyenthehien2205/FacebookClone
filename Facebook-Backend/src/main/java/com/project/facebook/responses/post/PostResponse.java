@@ -1,75 +1,60 @@
 package com.project.facebook.responses.post;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.project.facebook.models.Media;
 import com.project.facebook.models.Post;
-import com.project.facebook.repositories.MediaRepository;
 import com.project.facebook.responses.BaseResponse;
+import com.project.facebook.responses.media.MediaPostResponse;
 import com.project.facebook.responses.media.MediaResponse;
-import com.project.facebook.responses.reaction.ReactionResponse;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.project.facebook.responses.interaction.InteractionPostResponse;
+import lombok.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostResponse extends BaseResponse {
-    @JsonProperty("post_id")
-    private Long postId;
+    @JsonProperty("id")
+    private Long id;
 
     @JsonProperty("author_id")
     private Long authorId;
 
+    @JsonProperty("author_type")
+    private String authorType;
+
+    @JsonProperty("post_type")
+    private String postType;
+
     @JsonProperty("author_name")
     private String authorName;
-
-    @JsonProperty("first_name")
-    private String firstName;
-
-    @JsonProperty("last_name")
-    private String lastName;
-
-    @JsonProperty("display_format")
-    private String displayFormat;
 
     private String content;
 
     private String privacy;
 
-    @JsonProperty("author_type")
-    private String authorType;
-
     private String avatar;
-
-    private List<MediaResponse> medias;
-
-    private List<ReactionResponse> reactions;
 
     @JsonProperty("is_online")
     private Boolean isOnline;
-    public static PostResponse fromPost(Post post, List<MediaResponse> mediaResponses, List<ReactionResponse> reactionResponses) {
+
+    @JsonProperty("is_active")
+    private Boolean isActive;
+
+    public static PostResponse fromPost(Post post){
         PostResponse postResponse = PostResponse.builder()
-                .postId(post.getPostId())
-                .content(post.getContent())
-                .authorId(post.getAuthor().getUserId())
-                .authorName(post.getAuthor().getUsername())
-                .firstName(post.getAuthor().getFirstName())
-                .lastName(post.getAuthor().getLastName())
-                .displayFormat(post.getAuthor().getDisplayFormat())
-                .privacy(post.getPrivacy())
+                .id(post.getId())
+                .authorId(post.getAuthorId())
                 .authorType(post.getAuthorType())
-                .avatar(post.getAuthor().getAvatar())
-                .medias(mediaResponses)
-                .reactions(reactionResponses)
-                .isOnline(post.getAuthor().isOnline())
+                .postType(post.getPostType())
+                .privacy(post.getPrivacy())
+                .content(post.getContent())
+                .isActive(post.isActive())
                 .build();
-        postResponse.setCreatedAt(post.getCreatedAt());
         postResponse.setUpdatedAt(post.getUpdatedAt());
+        postResponse.setCreatedAt(post.getCreatedAt());
         return postResponse;
     }
 }

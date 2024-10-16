@@ -13,6 +13,9 @@ public class MediaDTO {
     @JsonProperty("post_id")
     private Long postId;
 
+    @JsonProperty("note")
+    private String note;
+
     @JsonProperty("url")
     private String url;
 

@@ -23,6 +23,9 @@ public class Media {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
+    @Column(name = "note")
+    private String note;
+
     @Column(name = "url", length = 350)
     private String url;
 

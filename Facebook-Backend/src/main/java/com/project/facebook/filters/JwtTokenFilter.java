@@ -74,10 +74,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // cac request duoc cho qua ma khong can kiem tra token
         final List<Pair<String, String>> bypassTokens = Arrays.asList(
                 Pair.of(String.format("/%s/users/register", apiBasePath),"POST"),
-                Pair.of(String.format("/%s/users/login", apiBasePath),"POST"),
-                Pair.of(String.format("/%s/users/images/", apiBasePath),"GET"),
-                Pair.of(String.format("/%s/posts/images/", apiBasePath),"GET"),
-                Pair.of(String.format("/%s/posts/videos/", apiBasePath),"GET")
+                Pair.of(String.format("/%s/users/login", apiBasePath),"POST")
         );
         for (Pair<String, String> bypassToken: bypassTokens){
             if(request.getServletPath().contains(bypassToken.getFirst()) && request.getMethod().equals(bypassToken.getSecond())){

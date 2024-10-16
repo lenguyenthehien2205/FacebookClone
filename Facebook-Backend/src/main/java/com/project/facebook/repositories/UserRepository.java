@@ -9,6 +9,6 @@ import com.project.facebook.models.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
-    boolean existsByPhoneNumber(String phoneNumber);
-    Optional<User> findByPhoneNumber(String phoneNumber);
+    boolean existsByUsername(String phoneNumber);
+    Optional<User> findByUsername(String phoneNumber);
 }

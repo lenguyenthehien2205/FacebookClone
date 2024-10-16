@@ -33,11 +33,11 @@ public class JwtTokenUtils {
         // Truyen cac gia tri vao cac claim(khong chi la phoneNumber)
         Map<String, Object> claims = new HashMap<>();
 //        this.generateSecretKey();
-        claims.put("phoneNumber", user.getPhoneNumber());
+        claims.put("phoneNumber", user.getUsername());
         try{
             String token = Jwts.builder()
                     .setClaims(claims) // truyen claims vao token
-                    .setSubject(user.getPhoneNumber())
+                    .setSubject(user.getUsername())
                     .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256) // sau nay truyen secret key de lay cac claim
                     .compact();
@@ -88,6 +88,6 @@ public class JwtTokenUtils {
     }
     public boolean validateToken(String token, UserDetails userDetails){
         String phoneNumber = extractPhoneNumber(token);
-        return (phoneNumber.equals(((User) userDetails).getPhoneNumber()) && !isTokenExpired(token));
+        return (phoneNumber.equals(((User) userDetails).getUsername()) && !isTokenExpired(token));
     }
 }

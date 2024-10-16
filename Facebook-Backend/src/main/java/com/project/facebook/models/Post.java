@@ -18,18 +18,21 @@ import java.util.List;
 public class Post extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("post_id")
-    @Column(name = "post_id")
-    private Long postId;
+    @JsonProperty("id")
+    @Column(name = "id")
+    private Long id;
 
-    @ManyToOne
     @JsonProperty("author_id")
-    @JoinColumn(name = "author_id")
-    private User author;
+    @Column(name = "author_id")
+    private Long authorId;
 
     @JsonProperty("author_type")
     @Column(name = "author_type")
     private String authorType;
+
+    @JsonProperty("post_type")
+    @Column(name = "post_type")
+    private String postType;
 
     @Column(name = "privacy")
     private String privacy;

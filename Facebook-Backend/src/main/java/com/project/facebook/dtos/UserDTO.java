@@ -8,6 +8,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.Date;
+
 @Data//toString
 @Getter
 @Setter
@@ -15,31 +17,41 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(force = true) // có thể khởi tạo LocalizationUtils mà không cần gán giá trị mặc định
 public class UserDTO {
-    private final LocalizationUtils localizationUtils;
-    @JsonProperty("username")
-    @NotBlank(message = MessageKeys.USERNAME_IS_REQUIRED)
-    private String username;
+    @JsonProperty("phone_number")
+    @NotBlank(message = "Phone number is required")
+    private String phoneNumber;
 
     @JsonProperty("password")
-    @NotBlank(message = MessageKeys.PASSWORD_IS_REQUIRED)
+    @NotBlank(message = "Password is required")
     private String password;
 
+    @JsonProperty("role_id")
+    @NotNull(message = "Role is required")
+    private Long roleId;
+
     @JsonProperty("first_name")
-    @NotBlank(message = "first name is required")
+    @NotBlank(message = "First name is required")
     private String firstName;
 
     @JsonProperty("last_name")
-    @NotBlank(message = "last name is required")
+    @NotBlank(message = "Last name is required")
     private String lastName;
 
-    @JsonProperty("role_id")
-    @NotNull(message = MessageKeys.ROLE_IS_REQUIRED)
-    private Long roleId;
+    @NotBlank(message = "Gender is required")
+    private String gender;
 
-    @JsonProperty("avatar")
+    @JsonProperty("date_of_birth")
+    @NotNull(message = "Date of birth is required")
+    private Date dateOfBirth;
+
+    @JsonProperty("path_name")
+    @NotBlank(message = "Path name is required")
+    private String pathName;
+
     private String avatar;
 
-    @JsonProperty("phone_number")
-    @NotBlank(message = MessageKeys.PHONE_NUMBER_IS_REQUIRED)
-    private String phoneNumber;
+    @JsonProperty("cover_photo")
+    private String coverPhoto;
+
+    private String biography;
 }
