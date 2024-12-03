@@ -16,4 +16,8 @@ export class PostComponent {
   time = input.required<string>();
   timeAgo = input.required<string>();
   isOnline = input.required<boolean>();
+  postId = input.required<number>();
+  totalInteractions = input.required<number>();
+  highestInteraction = input.required<string>();
+  secondHighestInteraction = input.required<string>();
 }

@@ -24,14 +24,14 @@ public class ProfileService implements IProfileService{
     @Override
     public PageBase updateProfileAvatar(Long profileId, String avatarFileName) throws DataNotFoundException{
         Profile existingProfile = getProfileById(profileId);
-        PageBase pageBase = pageBaseService.getPageBaseById(existingProfile.getId());
+        PageBase pageBase = pageBaseService.getPageBaseById(existingProfile.getPageBase().getId());
         pageBase.setAvatar(avatarFileName);
         return pageBaseRepository.save(pageBase);
     }
     @Override
     public PageBase updateProfileCoverPhoto(Long profileId, String avatarFileName) throws DataNotFoundException{
         Profile existingProfile = getProfileById(profileId);
-        PageBase pageBase = pageBaseService.getPageBaseById(existingProfile.getId());
+        PageBase pageBase = pageBaseService.getPageBaseById(existingProfile.getPageBase().getId());
         pageBase.setCoverPhoto(avatarFileName);
         return pageBaseRepository.save(pageBase);
     }

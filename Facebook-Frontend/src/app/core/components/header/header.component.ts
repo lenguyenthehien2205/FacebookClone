@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, HostListener, ViewChild} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, inject, input, ViewChild} from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { environment } from 'src/app/environments/environment';
 import { PostPanelComponent } from 'src/app/features/home/components/post-panel/post-panel.component';
+import { TokenService } from '../../services/token.service';
 
 @Component({
   selector: 'app-header',
@@ -10,6 +12,7 @@ import { PostPanelComponent } from 'src/app/features/home/components/post-panel/
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
+  tokenService = inject(TokenService);
   roundedButtons = [
     {
       name: 'Menu',
@@ -34,6 +37,12 @@ export class HeaderComponent {
   
   activeItemNavItem: string | null = null;
   activeButton: string | null = null;
+  getAvatar(): string{
+    if(this.tokenService.getAvatar()){
+      return `${environment.apiBaseUrl}/profiles/avatar_image/${this.tokenService.getAvatar()}`;
+    }
+    return 'assets/avatars/default-avatar.png';
+  }
   // showHistory: boolean = false;
   onSelectNavItem(name: string) {
     this.activeItemNavItem = name;
@@ -68,7 +77,6 @@ export class HeaderComponent {
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         const pathAfterHostname = this.router.url;
-        console.log(pathAfterHostname);
 
         // Cập nhật activeItemNavItem dựa trên URL
         switch (pathAfterHostname) {

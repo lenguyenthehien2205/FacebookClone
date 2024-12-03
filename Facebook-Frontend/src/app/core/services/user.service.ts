@@ -1,19 +1,21 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RegisterDTO } from 'src/app/features/auth/dtos/register.dto';
 import { environment } from 'src/app/environments/environment';
 import { LoginDTO } from 'src/app/features/auth/dtos/login.dto';
 import { ApiResponse } from 'src/app/features/auth/responses/api.response';
+import { TokenService } from './token.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  tokenService = inject(TokenService);
   private apiRegister = `${environment.apiBaseUrl}/users/register`;
   private apiLogin = `${environment.apiBaseUrl}/users/login`;
   private apiUrl = 'http://localhost:8088/api/v1/users'; // Thay thế bằng URL API thực tế
-  private apiContacts = `${environment.apiBaseUrl}/friends/contacts/1`;
+  private apiContacts = `${environment.apiBaseUrl}/friends/contacts/${this.tokenService.getUserId()}`;
   private apiConfig = {
     headers: this.createHeaders()
   }

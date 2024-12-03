@@ -10,10 +10,8 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class InteractionPostResponse {
-    @JsonProperty("interactor_name_responses")
-    private List<InteractorNameResponse> interactorNameResponses;
-
+public class InteractionResponse {
+    // bo interactor name
     @JsonProperty("total_interactions")
     private int totalInteractions;
 

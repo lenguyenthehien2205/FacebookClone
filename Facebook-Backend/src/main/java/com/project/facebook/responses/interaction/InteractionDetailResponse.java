@@ -10,16 +10,10 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class InteractionMediaResponse {
+public class InteractionDetailResponse {
     @JsonProperty("interactor_name_responses")
     private List<InteractorNameResponse> interactorNameResponses;
 
     @JsonProperty("total_interactions")
     private int totalInteractions;
-
-    @JsonProperty("highest_interaction")
-    private String highestInteraction;
-
-    @JsonProperty("second_highest_interaction")
-    private String secondHighestInteraction;
 }

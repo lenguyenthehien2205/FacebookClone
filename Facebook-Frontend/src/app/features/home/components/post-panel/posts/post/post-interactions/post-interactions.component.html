@@ -1,10 +1,27 @@
 <div class="flex justify-between px-4 pb-[10px] border-[#e0e3e7]">
-    <div class="flex items-center gap-[22px]">   
+    <div class="flex items-center">   
         <div class="flex relative">
-            <img src="assets/icons/like.svg" alt="" class="size-[22px] z-10 border-[2px] border-white rounded-full cursor-pointer">
-            <img src="assets/icons/haha.svg" alt="" class="size-[22px] absolute left-[18px] z-0 border-[2px] border-white rounded-full cursor-pointer">
+            @if(highestInteraction()){
+                <app-custom-title [titleCustom]="highestInteractionDetails$ | async" [y]="10" [center]="false" class="z-20">
+                    <img [src]="'assets/icons/interaction_icons/' + highestInteraction() + '.svg'" alt="" class="size-[22px] z-15 border-[2px] border-white rounded-full cursor-pointer" (mouseenter)="loadInteractionByTypeDetail()">
+                </app-custom-title>
+            }
+            @if(secondHighestInteraction()){
+                <app-custom-title [titleCustom]="secondHighestInteractionDetails$ | async" [y]="10" [center]="false" >
+                    <img [src]="'assets/icons/interaction_icons/' + secondHighestInteraction() + '.svg'" alt="" 
+                    [ngClass]="[
+                            'size-[22px] border-[2px] border-white rounded-full cursor-pointer',
+                            highestInteraction() ? '-translate-x-[5px] z-15' : ''
+                    ]">
+                </app-custom-title>
+
+            }
         </div>
-        <div class="text-[15px] text-grey hover:underline cursor-pointer">{{interactionCount()}}</div>
+        <app-custom-title [titleCustom]="interactionDetails()" [y]="10" [center]="false" [ngClass]="[
+            secondHighestInteraction() ? 'ml-[1px]' : 'ml-[4px]'
+        ]">
+            <div class="text-[15px] text-grey hover:underline cursor-pointer" (mouseenter)="loadInteractionDetails()">{{interactionCount() || null }}</div>
+        </app-custom-title>
     </div>
     <div class="flex items-center gap-[12px]">
         <span class="text-[15px] text-grey hover:underline cursor-pointer">{{commentCount()}} bình luận</span>

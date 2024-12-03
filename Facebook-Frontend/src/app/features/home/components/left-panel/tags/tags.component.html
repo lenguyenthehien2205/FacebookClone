@@ -1,8 +1,8 @@
 <div class="pb-[10px]">
     <a routerLink="/account">
       <app-card styleClass="h-[52px] gap-3 px-2">
-        <img visual src="assets/avatars/thehien.jpg" alt="Avatar" class="rounded-full w-[36px] h-[36px]"/>
-        <span text class="font-medium text-[15px]">Thế Hiển</span>
+        <img visual [src]="getAvatar()" alt="Avatar" class="rounded-full w-[36px] h-[36px]"/>
+        <span text class="font-medium text-[15px]">{{ getName() }}</span>
       </app-card>
     </a>
     @for(item of navItems; track item.name){

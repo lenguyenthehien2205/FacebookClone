@@ -11,10 +11,12 @@ import com.project.facebook.models.Profile;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
-    @Query(value = "SELECT COUNT(f) > 0 FROM friends f " +
+    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END " +
+            "FROM friends f " +
             "WHERE (f.first_profile_id = :firstProfileId AND f.second_profile_id = :secondProfileId) " +
             "OR (f.first_profile_id = :secondProfileId AND f.second_profile_id = :firstProfileId)", nativeQuery = true)
-    boolean existsFriendship(@Param("firstProfileId") Long firstProfileId, @Param("secondProfileId") Long secondProfileId);
+    int existsFriendship(@Param("firstProfileId") Long firstProfileId, @Param("secondProfileId") Long secondProfileId);
+
 
     @Query("SELECT p FROM Profile p WHERE p.id IN " +
             "(SELECT CASE WHEN f.firstProfile.id = :profileId THEN f.secondProfile.id " +

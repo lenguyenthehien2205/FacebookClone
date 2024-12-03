@@ -6,5 +6,4 @@ import com.project.facebook.models.Profile;
 
 public interface IPageBaseService {
     PageBase getPageBaseById(Long id) throws DataNotFoundException;
-
 }

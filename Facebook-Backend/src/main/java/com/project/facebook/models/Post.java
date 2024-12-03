@@ -43,4 +43,8 @@ public class Post extends BaseEntity{
     @JsonProperty("is_active")
     @Column(name = "is_active")
     private boolean isActive;
+
+    public static String PUBLIC = "public";
+    public static String FRIENDS = "friends";
+    public static String PRIVATE = "only me";
 }

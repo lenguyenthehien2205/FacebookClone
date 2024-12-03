@@ -28,7 +28,7 @@ public class FriendService implements IFriendService{
     private final PageBaseRepository pageBaseRepository;
     @Override
     public Friend addFriend(Long firstProfileId, Long secondProfileId) throws Exception{
-        if(!friendRepository.existsFriendship(firstProfileId, secondProfileId)){
+        if(friendRepository.existsFriendship(firstProfileId, secondProfileId) == 0){
             Profile sender = profileRepository.findById(firstProfileId).orElseThrow(() -> new DataNotFoundException("Sender not found"));
             Profile receiver = profileRepository.findById(secondProfileId).orElseThrow(() -> new DataNotFoundException("Receiver not found"));
             Friend friend = new Friend();

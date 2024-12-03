@@ -11,6 +11,7 @@ import com.project.facebook.responses.profile.ProfileTagResponse;
 import com.project.facebook.responses.user.UserResponse;
 import com.project.facebook.responses.user.UserTagResponse;
 import com.project.facebook.services.FriendService;
+import com.project.facebook.services.IFriendService;
 import com.project.facebook.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,23 +27,23 @@ import java.util.stream.Collectors;
 @RequestMapping("${api.base-path}/friends")
 @RequiredArgsConstructor
 public class FriendController {
-    private final FriendService friendService;
+    private final IFriendService friendService;
     private final LocalizationUtils localizationUtils;
     private final ProfileRepository profileRepository;
-//    @PostMapping("/{first_user_id}/{second_user_id}")
-//    public ResponseEntity<?> addFriend(
-//            @PathVariable("first_user_id") Long firstUserId,
-//            @PathVariable("second_user_id") Long secondUserId){
-//        try{
-//            if(firstUserId.equals(secondUserId)){
-//                return ResponseEntity.badRequest().body("Invalid senderId and receiverId");
-//            }
-//            Friend newFriend = friendService.addFriend(firstUserId, secondUserId);
-//            return ResponseEntity.ok(newFriend);
-//        }catch (Exception e){
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
+    @PostMapping("/{first_profile_id}/{second_profile_id}")
+    public ResponseEntity<?> addFriend(
+            @PathVariable("first_profile_id") Long firstProfileId,
+            @PathVariable("second_profile_id") Long secondProfileId){
+        try{
+            if(firstProfileId.equals(secondProfileId)){
+                return ResponseEntity.badRequest().body("Invalid senderId and receiverId");
+            }
+            Friend newFriend = friendService.addFriend(firstProfileId, secondProfileId);
+            return ResponseEntity.ok(newFriend);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 //
 //    @GetMapping("/{user_id}")
 //    public ResponseEntity<?> getFriendsById(@PathVariable("user_id") Long userId){

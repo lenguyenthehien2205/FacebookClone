@@ -39,6 +39,12 @@ public class User extends BaseEntity implements UserDetails{
     @Column(name = "password", length = 200, nullable = false)
     private String password;
 
+    @Column(name = "current_page_type")
+    private String currentPageType;
+
+    @Column(name = "current_page_id")
+    private Long currentPageId;
+
     @ManyToOne
     @JsonProperty("role_id")
     @JoinColumn(name = "role_id", nullable = false)
@@ -47,6 +53,9 @@ public class User extends BaseEntity implements UserDetails{
     @Column(name = "is_active")
     @JsonProperty("is_active")
     private boolean isActive;
+
+    public static String PROFILE = "profile";
+    public static String PAGE = "page";
 
     @PrePersist
     protected void onCreate() {

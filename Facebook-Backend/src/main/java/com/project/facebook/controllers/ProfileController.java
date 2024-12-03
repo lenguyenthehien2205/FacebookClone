@@ -7,6 +7,7 @@ import com.project.facebook.models.Profile;
 import com.project.facebook.models.User;
 import com.project.facebook.responses.ResponseObject;
 import com.project.facebook.responses.user.UserResponse;
+import com.project.facebook.services.IProfileService;
 import com.project.facebook.services.ProfileService;
 import com.project.facebook.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ import java.util.UUID;
 @RequestMapping("${api.base-path}/profiles")
 @RequiredArgsConstructor
 public class ProfileController {
-    private final ProfileService profileService;
+    private final IProfileService profileService;
     private final LocalizationUtils localizationUtils;
     private final FileUtils fileUtils;
 
@@ -65,7 +66,7 @@ public class ProfileController {
                         .message(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMAGE_FILE_MUST_BE_IMAGE))
                         .build());
             }
-            String fileName = fileUtils.storeFile(file, "uploads/user_images/avatars/profiles/avatar_temp");
+            String fileName = fileUtils.storeFile(file, "uploads/user_images/avatars/profiles/avatar");
             PageBase pageBase = profileService.updateProfileAvatar(profileId, fileName);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(HttpStatus.OK)
@@ -109,7 +110,7 @@ public class ProfileController {
                         .message(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMAGE_FILE_MUST_BE_IMAGE))
                         .build());
             }
-            String fileName = fileUtils.storeFile(file, "uploads/user_images/cover_photos/profiles/cover_photo_temp");
+            String fileName = fileUtils.storeFile(file, "uploads/user_images/cover_photos/profiles/cover_photo");
             PageBase pageBase = profileService.updateProfileCoverPhoto(profileId, fileName);
             return ResponseEntity.ok(ResponseObject.builder()
                     .status(HttpStatus.OK)
@@ -127,7 +128,7 @@ public class ProfileController {
     @GetMapping("avatar_image/{image_name}")
     public ResponseEntity<?> viewAvatarImage(@PathVariable("image_name") String imageName){
         try {
-            Path imagePath = Paths.get("uploads/user_images/avatars/profiles/avatar_temp/"+imageName);
+            Path imagePath = Paths.get("uploads/user_images/avatars/profiles/avatar/"+imageName);
             // dung de truy cap tep hinh anh
             UrlResource resource = new UrlResource(imagePath.toUri());
             if(resource.exists()){
@@ -145,7 +146,7 @@ public class ProfileController {
     @GetMapping("cover_photo_image/{image_name}")
     public ResponseEntity<?> viewCoverPhotoImage(@PathVariable("image_name") String imageName){
         try {
-            Path imagePath = Paths.get("uploads/user_images/cover_photos/profiles/cover_photo_temp/"+imageName);
+            Path imagePath = Paths.get("uploads/user_images/cover_photos/profiles/cover_photo/"+imageName);
             // dung de truy cap tep hinh anh
             UrlResource resource = new UrlResource(imagePath.toUri());
             if(resource.exists()){

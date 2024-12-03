@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -43,26 +44,40 @@ public class WebSecurityConfig {
                             .requestMatchers(
                                     String.format("/%s/users/register", apiBasePath),
                                     String.format("/%s/users/login", apiBasePath),
-                                    String.format("/%s/friends/{user_id}", apiBasePath)
+                                    String.format("/%s/friends/{user_id}", apiBasePath),
+                                    String.format("/%s/profiles/avatar_image/{image_name}",apiBasePath),
+                                    String.format("/%s/profiles/cover_photo_image/{image_name}",apiBasePath),
+                                    String.format("/%s/medias/image_post/{image_name}", apiBasePath),
+                                    String.format("/%s/medias/video_post/{video_name}", apiBasePath)
+
                             )
                             .permitAll()
                             .requestMatchers(GET, String.format("/%s/users/{phone}", apiBasePath)).hasRole("ADMIN")
                             .requestMatchers(GET, String.format("/%s/users", apiBasePath)).hasRole("ADMIN")
                             .requestMatchers(GET, String.format("/%s/users/images/{imageName}", apiBasePath)).permitAll()
                             .requestMatchers(POST, String.format("/%s/users/upload_avatar/{user_id}", apiBasePath)).hasRole("USER")
-                            .requestMatchers(POST, String.format("/%s/friends/{first_user_id}/{second_user_id}", apiBasePath)).hasRole("USER")
+
+                            .requestMatchers(POST, String.format("/%s/friends/{first_profile_id}/{second_profile_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/friends/contacts/{user_id}", apiBasePath)).hasRole("USER")
+
                             .requestMatchers(POST, String.format("/%s/posts", apiBasePath)).hasRole("USER")
                             .requestMatchers(PUT, String.format("/%s/posts/{post_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(GET, String.format("/%s/posts/friend-posts/{user_id}", apiBasePath)).hasRole("USER")
-                            .requestMatchers(POST, String.format("/%s/posts/upload_medias/{post_id}/{note}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/posts/random-authors-latest", apiBasePath)).permitAll()
-                            .requestMatchers(GET, String.format("/%s/posts/media/{mediaId}/interaction", apiBasePath)).permitAll()
-                            .requestMatchers(POST, String.format("/%s/medias/image_post/{image_name}", apiBasePath)).permitAll()
-                            .requestMatchers(POST, String.format("/%s/medias/video_post/{video_name}", apiBasePath)).permitAll()
+
+                            .requestMatchers(GET, String.format("/%s/medias/post/{post_id}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(POST, String.format("/%s/medias/upload_medias_post/{post_id}/{note}", apiBasePath)).hasRole("USER")
+
+                            .requestMatchers(GET, String.format("/%s/interactions/media/{media_id}", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/interactions/post/{post_id}", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/interactions/post/detail/{post_id}", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/interactions/post/{post_id}/{interaction_type}", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/interactions/media/detail/{media_id}", apiBasePath)).permitAll()
 
                             .requestMatchers(POST, String.format("/%s/profiles/upload_avatar/{profile_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/profiles/upload_cover_photo/{profile_id}", apiBasePath)).hasRole("USER")
+//                            .requestMatchers(GET, String.format("/%s/profiles/avatar_image/{imageName}", apiBasePath)).permitAll()
+//                            .requestMatchers(GET, String.format("/%s/profiles/cover_photo_image/{imageName}", apiBasePath)).permitAll()
 //                            .requestMatchers(GET,
 //                                    String.format("/%s/users", apiBasePath)).hasRole("ADMIN")
                             .anyRequest().authenticated();

@@ -54,6 +54,10 @@ public class Profile{
     @Column(name = "is_online")
     private Boolean isOnline;
 
+    public static String LASTNAMEFIRSTNAME = "lastname_firstname";
+    public static String FIRSTNAMELASTNAME  = "firstname_lastname";
+    public static String DEFAULT_AVATAR  = "default_image.png";
+
     @PrePersist
     protected void onCreate() {
         setDisplayFormat("lastname_firstname");

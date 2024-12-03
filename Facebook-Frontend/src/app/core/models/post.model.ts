@@ -1,34 +1,29 @@
+import { Interaction } from "./interaction.model";
 import { Media } from "./media.model";
 
-export class Post {
-    post_id: number;
+export interface Post {
+    id: number;
     author_id: string;
-    author_name: string;
     author_type: string;
-    first_name: string;
-    last_name: string;
-    display_format: string;
+    post_type: string;
+    author_name: string;
     content: string;
     privacy: string;
-    medias: Media[];
     avatar: string;
     created_at: number[];
     updated_at: number[];
+    medias: Media[];
+    interaction_response: Interaction;
+    is_active: boolean;
     is_online: boolean;
-    constructor(data: any) {
-        this.post_id = data.post_id;
-        this.author_id = data.author_id;
-        this.author_name = data.author_name;
-        this.author_type = data.author_type;
-        this.first_name = data.first_name;
-        this.last_name = data.last_name;
-        this.display_format = data.display_format;
-        this.avatar = data.avatar;
-        this.content = data.content;
-        this.privacy = data.privacy;
-        this.medias = data.medias;
-        this.created_at = data.created_at;
-        this.updated_at = data.updated_at;
-        this.is_online = data.is_online;
-    }
+}
+export interface PostFetchData {
+    author_id: number;
+    limit: number;
+    fetched_ids: number[];
+}
+
+export interface PostWithMedia {
+    post: Post;
+    medias: Media[];
 }

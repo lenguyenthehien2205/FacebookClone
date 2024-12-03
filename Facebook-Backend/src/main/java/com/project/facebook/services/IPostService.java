@@ -15,4 +15,5 @@ public interface IPostService {
     Post getPostById(Long postId) throws Exception;
 //    List<PostResponse> getFriendPosts(Long userId) throws Exception;
     Media createPostMedia(Long id, MediaDTO mediaDTO) throws Exception;
+    List<PostResponse> getLatestRandomFetchedFriendPosts(Long userId, int limit, List<Long> fetchedIds);
 }

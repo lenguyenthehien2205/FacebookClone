@@ -3,9 +3,9 @@ package com.project.facebook.responses.post;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.facebook.models.Post;
 import com.project.facebook.responses.BaseResponse;
+import com.project.facebook.responses.interaction.InteractionResponse;
 import com.project.facebook.responses.media.MediaPostResponse;
 import com.project.facebook.responses.media.MediaResponse;
-import com.project.facebook.responses.interaction.InteractionPostResponse;
 import lombok.*;
 
 import java.util.List;
@@ -36,6 +36,12 @@ public class PostResponse extends BaseResponse {
     private String privacy;
 
     private String avatar;
+
+    @JsonProperty("medias")
+    private List<MediaResponse> mediaResponses;
+
+    @JsonProperty("interaction_response")
+    private InteractionResponse interactionResponses;
 
     @JsonProperty("is_online")
     private Boolean isOnline;

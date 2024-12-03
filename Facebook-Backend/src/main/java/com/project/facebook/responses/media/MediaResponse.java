@@ -2,11 +2,6 @@ package com.project.facebook.responses.media;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.facebook.models.Media;
-import com.project.facebook.models.Post;
-import com.project.facebook.models.User;
-import com.project.facebook.responses.interaction.InteractionMediaResponse;
-import com.project.facebook.responses.user.UserResponse;
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

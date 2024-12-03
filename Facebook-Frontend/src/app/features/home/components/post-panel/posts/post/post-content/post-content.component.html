@@ -1,9 +1,9 @@
 <div class="px-4 pb-3 border-[#e0e3e7]">
     {{ content() }}
 </div>
-@if(media().length > 0){
+@if(media()){
     <div class="pb-3">
-        @for (media of media(); track media) {
+        @for (media of media(); track media.media_id) {
             @if (media.media_type === "image") {
                 <img [src]="media.url" alt="" class="w-full object-contain">
             } @else if(media.media_type === "video"){

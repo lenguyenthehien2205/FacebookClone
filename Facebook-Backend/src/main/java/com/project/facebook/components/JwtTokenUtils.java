@@ -5,8 +5,13 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
+import com.project.facebook.models.Page;
+import com.project.facebook.models.PageBase;
+import com.project.facebook.models.Profile;
+import com.project.facebook.services.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -23,6 +28,9 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtils {
+    private final IPageBaseService pageBaseService;
+    private final IPageService pageService;
+    private final IProfileService profileService;
     @Value("${jwt.expiration}")
     private int expiration;
     @Value("${jwt.secretKey}")
@@ -33,7 +41,29 @@ public class JwtTokenUtils {
         // Truyen cac gia tri vao cac claim(khong chi la phoneNumber)
         Map<String, Object> claims = new HashMap<>();
 //        this.generateSecretKey();
+        String currentPageType = user.getCurrentPageType();
+        Long currentPageId = user.getCurrentPageId();
+        String avatar = "";
+        if(currentPageType.equals(User.PROFILE)){
+            Profile profile = profileService.getProfileById(currentPageId);
+            PageBase pageBase = pageBaseService.getPageBaseById(profile.getPageBase().getId());
+            avatar = pageBase.getAvatar();
+            claims.put("pageType", User.PROFILE);
+            claims.put("firstName", profile.getFirstName());
+            claims.put("lastName", profile.getLastName());
+            claims.put("displayFormat", profile.getDisplayFormat());
+        }else if (currentPageType.equals(User.PAGE)){
+            Page page = pageService.getPageById(currentPageId);
+            PageBase pageBase = pageBaseService.getPageBaseById(page.getPageBase().getId());
+            avatar = pageBase.getAvatar();
+            claims.put("pageType", User.PAGE);
+            claims.put("fullName", page.getPageName());
+        }
         claims.put("phoneNumber", user.getUsername());
+        claims.put("userId", user.getUserId());
+        claims.put("avatar", avatar);
+
+//        claims.put("avatar", pageBaseService.(user.get);
         try{
             String token = Jwts.builder()
                     .setClaims(claims) // truyen claims vao token

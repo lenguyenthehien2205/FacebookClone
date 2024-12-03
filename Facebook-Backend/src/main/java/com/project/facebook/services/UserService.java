@@ -70,9 +70,7 @@ public class UserService implements IUserService {
         System.out.println(user.getUserId());
         PageBase pageBase = PageBase.builder()
                 .pathName(userCreateDTO.getPathName())
-                .avatar(userCreateDTO.getAvatar())
-                .coverPhoto(userCreateDTO.getCoverPhoto())
-                .biography(userCreateDTO.getBiography())
+                .avatar(Profile.DEFAULT_AVATAR)
                 .build();
         pageBaseRepository.save(pageBase);
         Profile profile = Profile.builder()
@@ -84,6 +82,9 @@ public class UserService implements IUserService {
                 .dateOfBirth(userCreateDTO.getDateOfBirth())
                 .build();
         profileRepository.save(profile);
+        user.setCurrentPageType(User.PROFILE);
+        user.setCurrentPageId(profile.getId());
+        userRepository.save(user);
         return user;
     }
     // ok

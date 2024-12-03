@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
+import { environment } from './environments/environment';
+import { TokenService } from './core/services/token.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +10,10 @@ import { filter, Subscription } from 'rxjs';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
+  tokenService = inject(TokenService);
   title = 'facebook-clone';
   isAuthenticated = true;
   private routerSubscription!: Subscription;
-
   constructor(private router: Router) {}
 
   ngOnInit(): void {

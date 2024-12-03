@@ -16,8 +16,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileUtils {
     public String storeFile(MultipartFile file, String path) throws IOException {
-        if (!isImageFile(file) || file.getOriginalFilename() == null) {
-            throw new IOException("Invalid image format");
+        if (!isImageOrVideoFile(file) || file.getOriginalFilename() == null) {
+            throw new IOException("Invalid mei format");
         }
         // kiem tra có null không và sau đó làm sạch dữ liệu
         String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
@@ -35,8 +35,8 @@ public class FileUtils {
         Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
         return uniqueFilename;
     }
-    private boolean isImageFile(MultipartFile file) {
+    private boolean isImageOrVideoFile(MultipartFile file){
         String contentType = file.getContentType();
-        return contentType != null && contentType.startsWith("image/");
+        return contentType != null && (contentType.startsWith("image/") || contentType.startsWith("video/"));
     }
 }

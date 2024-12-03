@@ -23,6 +23,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import static org.springframework.http.HttpMethod.GET;
+
 @Component
 @RequiredArgsConstructor
 public class JwtTokenFilter extends OncePerRequestFilter {
@@ -74,7 +76,11 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         // cac request duoc cho qua ma khong can kiem tra token
         final List<Pair<String, String>> bypassTokens = Arrays.asList(
                 Pair.of(String.format("/%s/users/register", apiBasePath),"POST"),
-                Pair.of(String.format("/%s/users/login", apiBasePath),"POST")
+                Pair.of(String.format("/%s/users/login", apiBasePath),"POST"),
+                Pair.of(String.format("/%s/profiles/avatar_image", apiBasePath),"GET"),
+                Pair.of(String.format("/%s/profiles/cover_photo_image", apiBasePath),"GET"),
+                Pair.of(String.format("/%s/medias/image_post", apiBasePath),"GET"),
+                Pair.of(String.format("/%s/medias/video_post", apiBasePath),"GET")
         );
         for (Pair<String, String> bypassToken: bypassTokens){
             if(request.getServletPath().contains(bypassToken.getFirst()) && request.getMethod().equals(bypassToken.getSecond())){

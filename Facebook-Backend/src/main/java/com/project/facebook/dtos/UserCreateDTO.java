@@ -44,11 +44,4 @@ public class UserCreateDTO {
     @JsonProperty("path_name")
     @NotBlank(message = "Path name is required")
     private String pathName;
-
-    private String avatar;
-
-    @JsonProperty("cover_photo")
-    private String coverPhoto;
-
-    private String biography;
 }

@@ -44,7 +44,7 @@
 <!-- center-navbar -->
 <div class="lg:flex w-[590px] gap-1 hidden mr-4">
   @for (item of navItems; track item.name) {
-  <app-custom-title [titleCustom]="item.name" [position]="'bottom'">
+  <app-custom-title [titleCustom]="item.name" [y]="5">
     <app-navbar-button
       [routerLink]="item.url"
       [isActive]="activeItemNavItem === item.name"
@@ -79,11 +79,11 @@
         (buttonClick)="onSelectButton(item.name)"
       ></app-rounded-button>
     }
-    <app-custom-title titleCustom="Tài khoản" position="bottom">
+    <app-custom-title titleCustom="Tài khoản" [y]="10" [center]="true">
       <div
         class="h-[40px] w-[40px] leading-14 flex items-center justify-center rounded-full overflow-hidden hover:brightness-75"
       >
-        <img src="assets/avatars/thehien.jpg" alt="" />
+        <img [src]="getAvatar()" alt="" />
       </div>
     </app-custom-title>
   </div>

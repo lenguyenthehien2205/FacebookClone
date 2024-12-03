@@ -7,6 +7,7 @@ import { ChangeDetectionStrategy, Component, input, output, signal } from '@angu
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomTitleComponent {
-  titleCustom = input.required<string>();
-  position = input.required<string>();
+  titleCustom = input<string | null>();
+  y = input.required<number>();
+  center = input<boolean>(false);
 }

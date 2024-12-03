@@ -4,7 +4,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { UserTag } from 'src/app/core/models/user-tag.model';
+import { UserTag } from 'src/app/core/models/user.model';
 import { UserService } from 'src/app/core/services/user.service';
 import { getName } from 'src/app/core/utils/name-format-utils';
 import { environment } from 'src/app/environments/environment';
@@ -27,15 +27,18 @@ export class ContactsComponent implements OnInit {
     this.userService.getContacts().subscribe({
       next: (response: ApiResponse) => {
         const users = response?.data as UserTag[];
-        users.forEach((user: UserTag) => {
-          if (user) {
-            if (user.avatar === '') {
-              user.avatar = `${environment.apiBaseUrl}/users/images/default_image.png`;
-            } else {
-              user.avatar = `${environment.apiBaseUrl}/users/images/${user.avatar}`;
+        if(users){
+          users.forEach((user: UserTag) => {
+            if (user) {
+              if (user.avatar === '') {
+                user.avatar = `${environment.apiBaseUrl}/users/images/default_image.png`;
+              } else {
+                user.avatar = `${environment.apiBaseUrl}/profiles/avatar_image/${user.avatar}`;
+              }
             }
-          }
-        });
+          });
+        }
+      
         this.users.set(users);
       },
       error: (error) => {

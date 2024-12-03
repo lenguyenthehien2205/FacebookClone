@@ -1,6 +1,6 @@
-<app-custom-title [titleCustom]="name()" [position]="'bottom'">
+<app-custom-title [titleCustom]="name()" [y]="10" [center]="true">
     <div
-      class="h-[40px] w-[40px] leading-14 flex items-center justify-center rounded-full overflow-hidden"
+      class="h-[40px] w-[40px] leading-14 flex items-center justify-center rounded-full overflow-hidden"  
       (click)="onClick()"
       [ngClass]="{
         'bg-[#ebf5ff] hover:bg-[#dff0ff] active:bg-[#b4cce3]': isActive(),

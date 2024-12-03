@@ -3,11 +3,16 @@ package com.project.facebook.controllers;
 import com.project.facebook.components.FileUtils;
 import com.project.facebook.dtos.MediaDTO;
 import com.project.facebook.dtos.PostDTO;
+import com.project.facebook.dtos.PostFetchDTO;
 import com.project.facebook.exceptions.DataNotFoundException;
 import com.project.facebook.models.*;
 import com.project.facebook.repositories.PageRepository;
 import com.project.facebook.repositories.ProfileRepository;
 import com.project.facebook.responses.ResponseObject;
+import com.project.facebook.responses.media.MediaPostResponse;
+import com.project.facebook.services.IMediaService;
+import com.project.facebook.services.IPostService;
+import com.project.facebook.services.MediaService;
 import com.project.facebook.services.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +33,10 @@ import java.util.List;
 @RequestMapping("${api.base-path}/medias")
 @RequiredArgsConstructor
 public class MediaController {
-    private final PostService postService;
+    private final IPostService postService;
     private final ProfileRepository profileRepository;
     private final PageRepository pageRepository;
+    private final IMediaService mediaService;
     private final FileUtils fileUtils;
     // ok
     @GetMapping("image_post/{image_name}")
@@ -80,7 +86,7 @@ public class MediaController {
             Post existingPost = postService.getPostById(postId);
             User currentUser = (User) authentication.getPrincipal();
             // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
-            if(existingPost.getAuthorType().equals("profile")){
+            if(existingPost.getAuthorType().equals(User.PROFILE)){
                 Profile existingProfile = profileRepository.findById(existingPost.getAuthorId())
                         .orElseThrow(() -> new DataNotFoundException("Profile not found"));
                 if (!currentUser.getUserId().equals(existingProfile.getUser().getUserId())) {
@@ -88,7 +94,7 @@ public class MediaController {
                             .message("Unauthorized")
                             .status(HttpStatus.FORBIDDEN).build());
                 }
-            }else if(existingPost.getAuthorType().equals("page")){
+            }else if(existingPost.getAuthorType().equals(User.PAGE)){
                 Page existingPage = pageRepository.findById(existingPost.getAuthorId())
                         .orElseThrow(() -> new DataNotFoundException("Page not found"));
                 if (!currentUser.getUserId().equals(existingPage.getUser().getUserId())) {
@@ -150,4 +156,21 @@ public class MediaController {
             throw new RuntimeException(e);
         }
     }
+    @GetMapping("/post/{post_id}")
+    public ResponseEntity<ResponseObject> getMediaByPostId(@PathVariable("post_id") Long postId) {
+        try {
+            MediaPostResponse mediaPostResponse = mediaService.getMediaByPostId(postId);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(HttpStatus.OK)
+                    .message("Get post media successfully")
+                    .data(mediaPostResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseObject.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
 }

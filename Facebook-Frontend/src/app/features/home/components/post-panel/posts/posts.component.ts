@@ -9,9 +9,10 @@ import {
   signal,
 } from '@angular/core';
 import { Media } from 'src/app/core/models/media.model';
-import { PostFetchData } from 'src/app/core/models/post-fetch-data.model';
+import { PostFetchData } from 'src/app/core/models/post.model';
 import { Post } from 'src/app/core/models/post.model';
 import { PostService } from 'src/app/core/services/post.service';
+import { TokenService } from 'src/app/core/services/token.service';
 import { formatDate, getDayOfWeek, getTimeAgo } from 'src/app/core/utils/date-format-utils';
 import { getName } from 'src/app/core/utils/name-format-utils';
 import { environment } from 'src/app/environments/environment';
@@ -25,13 +26,14 @@ import { ApiResponse } from 'src/app/features/auth/responses/api.response';
 })
 export class PostsComponent implements OnInit {
   // posts = signal<Post[]>([]);
+  tokenService = inject(TokenService);
   postService = inject(PostService);
   postFetchData: PostFetchData = {
-    user_id: 1,
+    author_id: this.tokenService.getUserId(),
     limit: 3,
     fetched_ids: [],
   };
-  posts: Post[] = [];
+  posts = signal<Post[]>([]);
   ngOnInit() {
     this.loadPosts();
   }
@@ -50,22 +52,25 @@ export class PostsComponent implements OnInit {
           // Xử lý bài viết mới
           newPosts.forEach((post: Post) => {
             if (post) {
-              post.medias.forEach((media: Media) => {
-                if (media.media_type === 'image') {
-                  media.url = `${environment.apiBaseUrl}/posts/images/${media.url}`;
-                } else if (media.media_type === 'video') {
-                  media.url = `${environment.apiBaseUrl}/posts/videos/${media.url}`;
-                }
-              });
-              post.avatar = `${environment.apiBaseUrl}/users/images/${post.avatar}`;
+              if(post.medias){
+                post.medias.forEach((media: Media) => {
+                  if (media.media_type === 'image') {
+                    media.url = `${environment.apiBaseUrl}/medias/image_post/${media.url}`;
+                  } else if (media.media_type === 'video') {
+                    media.url = `${environment.apiBaseUrl}/medias/video_post/${media.url}`;
+                  }
+                });
+              }
+              post.avatar = `${environment.apiBaseUrl}/profiles/avatar_image/${post.avatar}`;
             }
           });
 
-          const newFetchedIds = newPosts.map((post) => post.post_id);
+          const newFetchedIds = newPosts.map((post) => post.id);
           this.postService.updateFetchedIds(newFetchedIds);
 
           this.postService.addPosts(newPosts);
-          this.posts = this.postService.getPosts();
+          this.posts.set(this.postService.getPosts());
+          console.log(this.posts());
           this.cdRef.detectChanges();
         }
       },
@@ -85,7 +90,7 @@ export class PostsComponent implements OnInit {
   getTimeAgo(inputDate: number[]): string {
     return getTimeAgo(inputDate);
   }
-  getDisplayName(post: Post): string {
-    return getName(post.first_name, post.last_name, post.display_format);
-  }
+  // getDisplayName(post: Post): string {
+  //   return getName(post.first_name, post.last_name, post.display_format);
+  // }
 }

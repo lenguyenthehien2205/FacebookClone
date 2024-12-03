@@ -7,18 +7,14 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.project.facebook.models.*;
+import com.project.facebook.responses.interaction.InteractionResponse;
 import org.springframework.stereotype.Service;
 
 import com.project.facebook.dtos.MediaDTO;
 import com.project.facebook.dtos.PostDTO;
 import com.project.facebook.exceptions.DataNotFoundException;
 import com.project.facebook.exceptions.InvalidParamException;
-import com.project.facebook.models.Interaction;
-import com.project.facebook.models.Media;
-import com.project.facebook.models.Page;
-import com.project.facebook.models.PageBase;
-import com.project.facebook.models.Post;
-import com.project.facebook.models.Profile;
 import com.project.facebook.repositories.FriendRepository;
 import com.project.facebook.repositories.InteractionRepository;
 import com.project.facebook.repositories.MediaRepository;
@@ -27,9 +23,6 @@ import com.project.facebook.repositories.PageRepository;
 import com.project.facebook.repositories.PostRepository;
 import com.project.facebook.repositories.ProfileRepository;
 import com.project.facebook.repositories.UserRepository;
-import com.project.facebook.responses.interaction.InteractionMediaResponse;
-import com.project.facebook.responses.interaction.InteractionPostResponse;
-import com.project.facebook.responses.interaction.InteractorNameResponse;
 import com.project.facebook.responses.media.MediaPostResponse;
 import com.project.facebook.responses.media.MediaResponse;
 import com.project.facebook.responses.post.PostResponse;
@@ -47,23 +40,24 @@ public class PostService implements IPostService{
     private final ProfileRepository profileRepository;
     private final PageRepository pageRepository;
     private final PageBaseRepository pageBaseRepository;
+    private final InteractionService interactionService;
     // ok
     @Override
     public Post createPost(PostDTO postDTO) throws Exception {
         Long authorId = postDTO.getAuthorId();
-        if(postDTO.getAuthorType().equals("profile")){
+        if(postDTO.getAuthorType().equals(User.PROFILE)){
             Profile profile = profileRepository.findById(authorId)
                     .orElseThrow(() -> new DataNotFoundException(String.format("Not found profile with id = %s", authorId)));
-        }else if(postDTO.getAuthorType().equals("page")){
+        }else if(postDTO.getAuthorType().equals(User.PAGE)){
             Page page = pageRepository.findById(authorId)
                     .orElseThrow(() -> new DataNotFoundException(String.format("Not found page with id = %s", authorId)));
         }
         String authorType = postDTO.getAuthorType();
-        if(!authorType.equals("profile") && !authorType.equals("page")){
+        if(!authorType.equals(User.PROFILE) && !authorType.equals(User.PAGE)){
             throw new DataNotFoundException("Author type not found");
         }
         String privacy = postDTO.getPrivacy();
-        if(!privacy.equals("public") && !privacy.equals("friends") && !privacy.equals("only me")){
+        if(!privacy.equals(Post.PUBLIC) && !privacy.equals(Post.FRIENDS) && !privacy.equals(Post.PRIVATE)){
             throw new DataNotFoundException("Privacy not found");
         }
         Post newPost = Post
@@ -82,7 +76,7 @@ public class PostService implements IPostService{
     public Post updatePost(Long postId, PostDTO postDTO) throws Exception{
         Post existingPost = postRepository.findById(postId)
                 .orElseThrow(() -> new DataNotFoundException("Post not found"));
-        if(!postDTO.getPrivacy().equals("public") && !postDTO.getPrivacy().equals("friends") && !postDTO.getPrivacy().equals("only me")){
+        if(!postDTO.getPrivacy().equals(Post.PUBLIC) && !postDTO.getPrivacy().equals(Post.FRIENDS) && !postDTO.getPrivacy().equals(Post.PRIVATE)){
             throw new DataNotFoundException("Privacy not found");
         }
         existingPost.setContent(postDTO.getContent());
@@ -138,6 +132,7 @@ public class PostService implements IPostService{
         Media postMedia = Media.builder()
                 .post(existingPost)
                 .url(mediaDTO.getUrl())
+                .note(mediaDTO.getNote())
                 .mediaType(mediaDTO.getMediaType())
                 .build();
         int size = mediaRepository.findByPostId(postId).size();
@@ -176,9 +171,7 @@ public class PostService implements IPostService{
 //        });
 //        return postsCompleted;
 //    }
-    private final Map<String, Integer> interactionScores = Map.of(
-            "like", 7, "love", 6, "care", 5, "haha", 4, "wow", 3, "sad", 2, "angry", 1
-    );
+    @Override
     public List<PostResponse> getLatestRandomFetchedFriendPosts(Long userId, int limit, List<Long> fetchedIds) {
         List<Post> posts;
         if (fetchedIds == null || fetchedIds.isEmpty()) {
@@ -186,16 +179,12 @@ public class PostService implements IPostService{
         } else {
             posts = postRepository.getLatestRandomFetchedFriendPosts(userId, limit, fetchedIds);
         }
-//
-//        Map<String, Integer> interactionScores = Map.of(
-//                "like", 7, "love", 6, "care", 5, "haha", 4, "wow", 3, "sad", 2, "angry", 1
-//        );
 
         List<PostResponse> postResponses = posts.stream().map(post -> {
             PostResponse postResponse = PostResponse.fromPost(post);
 
             // Fetch author information based on author_type
-            if (post.getAuthorType().equals("profile")) {
+            if (post.getAuthorType().equals(User.PROFILE)) {
                 Optional<Profile> profOpt = profileRepository.findById(post.getAuthorId());
                 if (profOpt.isPresent()) {
                     Profile prof = profOpt.get();
@@ -204,7 +193,7 @@ public class PostService implements IPostService{
                             : prof.getLastName() + " " + prof.getFirstName());
                     postResponse.setIsOnline(prof.getIsOnline() ? true : false);
                 }
-            } else if (post.getAuthorType().equals("page")) {
+            } else if (post.getAuthorType().equals(User.PAGE)) {
                 Optional<Page> pageOpt = pageRepository.findById(post.getAuthorId());
                 if (pageOpt.isPresent()) {
                     Page page = pageOpt.get();
@@ -219,113 +208,17 @@ public class PostService implements IPostService{
                 postResponse.setAvatar(pageBaseOpt.get().getAvatar());
             }
 
+            List<Media> medias = mediaRepository.findByPostId(post.getId());
+            List<MediaResponse> mediaResponses = medias.stream()
+                    .map(MediaResponse::fromMedia)
+                    .collect(Collectors.toList());
+            postResponse.setMediaResponses(mediaResponses);
+
+            InteractionResponse interactionResponses = interactionService.getInteractionPost(post.getId());
+            postResponse.setInteractionResponses(interactionResponses);
+
             return postResponse;
         }).collect(Collectors.toList());
         return postResponses;
-    }
-    public InteractionMediaResponse getMediaInteraction(Long mediaId) {
-        List<InteractorNameResponse> mediaInteractorResponses = interactionRepository
-                .findByPostMediaIdAndPostMediaType(mediaId, "media")
-                .stream()
-                .map(this::createInteractorNameResponse)
-                .limit(19)
-                .collect(Collectors.toList());
-
-        int totalMediaInteractions = interactionRepository.countByPostMediaIdAndPostMediaType(mediaId, "media");
-        List<String> mediaInteractionTypes = interactionRepository.findInteractionTypesByMediaId(mediaId);
-
-        Map<String, Long> mediaInteractionCounts = mediaInteractionTypes.stream()
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-
-//        Map<String, Integer> interactionScores = Map.of(
-//                "like", 7, "love", 6, "care", 5, "haha", 4, "wow", 3, "sad", 2, "angry", 1
-//        );
-
-        String highestMediaInteraction = getHighestInteraction(mediaInteractionCounts, interactionScores);
-        String secondHighestMediaInteraction = getSecondHighestInteraction(mediaInteractionCounts, interactionScores, highestMediaInteraction);
-
-        return InteractionMediaResponse.builder()
-                .interactorNameResponses(mediaInteractorResponses)
-                .totalInteractions(totalMediaInteractions)
-                .highestInteraction(highestMediaInteraction)
-                .secondHighestInteraction(secondHighestMediaInteraction)
-                .build();
-    }
-    public MediaPostResponse getPostMedia(Long postId) {
-        List<Media> medias = mediaRepository.findByPostId(postId);
-        List<MediaResponse> mediaResponses = medias.stream()
-                .map(MediaResponse::fromMedia)
-                .collect(Collectors.toList());
-
-        return MediaPostResponse.builder()
-                .mediaResponses(mediaResponses)
-                .totalMedias(medias.size())
-                .build();
-    }
-    public InteractionPostResponse getPostInteraction(Long postId) {
-        List<InteractorNameResponse> postInteractorResponses = interactionRepository
-                .findByPostMediaIdAndPostMediaType(postId, "post")
-                .stream()
-                .map(this::createInteractorNameResponse)
-                .limit(19)
-                .collect(Collectors.toList());
-
-        int totalPostInteractions = interactionRepository.countByPostMediaIdAndPostMediaType(postId, "post");
-        List<String> postInteractionTypes = interactionRepository.findInteractionTypesByMediaId(postId);
-
-        Map<String, Long> postInteractionCounts = postInteractionTypes.stream()
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
-
-//        Map<String, Integer> interactionScores = Map.of(
-//                "like", 7, "love", 6, "care", 5, "haha", 4, "wow", 3, "sad", 2, "angry", 1
-//        );
-
-        String highestPostInteraction = getHighestInteraction(postInteractionCounts, interactionScores);
-        String secondHighestPostInteraction = getSecondHighestInteraction(postInteractionCounts, interactionScores, highestPostInteraction);
-
-        return InteractionPostResponse.builder()
-                .interactorNameResponses(postInteractorResponses)
-                .totalInteractions(totalPostInteractions)
-                .highestInteraction(highestPostInteraction)
-                .secondHighestInteraction(secondHighestPostInteraction)
-                .build();
-    }
-    private InteractorNameResponse createInteractorNameResponse(Interaction interaction) {
-        InteractorNameResponse interactorNameResponse = new InteractorNameResponse();
-        if (interaction.getInteractorType().equals("profile")) {
-            Optional<Profile> profOpt = profileRepository.findById(interaction.getInteractorId());
-            if (profOpt.isPresent()) {
-                Profile prof = profOpt.get();
-                interactorNameResponse.setInteractorName(prof.getDisplayFormat().equals("firstname_lastname")
-                        ? prof.getFirstName() + " " + prof.getLastName()
-                        : prof.getLastName() + " " + prof.getFirstName());
-            }
-        } else if (interaction.getInteractorType().equals("page")) {
-            Optional<Page> pageOpt = pageRepository.findById(interaction.getInteractorId());
-            if (pageOpt.isPresent()) {
-                Page page = pageOpt.get();
-                interactorNameResponse.setInteractorName(page.getPageName());
-            }
-        }
-        return interactorNameResponse;
-    }
-
-    private String getHighestInteraction(Map<String, Long> interactionCounts, Map<String, Integer> interactionScores) {
-        return interactionCounts.entrySet().stream()
-                .max(Comparator.<Map.Entry<String, Long>>comparingLong(Map.Entry::getValue)
-                        .thenComparingInt(entry -> interactionScores.getOrDefault(entry.getKey(), 0))
-                )
-                .map(Map.Entry::getKey)
-                .orElse(null);
-    }
-
-    private String getSecondHighestInteraction(Map<String, Long> interactionCounts, Map<String, Integer> interactionScores, String highestInteraction) {
-        return interactionCounts.entrySet().stream()
-                .filter(entry -> !entry.getKey().equals(highestInteraction))
-                .max(Comparator.<Map.Entry<String, Long>>comparingLong(Map.Entry::getValue)
-                        .thenComparingInt(entry -> interactionScores.getOrDefault(entry.getKey(), 0))
-                )
-                .map(Map.Entry::getKey)
-                .orElse(null);
     }
 }

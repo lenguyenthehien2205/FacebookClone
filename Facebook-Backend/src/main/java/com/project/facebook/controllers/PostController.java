@@ -6,10 +6,9 @@ import com.project.facebook.dtos.PostFetchDTO;
 import com.project.facebook.models.Post;
 import com.project.facebook.models.User;
 import com.project.facebook.responses.ResponseObject;
-import com.project.facebook.responses.interaction.InteractionMediaResponse;
-import com.project.facebook.responses.interaction.InteractionPostResponse;
 import com.project.facebook.responses.media.MediaPostResponse;
 import com.project.facebook.responses.post.PostResponse;
+import com.project.facebook.services.IPostService;
 import com.project.facebook.services.PostService;
 import com.project.facebook.utils.MessageKeys;
 import jakarta.validation.Valid;
@@ -26,7 +25,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class PostController {
     private final LocalizationUtils localizationUtils;
-    private final PostService postService;
+    private final IPostService postService;
     // ok
     @PostMapping("")
     public ResponseEntity<ResponseObject> createPost(
@@ -276,53 +275,5 @@ public class PostController {
                 .message(localizationUtils.getLocalizedMessage(MessageKeys.GET_FRIEND_POSTS_SUCCESSFULLY))
                 .build());
     }
-    @GetMapping("/media/{mediaId}/interaction")
-    public ResponseEntity<ResponseObject> getMediaInteraction(@PathVariable Long mediaId) {
-        try {
-            InteractionMediaResponse interactionMediaResponse = postService.getMediaInteraction(mediaId);
-            return ResponseEntity.ok(ResponseObject.builder()
-                    .status(HttpStatus.OK)
-                    .message("Get media interaction successfully")
-                    .data(interactionMediaResponse)
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseObject.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .message(e.getMessage())
-                    .build());
-        }
-    }
-    @GetMapping("/{postId}/interaction")
-    public ResponseEntity<ResponseObject> getPostInteraction(@PathVariable Long postId) {
-        try {
-            InteractionPostResponse interactionPostResponse = postService.getPostInteraction(postId);
-            return ResponseEntity.ok(ResponseObject.builder()
-                    .status(HttpStatus.OK)
-                    .message("Get post interaction successfully")
-                    .data(interactionPostResponse)
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseObject.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .message(e.getMessage())
-                    .build());
-        }
-    }
 
-    @GetMapping("/{postId}/media")
-    public ResponseEntity<ResponseObject> getPostMedia(@PathVariable Long postId) {
-        try {
-            MediaPostResponse mediaPostResponse = postService.getPostMedia(postId);
-            return ResponseEntity.ok(ResponseObject.builder()
-                    .status(HttpStatus.OK)
-                    .message("Get post media successfully")
-                    .data(mediaPostResponse)
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseObject.builder()
-                    .status(HttpStatus.BAD_REQUEST)
-                    .message(e.getMessage())
-                    .build());
-        }
-    }
 }
