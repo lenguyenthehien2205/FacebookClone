@@ -52,12 +52,16 @@ public class JwtTokenUtils {
             claims.put("firstName", profile.getFirstName());
             claims.put("lastName", profile.getLastName());
             claims.put("displayFormat", profile.getDisplayFormat());
+            claims.put("currentPageType", user.getCurrentPageType());
+            claims.put("currentPageId", user.getCurrentPageId());
         }else if (currentPageType.equals(User.PAGE)){
             Page page = pageService.getPageById(currentPageId);
             PageBase pageBase = pageBaseService.getPageBaseById(page.getPageBase().getId());
             avatar = pageBase.getAvatar();
             claims.put("pageType", User.PAGE);
             claims.put("fullName", page.getPageName());
+            claims.put("currentPageType", user.getCurrentPageType());
+            claims.put("currentPageId", user.getCurrentPageId());
         }
         claims.put("phoneNumber", user.getUsername());
         claims.put("userId", user.getUserId());

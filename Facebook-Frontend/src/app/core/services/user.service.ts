@@ -15,7 +15,7 @@ export class UserService {
   private apiRegister = `${environment.apiBaseUrl}/users/register`;
   private apiLogin = `${environment.apiBaseUrl}/users/login`;
   private apiUrl = 'http://localhost:8088/api/v1/users'; // Thay thế bằng URL API thực tế
-  private apiContacts = `${environment.apiBaseUrl}/friends/contacts/${this.tokenService.getUserId()}`;
+  private apiContacts = `${environment.apiBaseUrl}/friends/contacts/`;
   private apiConfig = {
     headers: this.createHeaders()
   }
@@ -29,7 +29,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getContacts(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.apiContacts, this.apiConfig);
+    return this.http.get<ApiResponse>(`${this.apiContacts}${this.tokenService.getProfileId()}`, this.apiConfig);
   }
   register(registerData: RegisterDTO):Observable<any>{
     const headers = this.createHeaders();

@@ -3,6 +3,7 @@ import { VideosComponent } from './features/videos/page/videos.component';
 import { NotFoundComponent } from './features/not-found/page/not-found.component';
 import { HomeComponent } from './features/home/page/home.component';
 import { LoginComponent } from './features/auth/page/login.component';
+import { ProfileComponent } from './features/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,10 @@ export const routes: Routes = [
   {
     path: 'videos',
     component: VideosComponent
+  },
+  {
+    path: ':username',
+    component: ProfileComponent
   },
   {
     path: '**',

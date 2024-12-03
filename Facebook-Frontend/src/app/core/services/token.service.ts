@@ -24,6 +24,14 @@ export class TokenService {
         let userObject = this.jwtHelperService.decodeToken(token);
         return 'userId' in userObject ? parseInt(userObject['userId']) : 0;
     }
+    getProfileId(): number {
+        let token = this.getToken();
+        if (!token) {
+            return 0;
+        }
+        let userObject = this.jwtHelperService.decodeToken(token);
+        return 'currentPageId' in userObject ? parseInt(userObject['currentPageId']) : 0;
+    }
     getAvatar(): string {
         let token = this.getToken();
         if(!token){

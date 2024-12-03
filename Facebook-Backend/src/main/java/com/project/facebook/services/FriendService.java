@@ -62,6 +62,4 @@ public class FriendService implements IFriendService{
                 .collect(Collectors.toList());
         return profileTagResponses;
     }
-
-
 }

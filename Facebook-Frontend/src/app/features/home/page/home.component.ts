@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import { PostPanelComponent } from '../components/post-panel/post-panel.component';
+import { NavigationEnd } from '@angular/router';
+import { NavigationStart } from '@angular/router';
+import { Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -19,5 +23,12 @@ export class HomeComponent {
     if (scrollPosition >= scrollThreshold) {
       this.postPanelComponent.loadMorePosts();
     }
+  }
+  constructor(private router: Router) {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      console.log('Navigation ended, checking scroll position restoration');
+    });
   }
 }

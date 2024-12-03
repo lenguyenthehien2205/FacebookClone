@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, HostListener, inject, input, ViewChild} from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject, input, OnInit, ViewChild} from '@angular/core';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { environment } from 'src/app/environments/environment';
 import { PostPanelComponent } from 'src/app/features/home/components/post-panel/post-panel.component';
 import { TokenService } from '../../services/token.service';
+import { NavigationService} from '../../services/navigation.service';
 
 @Component({
   selector: 'app-header',
@@ -11,8 +12,9 @@ import { TokenService } from '../../services/token.service';
   styleUrls: ['./header.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
   tokenService = inject(TokenService);
+  cdr = inject(ChangeDetectorRef);
   roundedButtons = [
     {
       name: 'Menu',
@@ -37,6 +39,7 @@ export class HeaderComponent {
   
   activeItemNavItem: string | null = null;
   activeButton: string | null = null;
+
   getAvatar(): string{
     if(this.tokenService.getAvatar()){
       return `${environment.apiBaseUrl}/profiles/avatar_image/${this.tokenService.getAvatar()}`;
@@ -75,13 +78,14 @@ export class HeaderComponent {
     this.activeItemNavItem = 'Trang chủ';
     // Lắng nghe sự kiện điều hướng hoàn tất
     this.routerSubscription = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
+      if (event instanceof NavigationEnd || event instanceof NavigationStart) {
         const pathAfterHostname = this.router.url;
 
         // Cập nhật activeItemNavItem dựa trên URL
         switch (pathAfterHostname) {
           case '/home':
             this.activeItemNavItem = 'Trang chủ';
+            console.log("ok");
             break;
           case '/videos':
             this.activeItemNavItem = 'Video';
@@ -96,15 +100,15 @@ export class HeaderComponent {
             this.activeItemNavItem = 'Trò chơi';
             break;
           default:
-            this.activeItemNavItem = 'Trang chủ';
+            this.activeItemNavItem = '';
             break;
         }
+        this.cdr.detectChanges(); // dùng detect do popstate(back trình duyệt) không kích hoạt changeDetect nên phải làm thủ công
       }
     });
   }
 
   ngOnDestroy(): void {
-    // Hủy đăng ký để tránh rò rỉ bộ nhớ
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }

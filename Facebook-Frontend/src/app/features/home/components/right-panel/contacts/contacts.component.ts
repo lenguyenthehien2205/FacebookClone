@@ -4,6 +4,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { UserTag } from 'src/app/core/models/user.model';
 import { UserService } from 'src/app/core/services/user.service';
 import { getName } from 'src/app/core/utils/name-format-utils';
@@ -17,13 +18,15 @@ import { ApiResponse } from 'src/app/features/auth/responses/api.response';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactsComponent implements OnInit {
-  users = signal<UserTag[]>([]);
+  users = new BehaviorSubject<UserTag[]>([]);
   constructor(private userService: UserService) {}
   ngOnInit() {
     this.loadContacts();
+    console.log('ContactsComponent initialized');
   }
 
   loadContacts() {
+    console.log('Loading contacts...');
     this.userService.getContacts().subscribe({
       next: (response: ApiResponse) => {
         const users = response?.data as UserTag[];
@@ -38,8 +41,9 @@ export class ContactsComponent implements OnInit {
             }
           });
         }
-      
-        this.users.set(users);
+
+        this.users.next(users);
+        console.log('Contacts loaded:', users);
       },
       error: (error) => {
         console.error('Lỗi khi tải danh sách người dùng:', error);
