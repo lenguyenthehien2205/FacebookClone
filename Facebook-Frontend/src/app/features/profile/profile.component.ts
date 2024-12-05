@@ -15,4 +15,18 @@ export class ProfileComponent {
   ngOnInit(): void {
     this.username = this.route.snapshot.paramMap.get('username');
   }
+
+  // constructor() {
+  //   // Lắng nghe sự kiện đóng trình duyệt
+  //   window.addEventListener('beforeunload', this.updateOfflineStatus.bind(this));
+  // }
+
+  // updateOfflineStatus() {
+  //   // Gửi yêu cầu cập nhật trạng thái người dùng
+  //   navigator.sendBeacon('/api/user/offline');
+  // }
+
+  // ngOnDestroy() {
+  //   window.removeEventListener('beforeunload', this.updateOfflineStatus);
+  // }
 }

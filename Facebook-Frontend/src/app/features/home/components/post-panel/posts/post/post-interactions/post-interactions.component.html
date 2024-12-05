@@ -18,7 +18,7 @@
             }
         </div>
         <app-custom-title [titleCustom]="interactionDetails()" [y]="10" [center]="false" [ngClass]="[
-            secondHighestInteraction() ? 'ml-[1px]' : 'ml-[4px]'
+            secondHighestInteraction() ? 'ml-[-2px]' : 'ml-[4px]'
         ]">
             <div class="text-[15px] text-grey hover:underline cursor-pointer" (mouseenter)="loadInteractionDetails()">{{interactionCount() || null }}</div>
         </app-custom-title>

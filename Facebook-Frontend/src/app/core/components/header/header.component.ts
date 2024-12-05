@@ -46,16 +46,12 @@ export class HeaderComponent implements OnInit{
     }
     return 'assets/avatars/default-avatar.png';
   }
-  // showHistory: boolean = false;
   onSelectNavItem(name: string) {
     this.activeItemNavItem = name;
   }
   onSelectButton(name: string) {
     this.activeButton = name;
   }
-  // onHandleFocusInput(){
-  //   this.showHistory = true;
-  // }
   isHistoryVisible = false;
 
   @HostListener('document:click', ['$event'])

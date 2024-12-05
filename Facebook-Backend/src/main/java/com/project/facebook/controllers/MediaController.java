@@ -2,19 +2,15 @@ package com.project.facebook.controllers;
 
 import com.project.facebook.components.FileUtils;
 import com.project.facebook.dtos.MediaDTO;
-import com.project.facebook.dtos.PostDTO;
-import com.project.facebook.dtos.PostFetchDTO;
 import com.project.facebook.exceptions.DataNotFoundException;
 import com.project.facebook.models.*;
 import com.project.facebook.repositories.PageRepository;
 import com.project.facebook.repositories.ProfileRepository;
 import com.project.facebook.responses.ResponseObject;
+import com.project.facebook.responses.media.MediaImageProfileResponse;
 import com.project.facebook.responses.media.MediaPostResponse;
 import com.project.facebook.services.IMediaService;
 import com.project.facebook.services.IPostService;
-import com.project.facebook.services.MediaService;
-import com.project.facebook.services.PostService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -164,6 +160,23 @@ public class MediaController {
                     .status(HttpStatus.OK)
                     .message("Get post media successfully")
                     .data(mediaPostResponse)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseObject.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    @GetMapping("/images/{profile_id}")
+    public ResponseEntity<ResponseObject> getMediaImagesProfile(@PathVariable("profile_id") Long profileId) {
+        try {
+            List<MediaImageProfileResponse> mediaImageProfileResponse = mediaService.getImagesByProfileId(profileId);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(HttpStatus.OK)
+                    .message("Get images profile successfully")
+                    .data(mediaImageProfileResponse)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseObject.builder()

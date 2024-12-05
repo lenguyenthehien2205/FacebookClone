@@ -2,7 +2,9 @@ package com.project.facebook.services;
 
 import com.project.facebook.exceptions.DataNotFoundException;
 import com.project.facebook.models.Media;
+import com.project.facebook.projections.medias.MediaImageProfileProjection;
 import com.project.facebook.repositories.MediaRepository;
+import com.project.facebook.responses.media.MediaImageProfileResponse;
 import com.project.facebook.responses.media.MediaPostResponse;
 import com.project.facebook.responses.media.MediaResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,5 +33,12 @@ public class MediaService implements IMediaService{
                 .mediaResponses(mediaResponses)
                 .totalMedias(medias.size())
                 .build();
+    }
+    @Override
+    public List<MediaImageProfileResponse> getImagesByProfileId(Long profileId) {
+        List<MediaImageProfileProjection> projections = mediaRepository.getImagesByProfileId(profileId, 9);
+        return projections.stream()
+                .map(MediaImageProfileResponse::convertToResponse)
+                .collect(Collectors.toList());
     }
 }

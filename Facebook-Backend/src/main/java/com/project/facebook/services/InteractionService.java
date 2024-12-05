@@ -90,7 +90,7 @@ public class InteractionService implements IInteractionService{
                 .findByPostMediaIdAndPostMediaType(postId, "post")
                 .stream()
                 .map(this::createInteractorNameResponse)
-                .limit(19)
+                .limit(5)
                 .collect(Collectors.toList());
         int totalPostInteractions = interactionRepository.countByPostMediaIdAndPostMediaType(postId, "post");
         return InteractionDetailResponse.builder()
@@ -166,4 +166,6 @@ public class InteractionService implements IInteractionService{
                 .map(Map.Entry::getKey)
                 .orElse(null);
     }
+
+
 }

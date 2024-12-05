@@ -160,5 +160,24 @@ public class ProfileController {
             return ResponseEntity.notFound().build();
         }
     }
-
+    @GetMapping("header/{pathname}/{my_profile_id}")
+    public ResponseEntity<?> getProfileHeaderByPathNameAndMyProfileId(
+            @PathVariable("pathname") String pathname,
+            @PathVariable("my_profile_id") Long myProfileId){
+        try {
+            return ResponseEntity.ok(profileService.getProfileHeaderByPathNameAndMyProfileId(pathname, myProfileId));
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("friends/{pathname}/{my_profile_id}")
+    public ResponseEntity<?> getProfileFriendsByPathNameAndMyProfileId(
+            @PathVariable("pathname") String pathname,
+            @PathVariable("my_profile_id") Long myProfileId){
+        try {
+            return ResponseEntity.ok(profileService.getProfileFriendsByPathNameAndMyProfileId(pathname, myProfileId));
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

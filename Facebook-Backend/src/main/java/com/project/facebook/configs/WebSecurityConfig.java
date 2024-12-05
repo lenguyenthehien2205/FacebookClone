@@ -67,6 +67,7 @@ public class WebSecurityConfig {
 
                             .requestMatchers(GET, String.format("/%s/medias/post/{post_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/medias/upload_medias_post/{post_id}/{note}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(GET, String.format("/%s/medias/images/{profile_id}", apiBasePath)).permitAll()
 
                             .requestMatchers(GET, String.format("/%s/interactions/media/{media_id}", apiBasePath)).permitAll()
                             .requestMatchers(GET, String.format("/%s/interactions/post/{post_id}", apiBasePath)).permitAll()
@@ -76,6 +77,8 @@ public class WebSecurityConfig {
 
                             .requestMatchers(POST, String.format("/%s/profiles/upload_avatar/{profile_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/profiles/upload_cover_photo/{profile_id}", apiBasePath)).hasRole("USER")
+                            .requestMatchers(GET, String.format("/%s/profiles/header/{pathname}/{my_profile_id}", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/profiles/friends/{pathname}/{my_profile_id}", apiBasePath)).permitAll()
 //                            .requestMatchers(GET, String.format("/%s/profiles/avatar_image/{imageName}", apiBasePath)).permitAll()
 //                            .requestMatchers(GET, String.format("/%s/profiles/cover_photo_image/{imageName}", apiBasePath)).permitAll()
 //                            .requestMatchers(GET,

@@ -4,9 +4,15 @@ import com.project.facebook.exceptions.DataNotFoundException;
 import com.project.facebook.models.PageBase;
 import com.project.facebook.models.Profile;
 import com.project.facebook.models.User;
+import com.project.facebook.responses.profile.ProfileFriendResponse;
+import com.project.facebook.responses.profile.ProfileHeaderResponse;
+
+import java.util.List;
 
 public interface IProfileService {
     Profile getProfileById(Long id) throws DataNotFoundException;
     PageBase updateProfileAvatar(Long id, String avatarFileName) throws DataNotFoundException;
     PageBase updateProfileCoverPhoto(Long id, String avatarFileName) throws DataNotFoundException;
+    ProfileHeaderResponse getProfileHeaderByPathNameAndMyProfileId(String pathname, Long myProfileId);
+    ProfileFriendResponse getProfileFriendsByPathNameAndMyProfileId(String pathname, Long myProfileId);
 }

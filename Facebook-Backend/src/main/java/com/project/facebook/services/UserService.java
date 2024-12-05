@@ -49,6 +49,12 @@ public class UserService implements IUserService {
     @Override
     public User createUser(UserCreateDTO userCreateDTO) throws Exception {
         String phoneNumber = userCreateDTO.getPhoneNumber();
+
+        // pathname khong duoc trung
+        if(pageBaseRepository.existsByPathName(userCreateDTO.getPathName())){
+            throw new DataIntegrityViolationException("Path name already exist");
+        }
+
         if(userRepository.existsByUsername(phoneNumber)){
             throw new DataIntegrityViolationException(localizationUtils.getLocalizedMessage(MessageKeys.PHONE_NUMBER_ALREADY_EXISTS));
         }

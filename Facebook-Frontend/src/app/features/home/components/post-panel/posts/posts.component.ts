@@ -29,7 +29,7 @@ export class PostsComponent implements OnInit {
   tokenService = inject(TokenService);
   postService = inject(PostService);
   postFetchData: PostFetchData = {
-    author_id: this.tokenService.getUserId(),
+    author_id: this.tokenService.getProfileId(),
     limit: 3,
     fetched_ids: [],
   };

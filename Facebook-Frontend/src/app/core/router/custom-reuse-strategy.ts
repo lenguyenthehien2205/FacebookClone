@@ -8,7 +8,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
 
   // Quyết định có nên lưu lại route này không
   shouldDetach(route: ActivatedRouteSnapshot): boolean {
-    // Ví dụ: Chỉ lưu route có path là 'posts'
+    // Ví dụ: Chỉ lưu route có path là 'home'
     return route.routeConfig?.path === 'home';
   }
 

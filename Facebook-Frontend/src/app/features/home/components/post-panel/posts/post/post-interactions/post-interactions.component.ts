@@ -61,10 +61,16 @@ export class PostInteractionsComponent {
     if (!this.interactionDetails()) {
       this.interactionService.getInteractionPost(this.postId()).subscribe({
         next: (response: ApiResponse) => {
+          const maxDisplay = 19;
           const names = response.data.interactor_name_responses;
+          const totalInteractions = response.data.total_interactions;
           const allNames = names.map((item: { interactor_name: string }) => item.interactor_name);
-          const finalString = allNames.concat('và 100 người khác...').join('<br>');
-          // const finalString = allNames.join('<br>');
+          let finalString = '';
+          if(totalInteractions > maxDisplay){
+            finalString = allNames.concat(`và ${totalInteractions - maxDisplay} người khác`).join('<br>');
+          }else{
+            finalString = allNames.join('<br>');
+          }
           this.interactionDetails.set(finalString);
         }
       });
@@ -72,14 +78,19 @@ export class PostInteractionsComponent {
   }
   loadInteractionByTypeDetail() {
     // Lấy dữ liệu cho highestInteraction
-    this.interactionService
-      .getInteractionByTypePost(this.postId(), this.highestInteraction())
-      .subscribe({
+    this.interactionService.getInteractionByTypePost(this.postId(), this.highestInteraction()).subscribe({
         next: (response: ApiResponse) => {
+          const maxDisplay = 19;
           const names = response.data.interactor_name_responses;
           const title = this.getTitleByName(this.highestInteraction());
+          const totalInteractions = response.data.total_interactions;
           const allNames = names.map((item: { interactor_name: string }) => item.interactor_name);
-          const finalString = `<h1 class="font-bold">${title}</h1>` + allNames.join('<br>');
+          let finalString = `<h1 class="font-bold">${title}</h1>`;
+          if(totalInteractions > maxDisplay){
+            finalString = finalString + allNames.concat(`và ${totalInteractions - maxDisplay} người khác`).join('<br>');
+          }else{
+            finalString = finalString + allNames.join('<br>');
+          }
           this.highestInteractionDetails$.next(finalString); // Cập nhật dữ liệu
         },
         error: (err) => {
