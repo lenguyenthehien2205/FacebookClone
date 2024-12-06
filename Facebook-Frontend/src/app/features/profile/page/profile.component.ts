@@ -1,19 +1,20 @@
 import { Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ProfileHeaderComponent } from '../components/profile-header/profile-header.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [],
+  imports: [ProfileHeaderComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
-  username: string | null = '';
+  pathname: string | null = '';
   route = inject(ActivatedRoute);
 
   ngOnInit(): void {
-    this.username = this.route.snapshot.paramMap.get('username');
+    this.pathname = this.route.snapshot.paramMap.get('pathname');
   }
 
   // constructor() {

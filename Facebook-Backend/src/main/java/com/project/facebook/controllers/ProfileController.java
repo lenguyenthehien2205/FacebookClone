@@ -165,7 +165,11 @@ public class ProfileController {
             @PathVariable("pathname") String pathname,
             @PathVariable("my_profile_id") Long myProfileId){
         try {
-            return ResponseEntity.ok(profileService.getProfileHeaderByPathNameAndMyProfileId(pathname, myProfileId));
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .data(profileService.getProfileHeaderByPathNameAndMyProfileId(pathname, myProfileId))
+                    .message("OK")
+                    .status(HttpStatus.OK)
+                    .build());
         } catch (Exception e){
             return ResponseEntity.notFound().build();
         }
@@ -175,7 +179,11 @@ public class ProfileController {
             @PathVariable("pathname") String pathname,
             @PathVariable("my_profile_id") Long myProfileId){
         try {
-            return ResponseEntity.ok(profileService.getProfileFriendsByPathNameAndMyProfileId(pathname, myProfileId));
+            return ResponseEntity.ok(ResponseObject.builder()
+                .data(profileService.getProfileFriendsByPathNameAndMyProfileId(pathname, myProfileId))
+                .message("OK")
+                .status(HttpStatus.OK)
+                .build());
         } catch (Exception e){
             return ResponseEntity.notFound().build();
         }

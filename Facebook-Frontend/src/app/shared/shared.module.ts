@@ -6,6 +6,8 @@ import { SectionWithHeaderComponent } from "./components/section-with-header/sec
 import { CustomTitleComponent } from "./components/custom-title/custom-title.component";
 import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
+import { PostSkeletonComponent } from "./components/skeletons/post-skeleton/post-skeleton.component";
+import { ContactSkeletonComponent } from "./components/skeletons/contact-skeleton/contact-skeleton.component";
 
 @NgModule({
   declarations: [
@@ -13,7 +15,9 @@ import { RouterModule } from "@angular/router";
     MoreActionItemComponent,
     CustomTitleComponent,
     SectionWithHeaderComponent,
-    NavbarButtonComponent
+    NavbarButtonComponent,
+    PostSkeletonComponent,
+    ContactSkeletonComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +28,9 @@ import { RouterModule } from "@angular/router";
     MoreActionItemComponent,
     CustomTitleComponent,
     SectionWithHeaderComponent,
-    NavbarButtonComponent
+    NavbarButtonComponent,
+    PostSkeletonComponent,
+    ContactSkeletonComponent
   ]
 })
 export class SharedModule {}

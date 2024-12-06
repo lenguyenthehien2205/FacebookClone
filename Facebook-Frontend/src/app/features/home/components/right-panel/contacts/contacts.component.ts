@@ -18,6 +18,8 @@ import { ApiResponse } from 'src/app/features/auth/responses/api.response';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactsComponent implements OnInit {
+  isLoading = signal<boolean>(false);
+  delay = signal<boolean>(false);
   users = new BehaviorSubject<UserTag[]>([]);
   constructor(private userService: UserService) {}
   ngOnInit() {
@@ -26,7 +28,9 @@ export class ContactsComponent implements OnInit {
   }
 
   loadContacts() {
-    console.log('Loading contacts...');
+    if (this.delay()) return; // Không tải nếu đang đợi
+    this.isLoading.set(true); 
+    this.delay.set(true);
     this.userService.getContacts().subscribe({
       next: (response: ApiResponse) => {
         const users = response?.data as UserTag[];
@@ -41,9 +45,11 @@ export class ContactsComponent implements OnInit {
             }
           });
         }
-
-        this.users.next(users);
-        console.log('Contacts loaded:', users);
+        setTimeout(() => {
+          this.delay.set(false); 
+          this.isLoading.set(false);
+          this.users.next(users);
+        }, 1000)
       },
       error: (error) => {
         console.error('Lỗi khi tải danh sách người dùng:', error);

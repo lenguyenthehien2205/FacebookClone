@@ -78,7 +78,8 @@ export class PostInteractionsComponent {
   }
   loadInteractionByTypeDetail() {
     // Lấy dữ liệu cho highestInteraction
-    this.interactionService.getInteractionByTypePost(this.postId(), this.highestInteraction()).subscribe({
+    this.interactionService.getInteractionByTypePost(this.postId(), this.highestInteraction())
+      .subscribe({
         next: (response: ApiResponse) => {
           const maxDisplay = 19;
           const names = response.data.interactor_name_responses;
@@ -100,8 +101,7 @@ export class PostInteractionsComponent {
       });
 
     // Lấy dữ liệu cho secondHighestInteraction
-    this.interactionService
-      .getInteractionByTypePost(this.postId(), this.secondHighestInteraction())
+    this.interactionService.getInteractionByTypePost(this.postId(), this.secondHighestInteraction())
       .subscribe({
         next: (response: ApiResponse) => {
           const names = response.data.interactor_name_responses;

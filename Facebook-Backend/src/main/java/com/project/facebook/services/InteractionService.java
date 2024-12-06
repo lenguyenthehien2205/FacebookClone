@@ -90,7 +90,7 @@ public class InteractionService implements IInteractionService{
                 .findByPostMediaIdAndPostMediaType(postId, "post")
                 .stream()
                 .map(this::createInteractorNameResponse)
-                .limit(5)
+                .limit(19)
                 .collect(Collectors.toList());
         int totalPostInteractions = interactionRepository.countByPostMediaIdAndPostMediaType(postId, "post");
         return InteractionDetailResponse.builder()

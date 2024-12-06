@@ -31,6 +31,9 @@ public class PostResponse extends BaseResponse {
     @JsonProperty("author_name")
     private String authorName;
 
+    @JsonProperty("path_name")
+    private String pathName;
+
     private String content;
 
     private String privacy;

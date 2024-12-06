@@ -25,5 +25,5 @@ export class InteractionService {
     }
     getInteractionByTypePost(postId: number, interactionType: string): Observable<ApiResponse> {
       return this.http.get<ApiResponse>(`${this.interactionByTypeUrl}/${postId}/${interactionType}`, this.apiConfig);
-  }
+    }
 }

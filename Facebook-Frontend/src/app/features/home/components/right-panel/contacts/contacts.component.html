@@ -12,8 +12,8 @@
         @for (user of users | async; track user.user_id) {
             <app-contact-item [image]="user.avatar" [username]="getDisplayName(user)" [isOnline]="user.is_online"></app-contact-item>
         }
-        <!-- <app-contact-item [image]="'thehien.jpg'" [username]="'Thế Hiển'" [isOnline]="true"></app-contact-item>
-        <app-contact-item [image]="'thanhkhiem.jpg'" [username]="'Thành Khiêm'" [isOnline]="true"></app-contact-item>
-        <app-contact-item [image]="'thuynga.jpg'" [username]="'Thúy Nga'" [isOnline]="true"></app-contact-item> -->
+        @if(isLoading()){
+            <app-contact-skeleton/>
+        }
     </div>
 </app-section-with-header>

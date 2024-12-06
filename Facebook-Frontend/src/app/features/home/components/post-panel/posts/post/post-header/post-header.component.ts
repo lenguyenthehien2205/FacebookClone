@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 export class PostHeaderComponent {
   avatar = input.required<string>();
   username = input.required<string>();
+  pathname = input.required<string>();
   time = input.required<string>();
   timeAgo = input.required<string>();
   isOnline = input.required<boolean>();

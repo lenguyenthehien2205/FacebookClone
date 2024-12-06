@@ -30,6 +30,9 @@ public class ProfileHeaderResponse {
     @JsonProperty("is_friends")
     private boolean isFriends;
 
+    @JsonProperty("is_online")
+    private boolean isOnline;
+
     @JsonProperty("avatar_friends")
     private List<ProfileAvatarFriendsResponse> avatarFriends;
 }

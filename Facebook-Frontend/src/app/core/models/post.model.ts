@@ -6,6 +6,7 @@ export interface Post {
     author_id: string;
     author_type: string;
     post_type: string;
+    path_name: string;
     author_name: string;
     content: string;
     privacy: string;

@@ -25,6 +25,8 @@ import { ApiResponse } from 'src/app/features/auth/responses/api.response';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostsComponent implements OnInit {
+  isLoading = signal<boolean>(false);
+  delay = signal<boolean>(false);
   // posts = signal<Post[]>([]);
   tokenService = inject(TokenService);
   postService = inject(PostService);
@@ -40,6 +42,9 @@ export class PostsComponent implements OnInit {
   constructor(private cdRef: ChangeDetectorRef) {}
 
   loadPosts() {
+    if (this.delay()) return; // Không tải nếu đang đợi
+    this.isLoading.set(true); 
+    this.delay.set(true);
     this.postFetchData.fetched_ids = this.postService.getFetchedIds();
     this.postService.fetchPosts(this.postFetchData).subscribe({
       next: (response: ApiResponse) => {
@@ -64,14 +69,15 @@ export class PostsComponent implements OnInit {
               post.avatar = `${environment.apiBaseUrl}/profiles/avatar_image/${post.avatar}`;
             }
           });
-
           const newFetchedIds = newPosts.map((post) => post.id);
           this.postService.updateFetchedIds(newFetchedIds);
-
           this.postService.addPosts(newPosts);
-          this.posts.set(this.postService.getPosts());
-          console.log(this.posts());
-          this.cdRef.detectChanges();
+          setTimeout(() => {
+            this.posts.set(this.postService.getPosts());
+            this.delay.set(false); 
+            this.isLoading.set(false);
+            this.cdRef.detectChanges();
+          }, 1000)
         }
       },
       error: (error) => {

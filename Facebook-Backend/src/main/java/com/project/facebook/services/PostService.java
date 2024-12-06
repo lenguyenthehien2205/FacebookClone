@@ -182,12 +182,13 @@ public class PostService implements IPostService{
 
         List<PostResponse> postResponses = posts.stream().map(post -> {
             PostResponse postResponse = PostResponse.fromPost(post);
-
+            Long baseId = null;
             // Fetch author information based on author_type
             if (post.getAuthorType().equals(User.PROFILE)) {
                 Optional<Profile> profOpt = profileRepository.findById(post.getAuthorId());
                 if (profOpt.isPresent()) {
                     Profile prof = profOpt.get();
+                    baseId = prof.getPageBase().getId();
                     postResponse.setAuthorName(prof.getDisplayFormat().equals("firstname_lastname")
                             ? prof.getFirstName() + " " + prof.getLastName()
                             : prof.getLastName() + " " + prof.getFirstName());
@@ -197,14 +198,16 @@ public class PostService implements IPostService{
                 Optional<Page> pageOpt = pageRepository.findById(post.getAuthorId());
                 if (pageOpt.isPresent()) {
                     Page page = pageOpt.get();
+                    baseId = page.getPageBase().getId();
                     postResponse.setAuthorName(page.getPageName());
                     postResponse.setIsOnline(false); // Pages are not online
                 }
             }
 
             // Fetch avatar from PageBaseRepo
-            Optional<PageBase> pageBaseOpt = pageBaseRepository.findById(post.getAuthorId());
+            Optional<PageBase> pageBaseOpt = pageBaseRepository.findById(baseId);
             if (pageBaseOpt.isPresent()) {
+                postResponse.setPathName(pageBaseOpt.get().getPathName());
                 postResponse.setAvatar(pageBaseOpt.get().getAvatar());
             }
 

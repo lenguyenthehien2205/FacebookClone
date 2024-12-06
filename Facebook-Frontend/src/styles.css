@@ -32,3 +32,23 @@ body {
 .scroll-container:hover::-webkit-scrollbar-thumb {
   background: #bcc0c4;
 }
+
+.skeleton {
+  background: linear-gradient(
+    to right,
+    #e0e0e0 0%,
+    #f0f0f0 50%,
+    #e0e0e0 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

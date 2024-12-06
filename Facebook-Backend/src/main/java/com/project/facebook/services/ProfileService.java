@@ -73,6 +73,7 @@ public class ProfileService implements IProfileService{
                 .totalFriends(totalFriends)
                 .mutualFriends(mutualFriends)
                 .isFriends(isFriend)
+                .isOnline(profile.getIsOnline())
                 .avatarFriends(profileAvatarFriendsResponseList)
                 .build();
     }
