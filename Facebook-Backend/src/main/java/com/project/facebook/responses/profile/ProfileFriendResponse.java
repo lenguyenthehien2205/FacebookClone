@@ -15,5 +15,5 @@ public class ProfileFriendResponse {
     private int mutual_friends;
 
     @JsonProperty("profile_avatar_friends")
-    private List<ProfileAvatarFriendsResponse> profileAvatarFriends;
+    private List<ProfileAvatarWithFullnameResponse> profileAvatarFriends;
 }

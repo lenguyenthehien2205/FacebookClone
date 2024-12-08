@@ -3,16 +3,14 @@ package com.project.facebook.services;
 import com.project.facebook.exceptions.DataNotFoundException;
 import com.project.facebook.models.PageBase;
 import com.project.facebook.models.Profile;
-import com.project.facebook.models.User;
 import com.project.facebook.repositories.FriendRepository;
 import com.project.facebook.repositories.MediaRepository;
 import com.project.facebook.repositories.PageBaseRepository;
 import com.project.facebook.repositories.ProfileRepository;
-import com.project.facebook.responses.media.MediaImageProfileResponse;
-import com.project.facebook.responses.profile.ProfileAvatarFriendsResponse;
+import com.project.facebook.responses.profile.ProfileAvatarResponse;
+import com.project.facebook.responses.profile.ProfileAvatarWithFullnameResponse;
 import com.project.facebook.responses.profile.ProfileFriendResponse;
 import com.project.facebook.responses.profile.ProfileHeaderResponse;
-import com.project.facebook.responses.profile.ProfileResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -45,18 +43,16 @@ public class ProfileService implements IProfileService{
         // Tính số lượng bạn bè tổng
         int totalFriends = friendRepository.countTotalFriends(profile.getId());
         // Lấy avatar của bạn bè
-        List<ProfileAvatarFriendsResponse> profileAvatarFriendsResponseList = new ArrayList<>();
+        List<ProfileAvatarResponse> profileAvatarFriendsResponseList = new ArrayList<>();
         List<Long> profileIdFriends = profileRepository.getProfileIdFriends(profile.getId(), 8);
         List<String> avatarFriends = profileRepository.getAvatarsByFriendIds(profileIdFriends);
 
         for (int i = 0; i < profileIdFriends.size(); i++) {
             Long friendId = profileIdFriends.get(i);
             String avatarFriend = avatarFriends.get(i);
-            Optional<Profile> profileTemp = profileRepository.findById(friendId);
-            profileAvatarFriendsResponseList.add(ProfileAvatarFriendsResponse.builder()
+            profileAvatarFriendsResponseList.add(ProfileAvatarResponse.builder()
                     .profileId(friendId)
-                    .fullname(getFullName(profileTemp.get()))
-                    .avatar(avatarFriend)
+                    .url(avatarFriend)
                     .build());
         }
         Boolean isFriend;
@@ -86,7 +82,7 @@ public class ProfileService implements IProfileService{
         // Tính số lượng bạn bè chung
         int mutualFriends = friendRepository.countMutualFriendsByPathNameAndProfileId(profile.getId(), myProfileId);
         // Lấy avatar của bạn bè
-        List<ProfileAvatarFriendsResponse> profileAvatarFriendsResponseList = new ArrayList<>();
+        List<ProfileAvatarWithFullnameResponse> profileAvatarFriendsResponseList = new ArrayList<>();
         List<Long> profileIdFriends = profileRepository.getProfileIdFriends(profile.getId(), 9);
         List<String> avatarFriends = profileRepository.getAvatarsByFriendIds(profileIdFriends);
 
@@ -94,10 +90,10 @@ public class ProfileService implements IProfileService{
             Long friendId = profileIdFriends.get(i);
             String avatarFriend = avatarFriends.get(i);
             Optional<Profile> profileTemp = profileRepository.findById(friendId);
-            profileAvatarFriendsResponseList.add(ProfileAvatarFriendsResponse.builder()
+            profileAvatarFriendsResponseList.add(ProfileAvatarWithFullnameResponse.builder()
                     .profileId(friendId)
                     .fullname(getFullName(profileTemp.get()))
-                    .avatar(avatarFriend)
+                    .url(avatarFriend)
                     .build());
         }
         Boolean isFriend;

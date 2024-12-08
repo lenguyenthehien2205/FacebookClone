@@ -1,14 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { RegisterDTO } from 'src/app/features/auth/dtos/register.dto';
+import { RegisterDTO } from 'src/app/shared/dtos/register.dto';
 import { environment } from 'src/app/environments/environment';
-import { LoginDTO } from 'src/app/features/auth/dtos/login.dto';
-import { ApiResponse } from 'src/app/features/auth/responses/api.response';
+import { LoginDTO } from 'src/app/shared/dtos/login.dto';
+import { ApiResponse } from 'src/app/shared/responses/api.response';
 import { TokenService } from './token.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   tokenService = inject(TokenService);
@@ -17,26 +17,29 @@ export class UserService {
   private apiUrl = 'http://localhost:8088/api/v1/users'; // Thay thế bằng URL API thực tế
   private apiContacts = `${environment.apiBaseUrl}/friends/contacts/`;
   private apiConfig = {
-    headers: this.createHeaders()
-  }
+    headers: this.createHeaders(),
+  };
   private createHeaders(): HttpHeaders {
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Accept-Language': 'vi'
+      'Accept-Language': 'vi',
     });
   }
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getContacts(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(`${this.apiContacts}${this.tokenService.getProfileId()}`, this.apiConfig);
+    return this.http.get<ApiResponse>(
+      `${this.apiContacts}${this.tokenService.getProfileId()}`,
+      this.apiConfig
+    );
   }
-  register(registerData: RegisterDTO):Observable<any>{
+  register(registerData: RegisterDTO): Observable<any> {
     const headers = this.createHeaders();
-    return this.http.post(this.apiRegister, registerData, {headers});
+    return this.http.post(this.apiRegister, registerData, { headers });
   }
-  login(loginData: LoginDTO):Observable<any>{
+  login(loginData: LoginDTO): Observable<any> {
     const headers = this.createHeaders();
-    return this.http.post(this.apiLogin, loginData, {headers});
+    return this.http.post(this.apiLogin, loginData, { headers });
   }
 }

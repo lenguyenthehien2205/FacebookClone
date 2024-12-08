@@ -10,6 +10,7 @@ import { AuthModule } from './features/auth/auth.module';
 import { TokenInterceptor } from './core/interceptors/token.interceptor';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './core/router/custom-reuse-strategy';
+import { ProfileModule } from './features/profile/profile.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CustomReuseStrategy } from './core/router/custom-reuse-strategy';
     AppRoutingModule,
     HomeModule,
     HeaderModule,
-    AuthModule
+    AuthModule,
+    ProfileModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

@@ -34,5 +34,5 @@ public class ProfileHeaderResponse {
     private boolean isOnline;
 
     @JsonProperty("avatar_friends")
-    private List<ProfileAvatarFriendsResponse> avatarFriends;
+    private List<ProfileAvatarResponse> avatarFriends;
 }

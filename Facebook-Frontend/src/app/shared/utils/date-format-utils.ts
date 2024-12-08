@@ -2,6 +2,8 @@ export function getDayOfWeek(date: Date): string {
     const daysOfWeek = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
     return daysOfWeek[date.getDay()];
   }
+  // console.log(this.userResponse?.date_of_birth.toISOString().substring(0, 10));
+// Output: "1990-05-15"
   
   export function formatDate(inputDate: number[]): string {
     const createdAtDate = new Date(

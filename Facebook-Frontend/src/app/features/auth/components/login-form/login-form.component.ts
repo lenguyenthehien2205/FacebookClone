@@ -1,16 +1,20 @@
-import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  output,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { LoginDTO } from '../../dtos/login.dto';
+import { LoginDTO } from '../../../../shared/dtos/login.dto';
 import { UserService } from 'src/app/core/services/user.service';
-import { LoginResponse } from '../../responses/login.response';
 import { TokenService } from 'src/app/core/services/token.service';
 import { Router } from '@angular/router';
-import { ApiResponse } from '../../responses/api.response';
+import { ApiResponse } from '../../../../shared/responses/api.response';
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginFormComponent {
   router = inject(Router);
@@ -32,16 +36,16 @@ export class LoginFormComponent {
       password: this.form.value.password,
     };
     if (this.form.valid) {
-      const loginDTO: LoginDTO = new LoginDTO(formData)
+      const loginDTO: LoginDTO = new LoginDTO(formData);
       this.userService.login(loginDTO).subscribe({
         next: (response: ApiResponse) => {
           this.tokenService.setToken(response.data.token);
-          this.router.navigate(['/home']);  
+          this.router.navigate(['/']);
         },
         error: (error: any) => {
-          alert(error?.error?.message);    
-        }
-      })
+          alert(error?.error?.message);
+        },
+      });
     }
   }
 }

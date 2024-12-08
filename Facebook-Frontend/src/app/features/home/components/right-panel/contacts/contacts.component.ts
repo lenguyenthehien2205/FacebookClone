@@ -5,11 +5,12 @@ import {
   signal,
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { UserTag } from 'src/app/core/models/user.model';
+import { UserTag } from 'src/app/shared/models/user.model';
 import { UserService } from 'src/app/core/services/user.service';
-import { getName } from 'src/app/core/utils/name-format-utils';
+import { getName } from 'src/app/shared/utils/name-format-utils';
 import { environment } from 'src/app/environments/environment';
-import { ApiResponse } from 'src/app/features/auth/responses/api.response';
+import { ApiResponse } from 'src/app/shared/responses/api.response';
+import { LOADING_TIME } from 'src/app/shared/constants/app-config';
 
 @Component({
   selector: 'app-contacts',
@@ -29,12 +30,12 @@ export class ContactsComponent implements OnInit {
 
   loadContacts() {
     if (this.delay()) return; // Không tải nếu đang đợi
-    this.isLoading.set(true); 
+    this.isLoading.set(true);
     this.delay.set(true);
     this.userService.getContacts().subscribe({
       next: (response: ApiResponse) => {
         const users = response?.data as UserTag[];
-        if(users){
+        if (users) {
           users.forEach((user: UserTag) => {
             if (user) {
               if (user.avatar === '') {
@@ -46,10 +47,10 @@ export class ContactsComponent implements OnInit {
           });
         }
         setTimeout(() => {
-          this.delay.set(false); 
+          this.delay.set(false);
           this.isLoading.set(false);
           this.users.next(users);
-        }, 1000)
+        }, LOADING_TIME);
       },
       error: (error) => {
         console.error('Lỗi khi tải danh sách người dùng:', error);

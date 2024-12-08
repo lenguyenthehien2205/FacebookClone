@@ -80,6 +80,14 @@ export class TokenService {
         let userObject = this.jwtHelperService.decodeToken(token);
         return 'displayFormat' in userObject ? userObject['displayFormat'] : "";
     }
+    getPathname(): string{
+        let token = this.getToken();
+        if(!token){
+            return "";
+        }
+        let userObject = this.jwtHelperService.decodeToken(token);
+        return 'pathname' in userObject ? userObject['pathname'] : "";
+    }
     isTokenExpired(): boolean { 
         if(this.getToken() == null) {
             return false;

@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Media } from 'src/app/core/models/media.model';
+import { Media } from 'src/app/shared/models/media.model';
 
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
   styleUrl: './post.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostComponent {
   username = input.required<string>();

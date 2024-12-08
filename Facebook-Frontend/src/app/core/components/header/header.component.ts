@@ -1,19 +1,25 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, inject, input, OnInit, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { environment } from 'src/app/environments/environment';
-import { PostPanelComponent } from 'src/app/features/home/components/post-panel/post-panel.component';
 import { TokenService } from '../../services/token.service';
-import { NavigationService} from '../../services/navigation.service';
+import { ImageService } from '../../services/image.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit{
+export class HeaderComponent implements OnInit {
   tokenService = inject(TokenService);
+  avatarService = inject(ImageService);
   cdr = inject(ChangeDetectorRef);
   roundedButtons = [
     {
@@ -32,19 +38,16 @@ export class HeaderComponent implements OnInit{
   navItems = [
     { name: 'Trang chủ', icon: 'fa-solid fa-house', url: '' },
     { name: 'Video', icon: 'fa-solid fa-video', url: 'videos' },
-    { name: 'Marketplace', icon: 'fa-solid fa-shop',url: 'marketplace' },
+    { name: 'Marketplace', icon: 'fa-solid fa-shop', url: 'marketplace' },
     { name: 'Nhóm', icon: 'fa-solid fa-users', url: 'groups' },
     { name: 'Trò chơi', icon: 'fa-solid fa-gamepad', url: 'game' },
   ];
-  
+
   activeItemNavItem: string | null = null;
   activeButton: string | null = null;
 
-  getAvatar(): string{
-    if(this.tokenService.getAvatar()){
-      return `${environment.apiBaseUrl}/profiles/avatar_image/${this.tokenService.getAvatar()}`;
-    }
-    return 'assets/avatars/default-avatar.png';
+  getAvatar(): string {
+    return this.avatarService.getAvatar(this.tokenService.getAvatar());
   }
   onSelectNavItem(name: string) {
     this.activeItemNavItem = name;
@@ -59,8 +62,10 @@ export class HeaderComponent implements OnInit{
     const target = event.target as HTMLElement;
     const historyElement = document.getElementById('history');
     const inputElement = document.getElementById('search');
-
-    if ((inputElement && inputElement.contains(target)) || (historyElement && historyElement.contains(target))) {
+    if (
+      (inputElement && inputElement.contains(target)) ||
+      (historyElement && historyElement.contains(target))
+    ) {
       this.isHistoryVisible = true;
     } else {
       this.isHistoryVisible = false;
@@ -81,7 +86,7 @@ export class HeaderComponent implements OnInit{
         switch (pathAfterHostname) {
           case '/':
             this.activeItemNavItem = 'Trang chủ';
-            console.log("ok");
+            console.log('ok');
             break;
           case '/videos':
             this.activeItemNavItem = 'Video';

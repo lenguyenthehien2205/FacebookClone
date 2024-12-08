@@ -8,15 +8,19 @@ import {
   Output,
   signal,
 } from '@angular/core';
-import { Media } from 'src/app/core/models/media.model';
-import { PostFetchData } from 'src/app/core/models/post.model';
-import { Post } from 'src/app/core/models/post.model';
+import { Media } from 'src/app/shared/models/media.model';
+import { PostFetchData } from 'src/app/shared/models/post.model';
+import { Post } from 'src/app/shared/models/post.model';
 import { PostService } from 'src/app/core/services/post.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { formatDate, getDayOfWeek, getTimeAgo } from 'src/app/core/utils/date-format-utils';
-import { getName } from 'src/app/core/utils/name-format-utils';
+import {
+  formatDate,
+  getDayOfWeek,
+  getTimeAgo,
+} from 'src/app/shared/utils/date-format-utils';
 import { environment } from 'src/app/environments/environment';
-import { ApiResponse } from 'src/app/features/auth/responses/api.response';
+import { ApiResponse } from 'src/app/shared/responses/api.response';
+import { LOADING_TIME } from 'src/app/shared/constants/app-config';
 
 @Component({
   selector: 'app-posts',
@@ -43,7 +47,7 @@ export class PostsComponent implements OnInit {
 
   loadPosts() {
     if (this.delay()) return; // Không tải nếu đang đợi
-    this.isLoading.set(true); 
+    this.isLoading.set(true);
     this.delay.set(true);
     this.postFetchData.fetched_ids = this.postService.getFetchedIds();
     this.postService.fetchPosts(this.postFetchData).subscribe({
@@ -54,10 +58,9 @@ export class PostsComponent implements OnInit {
           Array.isArray(response.data)
         ) {
           const newPosts = response.data as Post[];
-          // Xử lý bài viết mới
           newPosts.forEach((post: Post) => {
             if (post) {
-              if(post.medias){
+              if (post.medias) {
                 post.medias.forEach((media: Media) => {
                   if (media.media_type === 'image') {
                     media.url = `${environment.apiBaseUrl}/medias/image_post/${media.url}`;
@@ -74,10 +77,10 @@ export class PostsComponent implements OnInit {
           this.postService.addPosts(newPosts);
           setTimeout(() => {
             this.posts.set(this.postService.getPosts());
-            this.delay.set(false); 
+            this.delay.set(false);
             this.isLoading.set(false);
             this.cdRef.detectChanges();
-          }, 1000)
+          }, LOADING_TIME);
         }
       },
       error: (error) => {

@@ -1,68 +1,135 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, input, OnInit, signal } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { ImageService } from 'src/app/core/services/image.service';
 import { ProfileService } from 'src/app/core/services/profile.service';
 import { TokenService } from 'src/app/core/services/token.service';
-import { ApiResponse } from 'src/app/features/auth/responses/api.response';
+import { ApiResponse } from 'src/app/shared/responses/api.response';
+import { ProfileHeaderResponse } from 'src/app/shared/responses/profile/profile-header.response';
+import { ImageResponse } from 'src/app/shared/responses/common/image.response';
+import { LOADING_TIME } from 'src/app/shared/constants/app-config';
+import { SharedModule } from "../../../../shared/shared.module";
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-header',
-  standalone: true,
-  imports: [CommonModule],
   templateUrl: './profile-header.component.html',
-  styleUrl: './profile-header.component.css'
+  styleUrl: './profile-header.component.css',
 })
-export class ProfileHeaderComponent implements OnInit{
-  pathname = input<string | null>(null);
-  fullname = signal<string>('');
-  totalFriends = signal<string>('');
-  mutualFriends = signal<string>('');
+export class ProfileHeaderComponent implements OnInit {
+  pathname = input<string | null>();
+  isLoading = signal<boolean>(false);
+  delay = signal<boolean>(false);
+  profileHeaderResponse = signal<ProfileHeaderResponse>(
+    new ProfileHeaderResponse()
+  );
   tokenService = inject(TokenService);
   profileService = inject(ProfileService);
-  images = [
-    {
-      id: 1,
-      url: 'assets/post-image/post-image-2.jpg'
-    },
-    {
-      id: 2,
-      url: 'assets/post-image/post-image-2.jpg'
-    },
-    {
-      id: 3,
-      url: 'assets/post-image/post-image-2.jpg'
-    },
-    {
-      id: 4,
-      url: 'assets/post-image/post-image-2.jpg'
-    },
-    {
-      id: 5,
-      url: 'assets/post-image/post-image-2.jpg'
-    },
-    {
-      id: 6,
-      url: 'assets/post-image/post-image-2.jpg'
-    },
-    {
-      id: 7,
-      url: 'assets/post-image/post-image-2.jpg'
-    },
-    {
-      id: 8,
-      url: 'assets/post-image/post-image-2.jpg'
-    }
-  ]
+  imageService = inject(ImageService);
+
+  // navigation
+  navItems = [
+    { name: 'Bài viết', url: '' },
+    { name: 'Giới thiệu', url: 'about' },
+    { name: 'Bạn bè', url: 'friends' },
+    { name: 'Ảnh', url: 'photos' },
+    { name: 'Video', url: 'videos' },
+    { name: 'Check in', url: 'map' }
+  ];
+  activeItemNavItem: string | null = null;
+  onSelectNavItem(name: string) {
+    this.activeItemNavItem = name;
+  }
+  private routerSubscription!: Subscription;
+  router = inject(Router);
+  cdr = inject(ChangeDetectorRef);
   ngOnInit(): void {
     this.loadProfileHeader();
-  }
-  loadProfileHeader(){
-    this.profileService.getProfileHeaderByPathname(this.pathname()!, Number(this.tokenService.getProfileId())).subscribe({
-      next: (response: ApiResponse) => {
-        this.fullname.set(response.data.fullname);
-        this.totalFriends.set(response.data.total_friends);
-        this.mutualFriends.set(response.data.mutual_friends);
+    this.activeItemNavItem = 'Bài viết';
+    // Lắng nghe sự kiện điều hướng hoàn tất
+    this.routerSubscription = this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd || event instanceof NavigationStart) {
+        const pathAfterHostname = this.router.url;
+        // Cập nhật activeItemNavItem dựa trên URL
+        switch (pathAfterHostname) {
+          case `${this.pathname()!}`:
+            this.activeItemNavItem = 'Bài viết';
+            break;
+          case `${this.pathname()!}/about`:
+            this.activeItemNavItem = 'Giới thiệu';
+            break;
+          case `${this.pathname()!}/friends`:
+            this.activeItemNavItem = 'Bạn bè';
+            break;
+          case `${this.pathname()!}/photos`:
+            this.activeItemNavItem = 'Ảnh';
+            break;
+          case `${this.pathname()!}/videos`:
+            this.activeItemNavItem = 'Video';
+            break;
+          case `${this.pathname()!}/map`:
+            this.activeItemNavItem = 'Check in';
+            break;
+          default:
+            this.activeItemNavItem = '';
+            break;
+        }
+        this.cdr.detectChanges(); // dùng detect do popstate(back trình duyệt) không kích hoạt changeDetect nên phải làm thủ công
       }
     });
+  }
+  getRouterLink(url: string): string {
+    const pathnameValue = this.pathname();
+    if (pathnameValue) {
+      // Nếu pathname có giá trị, trả về chuỗi kết hợp pathname và url tương ứng
+      return `/${pathnameValue}/${url}`;
+    }
+    // Nếu pathname không có giá trị, chỉ trả về url
+    return `/${url}`;
+  }
+  
+  loadProfileHeader() {
+    if (this.delay()) return; // Không tải nếu đang đợi
+    this.isLoading.set(true);
+    this.delay.set(true);
+    this.profileService
+      .getProfileHeaderByPathname(
+        this.pathname()!,
+        Number(this.tokenService.getProfileId())
+      )
+      .subscribe({
+        next: (response: ApiResponse) => {
+          this.profileHeaderResponse.set(
+            response.data as ProfileHeaderResponse
+          );
+          this.profileHeaderResponse.update((current) => {
+            if (current) {
+              return {
+                ...current,
+                avatar: this.getAvatar(current.avatar),
+                cover_photo: this.getCoverPhoto(current.cover_photo),
+                avatar_friends: current.avatar_friends.map(
+                  (image: ImageResponse) => ({
+                    ...image,
+                    url: this.getAvatar(image.url),
+                  })
+                ),
+              };
+            }
+            return current;
+          });
+          setTimeout(() => {
+            this.delay.set(false);
+            this.isLoading.set(false);
+          }, LOADING_TIME);
+        },
+      });
+  }
+  getAvatar(url: string): string {
+    return this.imageService.getAvatar(url);
+  }
+  getCoverPhoto(url: string): string {
+    return this.imageService.getCoverPhoto(url);
   }
 }

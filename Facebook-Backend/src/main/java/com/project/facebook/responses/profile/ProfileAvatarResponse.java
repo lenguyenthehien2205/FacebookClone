@@ -8,13 +8,10 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ProfileAvatarFriendsResponse {
+public class ProfileAvatarResponse {
     @JsonProperty("profile_id")
     private Long profileId;
 
-    @JsonProperty("fullname")
-    private String fullname;
-
-    @JsonProperty("avatar")
-    private String avatar;
+    @JsonProperty("url")
+    private String url;
 }

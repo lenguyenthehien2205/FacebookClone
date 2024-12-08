@@ -1,11 +1,11 @@
 import { Injectable, input, signal } from '@angular/core';
 import { filter, map, Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment';
-import { ApiResponse } from 'src/app/features/auth/responses/api.response';
+import { ApiResponse } from 'src/app/shared/responses/api.response';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Post } from '../models/post.model';
-import { Media } from '../models/media.model';
-import { PostFetchData } from '../models/post.model';
+import { Post } from '../../shared/models/post.model';
+import { Media } from '../../shared/models/media.model';
+import { PostFetchData } from '../../shared/models/post.model';
 @Injectable({
   providedIn: 'root',
 })

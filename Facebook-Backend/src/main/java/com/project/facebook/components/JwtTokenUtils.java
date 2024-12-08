@@ -44,6 +44,8 @@ public class JwtTokenUtils {
         String currentPageType = user.getCurrentPageType();
         Long currentPageId = user.getCurrentPageId();
         String avatar = "";
+        claims.put("currentPageType", user.getCurrentPageType());
+        claims.put("currentPageId", user.getCurrentPageId());
         if(currentPageType.equals(User.PROFILE)){
             Profile profile = profileService.getProfileById(currentPageId);
             PageBase pageBase = pageBaseService.getPageBaseById(profile.getPageBase().getId());
@@ -52,16 +54,14 @@ public class JwtTokenUtils {
             claims.put("firstName", profile.getFirstName());
             claims.put("lastName", profile.getLastName());
             claims.put("displayFormat", profile.getDisplayFormat());
-            claims.put("currentPageType", user.getCurrentPageType());
-            claims.put("currentPageId", user.getCurrentPageId());
+            claims.put("pathname", pageBase.getPathName());
         }else if (currentPageType.equals(User.PAGE)){
             Page page = pageService.getPageById(currentPageId);
             PageBase pageBase = pageBaseService.getPageBaseById(page.getPageBase().getId());
             avatar = pageBase.getAvatar();
             claims.put("pageType", User.PAGE);
             claims.put("fullName", page.getPageName());
-            claims.put("currentPageType", user.getCurrentPageType());
-            claims.put("currentPageId", user.getCurrentPageId());
+            claims.put("pathname", pageBase.getPathName());
         }
         claims.put("phoneNumber", user.getUsername());
         claims.put("userId", user.getUserId());

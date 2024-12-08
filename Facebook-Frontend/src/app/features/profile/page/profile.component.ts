@@ -1,11 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProfileHeaderComponent } from '../components/profile-header/profile-header.component';
 
 @Component({
   selector: 'app-profile',
-  standalone: true,
-  imports: [ProfileHeaderComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

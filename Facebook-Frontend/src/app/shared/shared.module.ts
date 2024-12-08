@@ -8,6 +8,7 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { PostSkeletonComponent } from "./components/skeletons/post-skeleton/post-skeleton.component";
 import { ContactSkeletonComponent } from "./components/skeletons/contact-skeleton/contact-skeleton.component";
+import { ProfileHeaderSkeletonComponent } from "./components/skeletons/profile-header-skeleton/profile-header-skeleton.component";
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ContactSkeletonComponent } from "./components/skeletons/contact-skeleto
     SectionWithHeaderComponent,
     NavbarButtonComponent,
     PostSkeletonComponent,
-    ContactSkeletonComponent
+    ContactSkeletonComponent,
+    ProfileHeaderSkeletonComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import { ContactSkeletonComponent } from "./components/skeletons/contact-skeleto
     SectionWithHeaderComponent,
     NavbarButtonComponent,
     PostSkeletonComponent,
-    ContactSkeletonComponent
+    ContactSkeletonComponent,
+    ProfileHeaderSkeletonComponent
   ]
 })
 export class SharedModule {}

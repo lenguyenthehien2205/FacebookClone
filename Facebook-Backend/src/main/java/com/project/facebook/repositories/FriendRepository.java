@@ -29,7 +29,10 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     // Truy vấn số lượng bạn bè chung giữa 2 profile bằng native SQL
     @Query(value = """
-            SELECT COUNT(*) AS mutual_friend_count
+            SELECT CASE
+                    WHEN :profileId1 = :profileId2 THEN 0
+                    ELSE COUNT(*)\s
+                   END AS mutual_friend_count
             FROM (
               SELECT\s
                 CASE\s
