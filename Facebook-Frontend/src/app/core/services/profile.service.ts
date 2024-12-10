@@ -9,6 +9,7 @@ import { ApiResponse } from 'src/app/shared/responses/api.response';
 })
 export class ProfileService {
   private profileHeaderApiUrl = `${environment.apiBaseUrl}/profiles/header`;
+  private profileApiUrl = `${environment.apiBaseUrl}/profiles`;
   private apiConfig = {
     headers: this.createHeaders(),
   };
@@ -27,5 +28,11 @@ export class ProfileService {
       `${this.profileHeaderApiUrl}/${pathname}/${myProfileId}`,
       this.apiConfig
     );
+  }
+  checkPathname(pathname: string): Observable<boolean>{
+    return this.http.get<boolean>(`${this.profileHeaderApiUrl}/check-pathname/${pathname}`, this.apiConfig);
+  }
+  getFullname(pathname: string): Observable<ApiResponse>{
+    return this.http.get<ApiResponse>(`${this.profileApiUrl}/fullname/${pathname}`, this.apiConfig);
   }
 }

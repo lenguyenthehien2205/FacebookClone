@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ImageService } from 'src/app/core/services/image.service';
@@ -17,7 +17,7 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
   templateUrl: './profile-header.component.html',
   styleUrl: './profile-header.component.css',
 })
-export class ProfileHeaderComponent implements OnInit {
+export class ProfileHeaderComponent implements OnInit, OnDestroy {
   pathname = input<string | null>();
   isLoading = signal<boolean>(false);
   delay = signal<boolean>(false);
@@ -30,7 +30,7 @@ export class ProfileHeaderComponent implements OnInit {
 
   // navigation
   navItems = [
-    { name: 'Bài viết', url: '' },
+    { name: 'Bài viết', url: 'posts' },
     { name: 'Giới thiệu', url: 'about' },
     { name: 'Bạn bè', url: 'friends' },
     { name: 'Ảnh', url: 'photos' },
@@ -40,6 +40,7 @@ export class ProfileHeaderComponent implements OnInit {
   activeItemNavItem: string | null = null;
   onSelectNavItem(name: string) {
     this.activeItemNavItem = name;
+    console.log(this.activeItemNavItem);
   }
   private routerSubscription!: Subscription;
   router = inject(Router);
@@ -49,43 +50,47 @@ export class ProfileHeaderComponent implements OnInit {
     this.activeItemNavItem = 'Bài viết';
     // Lắng nghe sự kiện điều hướng hoàn tất
     this.routerSubscription = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd || event instanceof NavigationStart) {
+      if (event instanceof NavigationEnd) {
         const pathAfterHostname = this.router.url;
+        console.log(pathAfterHostname);
         // Cập nhật activeItemNavItem dựa trên URL
         switch (pathAfterHostname) {
-          case `${this.pathname()!}`:
+          case `/${this.pathname()}/posts`:
             this.activeItemNavItem = 'Bài viết';
             break;
-          case `${this.pathname()!}/about`:
+          case `/${this.pathname()}/about`:
             this.activeItemNavItem = 'Giới thiệu';
             break;
-          case `${this.pathname()!}/friends`:
+          case `/${this.pathname()}/friends`:
             this.activeItemNavItem = 'Bạn bè';
             break;
-          case `${this.pathname()!}/photos`:
+          case `/${this.pathname()}/photos`:
             this.activeItemNavItem = 'Ảnh';
             break;
-          case `${this.pathname()!}/videos`:
+          case `/${this.pathname()}/videos`:
             this.activeItemNavItem = 'Video';
             break;
-          case `${this.pathname()!}/map`:
+          case `/${this.pathname()}/map`:
             this.activeItemNavItem = 'Check in';
             break;
           default:
-            this.activeItemNavItem = '';
+            this.activeItemNavItem = ``;  
             break;
         }
         this.cdr.detectChanges(); // dùng detect do popstate(back trình duyệt) không kích hoạt changeDetect nên phải làm thủ công
       }
     });
   }
+  ngOnDestroy(): void {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
   getRouterLink(url: string): string {
     const pathnameValue = this.pathname();
     if (pathnameValue) {
-      // Nếu pathname có giá trị, trả về chuỗi kết hợp pathname và url tương ứng
       return `/${pathnameValue}/${url}`;
     }
-    // Nếu pathname không có giá trị, chỉ trả về url
     return `/${url}`;
   }
   

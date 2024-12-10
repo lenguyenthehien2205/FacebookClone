@@ -7,6 +7,7 @@ import com.project.facebook.models.Profile;
 import com.project.facebook.models.User;
 import com.project.facebook.responses.ResponseObject;
 import com.project.facebook.responses.user.UserResponse;
+import com.project.facebook.services.IPageBaseService;
 import com.project.facebook.services.IProfileService;
 import com.project.facebook.services.ProfileService;
 import com.project.facebook.utils.MessageKeys;
@@ -33,6 +34,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ProfileController {
     private final IProfileService profileService;
+    private final IPageBaseService pageBaseService;
     private final LocalizationUtils localizationUtils;
     private final FileUtils fileUtils;
 
@@ -187,5 +189,19 @@ public class ProfileController {
         } catch (Exception e){
             return ResponseEntity.notFound().build();
         }
+    }
+    @GetMapping("/check-pathname/{pathname}")
+    public ResponseEntity<Boolean> checkPathname(@PathVariable("pathname") String pathname) {
+        boolean exists = pageBaseService.checkPathnameExists(pathname);
+        return ResponseEntity.ok(exists);
+    }
+    @GetMapping("/fullname/{pathname}")
+    public ResponseEntity<ResponseObject> getFullname(@PathVariable("pathname") String pathname) {
+        String fullname = pageBaseService.getFullnameByPathname(pathname);
+        return ResponseEntity.ok(ResponseObject.builder()
+                        .data(fullname)
+                        .status(HttpStatus.OK)
+                        .message("OK")
+                .build());
     }
 }

@@ -16,4 +16,12 @@ public class PageBaseService implements IPageBaseService{
                 () -> new DataNotFoundException("Page base not found")
         );
     }
+    @Override
+    public Boolean checkPathnameExists(String pathname){
+        return pageBaseRepository.existsByPathName(pathname);
+    }
+    @Override
+    public String getFullnameByPathname(String pathname){
+        return pageBaseRepository.getFullnameByPathname(pathname);
+    }
 }

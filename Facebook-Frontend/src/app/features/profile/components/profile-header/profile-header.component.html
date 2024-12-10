@@ -1,72 +1,66 @@
 @if(!isLoading()){
     <div class="flex flex-col items-center bg-white shadow-sm">
-        <div class="w-[1100px] h-[400px] bg-grey2 rounded-b-lg">
+        <div class="w-full max-w-[1100px] lg:h-[400px] h-[300px] bg-grey2 rounded-b-lg">
             <img [src]="profileHeaderResponse().cover_photo" alt="" class="w-full h-full object-cover object-center rounded-b-lg">
         </div>
-        <div class="w-[1000px]">
-            <div class="flex flex-row justify-between w-full items-end">
-                <div class="flex flex-row">
-                    <div class="relative">
-                        <img [src]="profileHeaderResponse().avatar" alt="" class="size-[172px] rounded-full translate-y-[-35px] border-4 border-white">
-                        <span class="size-[32px] border-4 border-white bg-green absolute left-[130px] rounded-full top-[85px]"></span>
+        <div class="w-full max-w-[1100px]">
+            <div class="mx-[50px]">
+                <div class="flex lg:flex-row flex-col justify-between w-full lg:items-end items-center">
+                    <div class="flex lg:flex-row flex-col">
+                        <div class="relative mx-auto lg:m-0">
+                            <img [src]="profileHeaderResponse().avatar" alt="" class="size-[172px] rounded-full lg:translate-y-[-35px] translate-y-[-85px] border-4 border-white">
+                            <span class="size-[32px] border-4 border-white bg-green absolute left-[130px] rounded-full lg:top-[95px] top-[45px]"></span>
+                        </div>
+                        <div class="flex flex-col mt-[14px] ml-[10px] translate-y-[-90px] lg:translate-y-[0px]">
+                            <span class="text-[32px] text-black font-bold lg:ml-1 text-center lg:text-left">{{ profileHeaderResponse().fullname }}</span>
+                            <div class="flex flex-row gap-1 text-grey font-semibold justify-center lg:justify-start">
+                                <span class="lg:ml-1 ml-0">{{ profileHeaderResponse().total_friends }} người bạn</span>
+                                @if(profileHeaderResponse().mutual_friends){
+                                    <span>•</span>
+                                    <span>{{ profileHeaderResponse().mutual_friends }} bạn chung</span>
+                                }
+                            </div>
+                            <div class="flex lg:ml-[7px] mx-auto">
+                                @for(image of profileHeaderResponse().avatar_friends; track image.profile_id; let index = $index){
+                                    <img [src]="image.url" alt="" class="size-[34px] rounded-full mt-[6px] border-2 border-white -ml-[7px]"
+                                    [style.zIndex]="(profileHeaderResponse().avatar_friends.length || 0) - index">
+                                }
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex flex-col mt-[14px] ml-[10px]">
-                        <span class="text-[32px] text-black font-bold ml-1">{{ profileHeaderResponse().fullname }}</span>
-                        <div class="flex flex-row gap-1 text-grey font-semibold">
-                            <span class="ml-1">{{ profileHeaderResponse().total_friends }} người bạn</span>
-                            @if(profileHeaderResponse().mutual_friends){
-                                <span>•</span>
-                                <span>{{ profileHeaderResponse().mutual_friends }} bạn chung</span>
-                            }
-                        </div>
-                        <div class="flex ml-[7px]">
-                            @for(image of profileHeaderResponse().avatar_friends; track image.profile_id; let index = $index){
-                                <img [src]="image.url" alt="" class="size-[34px] rounded-full mt-[6px] border-2 border-white -ml-[7px]"
-                                [style.zIndex]="(profileHeaderResponse().avatar_friends.length || 0) - index">
-                            }
-                        </div>
+                    <div class="lg:mb-[50px] lg:mr-[50px] flex gap-2 translate-y-[-50px] lg:translate-y-[0px]">
+                        <button class="h-[36px] px-3 bg-grey2 rounded-md hover:brightness-95">
+                            <i class="fa-solid fa-user-check"></i>
+                            <span class="ml-[5px] font-semibold">Bạn bè</span>
+                        </button>
+                        <button class="h-[36px] bg-primary text-white rounded-md px-3 hover:brightness-95">
+                            <i class="fa-brands fa-facebook-messenger"></i>
+                            <span class="ml-[5px] font-semibold">Nhắn tin</span>
+                        </button>
+                        <button class="h-[36px] px-3 bg-grey2 rounded-md my-auto hover:brightness-95"><i class="fa-solid fa-angle-down"></i></button>
                     </div>
                 </div>
-                <div class="mb-[50px] mr-[50px] flex gap-2">
-                    <button class="h-[36px] px-3 bg-grey2 rounded-md hover:brightness-95">
-                        <i class="fa-solid fa-user-check"></i>
-                        <span class="ml-[5px] font-semibold">Bạn bè</span>
-                    </button>
-                    <button class="h-[36px] bg-primary text-white rounded-md px-3 hover:brightness-95">
-                        <i class="fa-brands fa-facebook-messenger"></i>
-                        <span class="ml-[5px] font-semibold">Nhắn tin</span>
-                    </button>
-                    <button class="h-[36px] px-3 bg-grey2 rounded-md my-auto hover:brightness-95"><i class="fa-solid fa-angle-down"></i></button>
+                <div class="w-full h-[1px] bg-gray-300"></div>
+                <div class="flex mt-1">
+                    @for (item of navItems; track item.name; let i = $index) {
+                        <app-navbar-button
+                        [routerLink]="getRouterLink(item.url)"
+                        [isActive]="activeItemNavItem === item.name"
+                        (buttonClick)="onSelectNavItem(item.name)"
+                        styleClass="h-[50px]"
+                        >
+                        <div
+                            class="flex items-center justify-center h-[50px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover transition-all duration-100"
+                            [ngClass]="{
+                            'text-primary border-primary border-b-[3px] rounded-none hover:bg-white': activeItemNavItem === item.name,
+                            }"
+                        >{{ item.name }}</div>
+                        </app-navbar-button>
+                    }
+                    <button class="h-[50px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover">Xem thêm<i class="ml-[10px] fa-solid fa-caret-down"></i></button>
                 </div>
             </div>
-            <div class="w-full h-[1px] bg-gray-300 translate-y-[-20px]"></div>
-            <!-- <div class="flex flex-row justify-start items-center translate-y-[-20px]">
-                <button class="h-[60px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover">Bài viết</button>
-                <button class="h-[60px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover">Giới thiệu</button>
-                <button class="h-[60px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover">Bạn bè</button>
-                <button class="h-[60px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover">Ảnh</button>
-                <button class="h-[60px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover">Video</button>
-                <button class="h-[60px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover">Check in</button>
-                <button class="h-[60px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover">Xem thêm<i class="ml-[10px] fa-solid fa-caret-down"></i></button>
-            </div> -->
-            <div class="flex translate-y-[-15px]">
-                @for (item of navItems; track item.name; let i = $index) {
-                    <app-navbar-button
-                    [routerLink]="getRouterLink(item.url)"
-                    [isActive]="activeItemNavItem === item.name"
-                    (buttonClick)="onSelectNavItem(item.name)"
-                    styleClass="h-[50px]"
-                    >
-                    <div
-                        class="flex items-center justify-center h-[50px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover"
-                        [ngClass]="{
-                        'bg-primary': activeItemNavItem === item.name
-                        }"
-                    >{{ item.name }}</div>
-                    </app-navbar-button>
-                }
-                <button class="h-[50px] text-[15px] text-grey px-[16px] font-semibold rounded-md hover:bg-hover">Xem thêm<i class="ml-[10px] fa-solid fa-caret-down"></i></button>
-            </div>
+            
         </div>
     </div>
 }

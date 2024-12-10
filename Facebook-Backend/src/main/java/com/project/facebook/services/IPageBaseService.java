@@ -6,4 +6,6 @@ import com.project.facebook.models.Profile;
 
 public interface IPageBaseService {
     PageBase getPageBaseById(Long id) throws DataNotFoundException;
+    Boolean checkPathnameExists(String pathname);
+    String getFullnameByPathname(String pathname);
 }

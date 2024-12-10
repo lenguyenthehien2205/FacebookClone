@@ -4,6 +4,7 @@ import {
   Component,
   HostListener,
   inject,
+  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
@@ -17,7 +18,7 @@ import { ImageService } from '../../services/image.service';
   styleUrls: ['./header.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   tokenService = inject(TokenService);
   avatarService = inject(ImageService);
   cdr = inject(ChangeDetectorRef);
@@ -86,7 +87,6 @@ export class HeaderComponent implements OnInit {
         switch (pathAfterHostname) {
           case '/':
             this.activeItemNavItem = 'Trang chủ';
-            console.log('ok');
             break;
           case '/videos':
             this.activeItemNavItem = 'Video';

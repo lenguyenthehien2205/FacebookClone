@@ -7,7 +7,7 @@ export class TokenService {
     private readonly TOKEN_KEY = 'access_token';
     private jwtHelperService = new JwtHelperService();
     getToken(): string | null {
-        console.log(localStorage.getItem(this.TOKEN_KEY));
+        // console.log(localStorage.getItem(this.TOKEN_KEY));
         return localStorage.getItem(this.TOKEN_KEY);
     }
     setToken(token: string) {
