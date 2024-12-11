@@ -4,6 +4,12 @@ import { ProfileService } from 'src/app/core/services/profile.service';
 import { ApiResponse } from 'src/app/shared/responses/api.response';
 import { map } from 'rxjs';
 import { Title } from '@angular/platform-browser';
+import { ProfileHeaderComponent } from '../components/profile-header/profile-header.component';
+import { ProfileHeaderResponse } from 'src/app/shared/responses/profile/profile-header.response';
+import { ImageResponse, ProfileFriendsReponse } from 'src/app/shared/responses/common/image.response';
+import { TokenService } from 'src/app/core/services/token.service';
+import { LOADING_TIME } from 'src/app/shared/constants/app-config';
+import { ImageService } from 'src/app/core/services/image.service';
 
 @Component({
   selector: 'app-profile',
@@ -12,11 +18,16 @@ import { Title } from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent implements OnInit{
+  @ViewChild(ProfileHeaderComponent) profileHeaderComponent!: ProfileHeaderComponent;
   pathname: string | null = '';
   route = inject(ActivatedRoute);
   router = inject(Router);
   title = inject(Title);
+  haveCoverPhoto: boolean = false;
   activatedRoute = inject(ActivatedRoute);
+  profileHeaderResponse = signal<ProfileHeaderResponse>(
+    new ProfileHeaderResponse()
+  );
 
   ngOnInit(): void {
     this.pathname = this.route.snapshot.paramMap.get('pathname');
@@ -24,12 +35,68 @@ export class ProfileComponent implements OnInit{
       const fullname = data['fullname'];
       // Cập nhật tiêu đề
       this.title.setTitle(fullname + " | Facebook");
+      this.pathname = this.route.snapshot.paramMap.get('pathname');
+      this.loadProfileHeader();
     });
   }
   ngOnDestroy(): void {
     this.title.setTitle('Facebook'); 
   }
 
+  isLoading = signal<boolean>(false);
+  delay = signal<boolean>(false);
+  profileService = inject(ProfileService);
+  tokenService = inject(TokenService);
+  imageService = inject(ImageService);
+  loadProfileHeader() {
+    if (this.delay()) return; // Không tải nếu đang đợi
+    this.isLoading.set(true);
+    this.delay.set(true);
+    this.profileService
+      .getProfileHeaderByPathname(
+        this.pathname!,
+        Number(this.tokenService.getProfileId())
+      )
+      .subscribe({
+        next: (response: ApiResponse) => {
+          this.profileService.currentProfileId.set(response.data.profile_id);
+          this.profileHeaderResponse.set(
+            response.data as ProfileHeaderResponse
+          );
+          this.profileHeaderResponse.update((current) => {
+            if (current) {
+              if(current.cover_photo){
+                this.haveCoverPhoto = true;
+              }else{
+                this.haveCoverPhoto = false;
+              }
+              return {
+                ...current,
+                avatar: this.getAvatar(current.avatar),
+                cover_photo: this.getCoverPhoto(current.cover_photo),
+                avatar_friends: current.avatar_friends.map(
+                  (image: ImageResponse) => ({
+                    ...image,
+                    url: this.getAvatar(image.url),
+                  })
+                ),
+              };
+            }
+            return current;
+          });
+          setTimeout(() => {
+            this.delay.set(false);
+            this.isLoading.set(false);
+          }, LOADING_TIME);
+        },
+      });
+  }
+  getAvatar(url: string): string {
+    return this.imageService.getAvatar(url);
+  }
+  getCoverPhoto(url: string): string {
+    return this.imageService.getCoverPhoto(url);
+  }
   // constructor() {
   //   // Lắng nghe sự kiện đóng trình duyệt
   //   window.addEventListener('beforeunload', this.updateOfflineStatus.bind(this));

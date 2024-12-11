@@ -91,10 +91,12 @@ public class ProfileService implements IProfileService{
             Long friendId = profileIdFriends.get(i);
             String avatarFriend = avatarFriends.get(i);
             Optional<Profile> profileTemp = profileRepository.findById(friendId);
+            String pathname = pageBaseRepository.getPathnameByProfileId(profileTemp.get().getId());
             int mututal_friends = friendRepository.countMutualFriendsByPathNameAndProfileId(profileTemp.get().getId(), myProfileId);
             profileAvatarFriendsResponseList.add(ProfileAvatarWithFullnameResponse.builder()
                     .profileId(friendId)
                     .mutual_friends(mututal_friends)
+                    .pathname(pathname)
                     .fullname(getFullName(profileTemp.get()))
                     .url(avatarFriend)
                     .build());

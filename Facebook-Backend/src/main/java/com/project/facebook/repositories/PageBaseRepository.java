@@ -24,4 +24,11 @@ public interface PageBaseRepository extends JpaRepository<PageBase, Long> {
             "LEFT JOIN profiles p ON p.base_id = pb.id\n" +
             "WHERE pb.path_name = :pathname;\n", nativeQuery = true)
     ProfileFullnameAndIdProjection getFullnameAndIdByPathname(@Param("pathname") String pathname);
+    @Query(value = """
+        SELECT pb.path_name
+        FROM page_bases pb
+        JOIN profiles p ON p.base_id = pb.id
+        WHERE p.id = :profile_id
+    """, nativeQuery = true)
+    String getPathnameByProfileId(@Param("profile_id") Long profileId);
 }

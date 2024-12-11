@@ -20,15 +20,13 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 })
 export class ProfileHeaderComponent implements OnInit, OnDestroy {
   pathname = input<string | null>();
-  isLoading = signal<boolean>(false);
-  delay = signal<boolean>(false);
-  profileHeaderResponse = signal<ProfileHeaderResponse>(
-    new ProfileHeaderResponse()
-  );
+  response = input<ProfileHeaderResponse>(new ProfileHeaderResponse());
+  isLoading = input<boolean>();
+  delay = input<boolean>();
   tokenService = inject(TokenService);
   profileService = inject(ProfileService);
   imageService = inject(ImageService);
-
+  haveCoverPhoto = input();
   // navigation
   navItems = [
     { name: 'Bài viết', url: 'posts' },
@@ -47,7 +45,7 @@ export class ProfileHeaderComponent implements OnInit, OnDestroy {
   router = inject(Router);
   cdr = inject(ChangeDetectorRef);
   ngOnInit(): void {
-    this.loadProfileHeader();
+    // this.loadProfileHeader();
     const pathAfterHostname = this.router.url;
     this.updateActiveNavItem(pathAfterHostname);
     // Lắng nghe sự kiện điều hướng hoàn tất
@@ -91,48 +89,6 @@ export class ProfileHeaderComponent implements OnInit, OnDestroy {
     return `/${url}`;
   }
   
-  loadProfileHeader() {
-    if (this.delay()) return; // Không tải nếu đang đợi
-    this.isLoading.set(true);
-    this.delay.set(true);
-    this.profileService
-      .getProfileHeaderByPathname(
-        this.pathname()!,
-        Number(this.tokenService.getProfileId())
-      )
-      .subscribe({
-        next: (response: ApiResponse) => {
-          this.profileService.currentProfileId.set(response.data.profile_id);
-          this.profileHeaderResponse.set(
-            response.data as ProfileHeaderResponse
-          );
-          this.profileHeaderResponse.update((current) => {
-            if (current) {
-              return {
-                ...current,
-                avatar: this.getAvatar(current.avatar),
-                cover_photo: this.getCoverPhoto(current.cover_photo),
-                avatar_friends: current.avatar_friends.map(
-                  (image: ImageResponse) => ({
-                    ...image,
-                    url: this.getAvatar(image.url),
-                  })
-                ),
-              };
-            }
-            return current;
-          });
-          setTimeout(() => {
-            this.delay.set(false);
-            this.isLoading.set(false);
-          }, LOADING_TIME);
-        },
-      });
-  }
-  getAvatar(url: string): string {
-    return this.imageService.getAvatar(url);
-  }
-  getCoverPhoto(url: string): string {
-    return this.imageService.getCoverPhoto(url);
-  }
+  
+
 }

@@ -11,6 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 public class ProfileFriendResponse {
+    @JsonProperty("total_friends")
+    private int total_friends;
+
     @JsonProperty("mutual_friends")
     private int mutual_friends;
 

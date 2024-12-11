@@ -52,12 +52,19 @@ export class AppComponent {
       if (event instanceof NavigationEnd) {
         // Lưu vị trí cuộn khi chuyển đến route con mới
         const currentRoute = this.getCurrentRoutePath();
-        this.scrollService.saveScrollPosition(currentRoute);
-
-        // Khôi phục vị trí cuộn khi chuyển đến route con đã lưu
-        this.scrollService.restoreScrollPosition(currentRoute);
+        // nếu chuyển posts thì quay lên đầu trang
+        if (!this.isPostsPage(this.router.url)) {
+          // Lưu vị trí cuộn cho route
+          this.scrollService.saveScrollPosition(currentRoute);
+          // Khôi phục vị trí cuộn cho route đã lưu
+          this.scrollService.restoreScrollPosition(currentRoute);
+        }
       }
     });
+  }
+
+  private isPostsPage(routePath: string): boolean {
+    return routePath.includes('/posts');
   }
 
   // Lấy path route con từ ActivatedRoute

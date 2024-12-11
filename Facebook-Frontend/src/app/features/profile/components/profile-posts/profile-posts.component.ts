@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, OnInit, Optional, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { concatMap } from 'rxjs';
 import { ImageService } from 'src/app/core/services/image.service';
 import { ProfileService } from 'src/app/core/services/profile.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { ApiResponse } from 'src/app/shared/responses/api.response';
-import { ImageProfileResponse, ImageWithFullnameResponse, ProfileFriendsReponse } from 'src/app/shared/responses/common/image.response';
+import { ImageProfileResponse, ImageResponse, ImageWithFullnameResponse, ProfileFriendsReponse } from 'src/app/shared/responses/common/image.response';
+import { ProfileComponent } from '../../page/profile.component';
+import { ProfileHeaderResponse } from 'src/app/shared/responses/profile/profile-header.response';
+import { LOADING_TIME } from 'src/app/shared/constants/app-config';
 
 @Component({
   selector: 'app-profile-posts',
@@ -23,6 +26,8 @@ export class ProfilePostsComponent implements OnInit{
   route = inject(ActivatedRoute);
   cdr = inject(ChangeDetectorRef);
   profileId = signal<number>(0);
+
+  // constructor(@Optional() private profile: ProfileComponent) {}
   loadImages() {
     this.profileService.getInfo(this.pathname!).pipe(
       concatMap((response: any) => {
@@ -31,7 +36,6 @@ export class ProfilePostsComponent implements OnInit{
       })
     ).subscribe({
       next: (reponse: ApiResponse) => {
-        console.log("ok");
         const images = reponse.data as ImageProfileResponse[];
         if(images){
           images.forEach((image: ImageProfileResponse) => {
@@ -56,12 +60,19 @@ export class ProfilePostsComponent implements OnInit{
   }
   
   ngOnInit(): void {
-    this.pathname = this.route.snapshot.paramMap.get('pathname');
-    this.loadImages();
-    this.loadFriends();
+    this.route.paramMap.subscribe(params => {
+      const newPathname = params.get('pathname');
+      if (newPathname && newPathname !== this.pathname) {
+        this.pathname = newPathname;
+        
+        // Reload data
+        this.loadImages();
+        this.loadFriends();
+      }
+    });
   }
-
-  getAvatar(url: string){
+  getAvatar(url: string): string {
     return this.imageService.getAvatar(url);
   }
+  
 }

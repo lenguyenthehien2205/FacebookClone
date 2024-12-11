@@ -37,11 +37,9 @@
           </button>
         </div>
         <div class="text-grey">
-          <span>{{ profileFriendsResponse().total_friends }}</span>
-          @if(profileFriendsResponse().mutual_friends){
+          <span>{{ profileFriendsResponse().total_friends }}{{ profileFriendsResponse().mutual_friends ? '' : ' người bạn' }}</span>
+          @if(profileFriendsResponse().mutual_friends){ 
             <span class="ml-1">({{ profileFriendsResponse().mutual_friends }} bạn chung)</span>
-          } @else {
-            <span>người bạn</span>
           }
         </div>
         <div
@@ -49,11 +47,13 @@
         >
         @for (item of profileFriendsResponse().profile_avatar_friends; track $index) {
           <div class="text-[13px]">
-            <img
-              [src]="item.url"
-              alt=""
-              class="object-cover rounded-lg object-center aspect-[1/1] w-full"
-            />
+            <a [routerLink]="['/', item.pathname, 'posts']">  
+              <img
+                [src]="item.url"
+                alt=""
+                class="object-cover rounded-lg object-center aspect-[1/1] w-full"
+              />
+            </a>
             <div class="font-semibold mt-1">{{ item.fullname }}</div>
             @if (item.mutual_friends) {
               <div class="text-grey">{{ item.mutual_friends }} bạn chung</div>

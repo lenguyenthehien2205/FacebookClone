@@ -10,6 +10,7 @@ export class ProfileFriendsReponse {
 export interface ImageWithFullnameResponse {
     profile_id: number;
     mutual_friends: number;
+    pathname: string;
     fullname: string;
     url: string;
 }

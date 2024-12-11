@@ -12,8 +12,14 @@ public class ProfileAvatarWithFullnameResponse {
     @JsonProperty("profile_id")
     private Long profileId;
 
+    @JsonProperty("mutual_friends")
+    private int mutual_friends;
+
     @JsonProperty("fullname")
     private String fullname;
+
+    @JsonProperty("pathname")
+    private String pathname;
 
     @JsonProperty("url")
     private String url;
