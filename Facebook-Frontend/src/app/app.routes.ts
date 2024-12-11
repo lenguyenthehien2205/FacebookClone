@@ -10,6 +10,11 @@ import { profileRoutes } from './features/profile/profile.routes';
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'home',
     component: HomeComponent,
     // loadComponent: () =>
     //   import('./components/shared/header/history/history.component').then(

@@ -29,7 +29,7 @@ export class ContactsComponent implements OnInit {
   }
 
   loadContacts() {
-    if (this.delay()) return; // Không tải nếu đang đợi
+    if (this.delay() || this.users.value.length > 0) return; // Không tải nếu đang đợi hoặc đã có dữ liệu
     this.isLoading.set(true);
     this.delay.set(true);
     this.userService.getContacts().subscribe({

@@ -2,9 +2,14 @@ package com.project.facebook.services;
 
 import com.project.facebook.exceptions.DataNotFoundException;
 import com.project.facebook.models.PageBase;
+import com.project.facebook.projections.profiles.ProfileFullnameAndIdProjection;
 import com.project.facebook.repositories.PageBaseRepository;
+import com.project.facebook.responses.media.MediaImageProfileResponse;
+import com.project.facebook.responses.profile.ProfileFullnameAndIdResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +26,8 @@ public class PageBaseService implements IPageBaseService{
         return pageBaseRepository.existsByPathName(pathname);
     }
     @Override
-    public String getFullnameByPathname(String pathname){
-        return pageBaseRepository.getFullnameByPathname(pathname);
+    public ProfileFullnameAndIdResponse getFullnameAndIdByPathname(String pathname){
+        ProfileFullnameAndIdProjection projection = pageBaseRepository.getFullnameAndIdByPathname(pathname);
+        return ProfileFullnameAndIdResponse.convertToResponse(projection);
     }
 }

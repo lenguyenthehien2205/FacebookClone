@@ -5,7 +5,9 @@ import com.project.facebook.components.LocalizationUtils;
 import com.project.facebook.models.PageBase;
 import com.project.facebook.models.Profile;
 import com.project.facebook.models.User;
+import com.project.facebook.projections.profiles.ProfileFullnameAndIdProjection;
 import com.project.facebook.responses.ResponseObject;
+import com.project.facebook.responses.profile.ProfileFullnameAndIdResponse;
 import com.project.facebook.responses.user.UserResponse;
 import com.project.facebook.services.IPageBaseService;
 import com.project.facebook.services.IProfileService;
@@ -195,11 +197,11 @@ public class ProfileController {
         boolean exists = pageBaseService.checkPathnameExists(pathname);
         return ResponseEntity.ok(exists);
     }
-    @GetMapping("/fullname/{pathname}")
-    public ResponseEntity<ResponseObject> getFullname(@PathVariable("pathname") String pathname) {
-        String fullname = pageBaseService.getFullnameByPathname(pathname);
+    @GetMapping("/info/{pathname}")
+    public ResponseEntity<ResponseObject> getFullnameAndProfileId(@PathVariable("pathname") String pathname) {
+        ProfileFullnameAndIdResponse response = pageBaseService.getFullnameAndIdByPathname(pathname);
         return ResponseEntity.ok(ResponseObject.builder()
-                        .data(fullname)
+                        .data(response)
                         .status(HttpStatus.OK)
                         .message("OK")
                 .build());

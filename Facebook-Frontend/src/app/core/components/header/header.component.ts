@@ -37,7 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     },
   ];
   navItems = [
-    { name: 'Trang chủ', icon: 'fa-solid fa-house', url: '' },
+    { name: 'Trang chủ', icon: 'fa-solid fa-house', url: 'home' },
     { name: 'Video', icon: 'fa-solid fa-video', url: 'videos' },
     { name: 'Marketplace', icon: 'fa-solid fa-shop', url: 'marketplace' },
     { name: 'Nhóm', icon: 'fa-solid fa-users', url: 'groups' },
@@ -77,34 +77,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    this.activeItemNavItem = 'Trang chủ';
+    const pathAfterHostname = this.router.url;
+    this.updateActiveNavItem(pathAfterHostname);
     // Lắng nghe sự kiện điều hướng hoàn tất
     this.routerSubscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd || event instanceof NavigationStart) {
-        const pathAfterHostname = this.router.url;
-
-        // Cập nhật activeItemNavItem dựa trên URL
-        switch (pathAfterHostname) {
-          case '/':
-            this.activeItemNavItem = 'Trang chủ';
-            break;
-          case '/videos':
-            this.activeItemNavItem = 'Video';
-            break;
-          case '/marketplace':
-            this.activeItemNavItem = 'Marketplace';
-            break;
-          case '/groups':
-            this.activeItemNavItem = 'Nhóm';
-            break;
-          case '/game':
-            this.activeItemNavItem = 'Trò chơi';
-            break;
-          default:
-            this.activeItemNavItem = '';
-            break;
-        }
-        this.cdr.detectChanges(); // dùng detect do popstate(back trình duyệt) không kích hoạt changeDetect nên phải làm thủ công
+        const updatedPathAfterHostname = this.router.url;
+        this.updateActiveNavItem(updatedPathAfterHostname);
       }
     });
   }
@@ -113,5 +92,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.routerSubscription) {
       this.routerSubscription.unsubscribe();
     }
+  }
+  private updateActiveNavItem(url: string): void {
+    switch (url) {
+      case '/home':
+        this.activeItemNavItem = 'Trang chủ';
+        break;
+      case '/videos':
+        this.activeItemNavItem = 'Video';
+        break;
+      case '/marketplace':
+        this.activeItemNavItem = 'Marketplace';
+        break;
+      case '/groups':
+        this.activeItemNavItem = 'Nhóm';
+        break;
+      case '/game':
+        this.activeItemNavItem = 'Trò chơi';
+        break;
+      default:
+        this.activeItemNavItem = '';
+        break;
+    }
+    this.cdr.detectChanges(); // Đảm bảo giao diện được cập nhật
   }
 }

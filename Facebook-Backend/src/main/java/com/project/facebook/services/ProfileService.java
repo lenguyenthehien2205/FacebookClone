@@ -63,6 +63,7 @@ public class ProfileService implements IProfileService{
         }
         // Tạo ProfileHeaderResponse và trả về
         return ProfileHeaderResponse.builder()
+                .profileId(profile.getId())
                 .avatar(profile.getPageBase().getAvatar())
                 .coverPhoto(profile.getPageBase().getCoverPhoto())
                 .fullname(getFullName(profile))
@@ -79,7 +80,7 @@ public class ProfileService implements IProfileService{
         if (profile == null) {
             throw new RuntimeException("Profile not found");
         }
-        // Tính số lượng bạn bè chung
+        int totalFriends = friendRepository.countTotalFriends(profile.getId());
         int mutualFriends = friendRepository.countMutualFriendsByPathNameAndProfileId(profile.getId(), myProfileId);
         // Lấy avatar của bạn bè
         List<ProfileAvatarWithFullnameResponse> profileAvatarFriendsResponseList = new ArrayList<>();
@@ -90,8 +91,10 @@ public class ProfileService implements IProfileService{
             Long friendId = profileIdFriends.get(i);
             String avatarFriend = avatarFriends.get(i);
             Optional<Profile> profileTemp = profileRepository.findById(friendId);
+            int mututal_friends = friendRepository.countMutualFriendsByPathNameAndProfileId(profileTemp.get().getId(), myProfileId);
             profileAvatarFriendsResponseList.add(ProfileAvatarWithFullnameResponse.builder()
                     .profileId(friendId)
+                    .mutual_friends(mututal_friends)
                     .fullname(getFullName(profileTemp.get()))
                     .url(avatarFriend)
                     .build());
@@ -103,6 +106,7 @@ public class ProfileService implements IProfileService{
             isFriend = false;
         }
         return ProfileFriendResponse.builder()
+                .total_friends(totalFriends)
                 .mutual_friends(mutualFriends)
                 .profileAvatarFriends(profileAvatarFriendsResponseList)
                 .build();

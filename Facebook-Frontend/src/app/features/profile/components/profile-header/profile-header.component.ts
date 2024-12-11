@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input, OnDestroy, OnInit, signal } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { ImageService } from 'src/app/core/services/image.service';
@@ -16,6 +16,7 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
   selector: 'app-profile-header',
   templateUrl: './profile-header.component.html',
   styleUrl: './profile-header.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileHeaderComponent implements OnInit, OnDestroy {
   pathname = input<string | null>();
@@ -31,7 +32,7 @@ export class ProfileHeaderComponent implements OnInit, OnDestroy {
   // navigation
   navItems = [
     { name: 'Bài viết', url: 'posts' },
-    { name: 'Giới thiệu', url: 'about' },
+    { name: 'Giới thiệu', url: 'about/overview' },
     { name: 'Bạn bè', url: 'friends' },
     { name: 'Ảnh', url: 'photos' },
     { name: 'Video', url: 'videos' },
@@ -47,39 +48,35 @@ export class ProfileHeaderComponent implements OnInit, OnDestroy {
   cdr = inject(ChangeDetectorRef);
   ngOnInit(): void {
     this.loadProfileHeader();
-    this.activeItemNavItem = 'Bài viết';
+    const pathAfterHostname = this.router.url;
+    this.updateActiveNavItem(pathAfterHostname);
     // Lắng nghe sự kiện điều hướng hoàn tất
     this.routerSubscription = this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        const pathAfterHostname = this.router.url;
-        console.log(pathAfterHostname);
-        // Cập nhật activeItemNavItem dựa trên URL
-        switch (pathAfterHostname) {
-          case `/${this.pathname()}/posts`:
-            this.activeItemNavItem = 'Bài viết';
-            break;
-          case `/${this.pathname()}/about`:
-            this.activeItemNavItem = 'Giới thiệu';
-            break;
-          case `/${this.pathname()}/friends`:
-            this.activeItemNavItem = 'Bạn bè';
-            break;
-          case `/${this.pathname()}/photos`:
-            this.activeItemNavItem = 'Ảnh';
-            break;
-          case `/${this.pathname()}/videos`:
-            this.activeItemNavItem = 'Video';
-            break;
-          case `/${this.pathname()}/map`:
-            this.activeItemNavItem = 'Check in';
-            break;
-          default:
-            this.activeItemNavItem = ``;  
-            break;
-        }
-        this.cdr.detectChanges(); // dùng detect do popstate(back trình duyệt) không kích hoạt changeDetect nên phải làm thủ công
+      if (event instanceof NavigationEnd || event instanceof NavigationStart) {
+        const updatedPathAfterHostname = this.router.url;
+        this.updateActiveNavItem(updatedPathAfterHostname);
       }
     });
+  }
+  private updateActiveNavItem(url: string): void {
+    const baseUrl = `/${this.pathname()}`;
+    
+    if (url.startsWith(`${baseUrl}/posts`)) {
+      this.activeItemNavItem = 'Bài viết';
+    } else if (url.startsWith(`${baseUrl}/about`)) {
+      this.activeItemNavItem = 'Giới thiệu';
+    } else if (url.startsWith(`${baseUrl}/friends`)) {
+      this.activeItemNavItem = 'Bạn bè';
+    } else if (url.startsWith(`${baseUrl}/photos`)) {
+      this.activeItemNavItem = 'Ảnh';
+    } else if (url.startsWith(`${baseUrl}/videos`)) {
+      this.activeItemNavItem = 'Video';
+    } else if (url.startsWith(`${baseUrl}/map`)) {
+      this.activeItemNavItem = 'Check in';
+    } else {
+      this.activeItemNavItem = 'Bài viết';  // Mặc định
+    }
+    this.cdr.detectChanges();  // Đảm bảo giao diện được cập nhật
   }
   ngOnDestroy(): void {
     if (this.routerSubscription) {
@@ -105,6 +102,7 @@ export class ProfileHeaderComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (response: ApiResponse) => {
+          this.profileService.currentProfileId.set(response.data.profile_id);
           this.profileHeaderResponse.set(
             response.data as ProfileHeaderResponse
           );

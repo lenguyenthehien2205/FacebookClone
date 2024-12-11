@@ -9,6 +9,11 @@ import { RouterModule } from "@angular/router";
 import { PostSkeletonComponent } from "./components/skeletons/post-skeleton/post-skeleton.component";
 import { ContactSkeletonComponent } from "./components/skeletons/contact-skeleton/contact-skeleton.component";
 import { ProfileHeaderSkeletonComponent } from "./components/skeletons/profile-header-skeleton/profile-header-skeleton.component";
+import { PostComponent } from "./components/post/post.component";
+import { PostHeaderComponent } from "./components/post/post-header/post-header.component";
+import { PostActionsComponent } from "./components/post/post-actions/post-actions.component";
+import { PostContentComponent } from "./components/post/post-content/post-content.component";
+import { PostInteractionsComponent } from "./components/post/post-interactions/post-interactions.component";
 
 @NgModule({
   declarations: [
@@ -19,7 +24,12 @@ import { ProfileHeaderSkeletonComponent } from "./components/skeletons/profile-h
     NavbarButtonComponent,
     PostSkeletonComponent,
     ContactSkeletonComponent,
-    ProfileHeaderSkeletonComponent
+    ProfileHeaderSkeletonComponent,
+    PostComponent,
+    PostHeaderComponent,
+    PostActionsComponent,
+    PostContentComponent,
+    PostInteractionsComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +43,12 @@ import { ProfileHeaderSkeletonComponent } from "./components/skeletons/profile-h
     NavbarButtonComponent,
     PostSkeletonComponent,
     ContactSkeletonComponent,
-    ProfileHeaderSkeletonComponent
+    ProfileHeaderSkeletonComponent,
+    PostComponent,
+    PostActionsComponent,
+    PostHeaderComponent,
+    PostContentComponent,
+    PostInteractionsComponent
   ]
 })
 export class SharedModule {}

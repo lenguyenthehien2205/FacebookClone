@@ -30,7 +30,8 @@ import { ProfileModule } from './features/profile/profile.module';
     useClass: TokenInterceptor,
     multi: true
   },
-  { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }],
+  { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
+],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

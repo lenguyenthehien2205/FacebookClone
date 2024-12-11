@@ -8,7 +8,7 @@ import { routes } from "./app.routes";
         {
           bindToComponentInputs: true, 
           paramsInheritanceStrategy: 'always', 
-          scrollPositionRestoration: 'enabled' // Kích hoạt tính năng giữ lại vị trí cuộn
+          scrollPositionRestoration: 'enabled' // Kích hoạt tính năng giữ lại vị trí cuộn  
         }
       )
     ],

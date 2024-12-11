@@ -13,6 +13,7 @@ export class PostHeaderComponent {
   time = input.required<string>();
   timeAgo = input.required<string>();
   isOnline = input.required<boolean>();
+  hiddenIcon = input.required<boolean>();
   privacyIcons = [
     {
       mode: 'public',

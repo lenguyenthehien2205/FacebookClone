@@ -1,1 +1,21 @@
-<p>profile-about works!</p>
+<div class="w-full max-w-[1000px] bg-white rounded-lg shadow-around mx-auto mt-[16px] px-2 py-3 flex mb-[500px]">
+    <div class="w-[30%] flex flex-col gap-2 mr-2">
+        <h1 class="text-[20px] font-bold mb-2 ml-3">Giới thiệu</h1>
+        @for (item of navItems; track item.name; let i = $index) {
+            <app-navbar-button
+            [routerLink]="getRouterLink(item.url)"
+            [isActive]="activeItemNavItem === item.name"
+            (buttonClick)="onSelectNavItem(item.name)"
+            styleClass=""
+            >
+            <button class="px-3 py-1 hover:bg-hover text-left rounded-lg font-semibold text-grey w-full"
+             [ngClass]="{
+                'bg-[#ebf5ff] text-primary': activeItemNavItem === item.name
+             }">{{ item.name }}</button>
+            </app-navbar-button>
+        }
+    </div>
+    <div class="w-[70%] border-l-[2px] border-grey2">
+        <router-outlet />
+    </div>  
+</div>

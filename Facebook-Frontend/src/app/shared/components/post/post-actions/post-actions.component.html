@@ -1,0 +1,23 @@
+<div class="flex w-full px-4 py-1">
+    <div class="relative w-1/3 h-[35px]" (mouseenter)="showIcons = true" (mouseleave)="showIcons = false">
+        @if(showIcons){
+            <div class="absolute top-[-45px] l-0 bg-white flex shadow-around-lg rounded-full z-30 gap-2 w-[337px] p-1">
+                @for (item of interactionIcons; track $index) {
+                    <img [src]="'assets/icons/interaction_icons/'+ item.name +'.svg'" alt="" class="size-[40px] hover:translate-y-[-5px] hover:scale-110 cursor-pointer">
+                }
+            </div>
+        }
+        <app-card styleClass="w-full h-full items-center justify-center gap-2 rounded-md" class="w-full">
+            <i visual class="fa-regular fa-thumbs-up text-[15px] text-grey"></i>
+            <span text class="text-[15px] text-grey font-medium">Thích</span>
+        </app-card>
+    </div>
+    <app-card styleClass="w-full h-full items-center justify-center gap-2 rounded-md" class="w-1/3 h-[35px]">
+        <i visual class="fa-regular fa-message text-[15px] text-grey"></i>
+        <span text class="text-[15px] text-grey font-medium">Bình luận</span>
+    </app-card>
+    <app-card styleClass="w-full h-full items-center justify-center gap-2 rounded-md" class="w-1/3 h-[35px]">
+        <i visual class="fa-solid fa-share text-[15px] text-grey"></i>
+        <span text class="text-[15px] text-grey font-medium">Thích</span>
+    </app-card>
+</div>

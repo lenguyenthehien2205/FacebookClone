@@ -14,11 +14,6 @@ import { SponsoredItemComponent } from './components/right-panel/sponsored/spons
 import { YourMindComponent } from './components/post-panel/your-mind/your-mind.component';
 import { StoriesComponent } from './components/post-panel/stories/stories.component';
 import { PostsComponent } from './components/post-panel/posts/posts.component';
-import { PostComponent } from './components/post-panel/posts/post/post.component';
-import { PostHeaderComponent } from './components/post-panel/posts/post/post-header/post-header.component';
-import { PostContentComponent } from './components/post-panel/posts/post/post-content/post-content.component';
-import { PostInteractionsComponent } from './components/post-panel/posts/post/post-interactions/post-interactions.component';
-import { PostActionsComponent } from './components/post-panel/posts/post/post-actions/post-actions.component';
 import { ShortcutsComponent } from './components/left-panel/shortcuts/shortcuts.component';
 import { ShortcutItemComponent } from './components/left-panel/shortcuts/shortcut-item/shortcut-item.component';
 import { ContactsComponent } from './components/right-panel/contacts/contacts.component';
@@ -43,11 +38,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     YourMindComponent,
     StoriesComponent,
     PostsComponent,
-    PostComponent,
-    PostHeaderComponent,
-    PostContentComponent,
-    PostInteractionsComponent,
-    PostActionsComponent,
     ShortcutsComponent,
     ShortcutItemComponent,
     ContactsComponent,

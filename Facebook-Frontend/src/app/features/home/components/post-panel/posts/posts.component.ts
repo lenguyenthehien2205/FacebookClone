@@ -75,12 +75,12 @@ export class PostsComponent implements OnInit {
           const newFetchedIds = newPosts.map((post) => post.id);
           this.postService.updateFetchedIds(newFetchedIds);
           this.postService.addPosts(newPosts);
-          setTimeout(() => {
-            this.posts.set(this.postService.getPosts());
-            this.delay.set(false);
-            this.isLoading.set(false);
-            this.cdRef.detectChanges();
-          }, LOADING_TIME);
+            setTimeout(() => {
+              this.posts.set(this.postService.getPosts());
+              this.delay.set(false);
+              this.isLoading.set(false);
+              this.cdRef.detectChanges();
+            }, LOADING_TIME);
         }
       },
       error: (error) => {

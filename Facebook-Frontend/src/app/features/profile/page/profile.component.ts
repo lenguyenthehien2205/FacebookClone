@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router, RouterStateSnapshot } from '@angular/router';
 import { ProfileService } from 'src/app/core/services/profile.service';
 import { ApiResponse } from 'src/app/shared/responses/api.response';
@@ -8,7 +8,8 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css'
+  styleUrl: './profile.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileComponent implements OnInit{
   pathname: string | null = '';
@@ -51,16 +52,16 @@ export const resolveUserName: ResolveFn<string> = (
   const pathname = activatedRoute.paramMap.get('pathname')!;
   
   // Trả về Observable, resolver sẽ đợi Observable này hoàn thành trước khi chuyển hướng
-  return profileService.getFullname(pathname).pipe(
+  return profileService.getInfo(pathname).pipe(
     map((response: ApiResponse) => {
-      return response.data;
+      return response.data.fullname;
     })
   );
 };
 
-export const resolveTitle: ResolveFn<string> = (
-  activatedRoute,
-  routerState
-) => {
-  return resolveUserName(activatedRoute, routerState);
-};
+// export const resolveTitle: ResolveFn<string> = (
+//   activatedRoute,
+//   routerState
+// ) => {
+//   return resolveUserName(activatedRoute, routerState);
+// };

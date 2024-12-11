@@ -21,4 +21,5 @@ export class PostComponent {
   totalInteractions = input.required<number>();
   highestInteraction = input.required<string>();
   secondHighestInteraction = input.required<string>();
+  hiddenIcon = input.required<boolean>();
 }

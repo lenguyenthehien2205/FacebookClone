@@ -11,6 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 public class ProfileHeaderResponse {
+    @JsonProperty("profile_id")
+    private Long profileId;
+
     @JsonProperty("avatar")
     private String avatar;
 

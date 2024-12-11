@@ -80,7 +80,7 @@ public class WebSecurityConfig {
                             .requestMatchers(GET, String.format("/%s/profiles/header/{pathname}/{my_profile_id}", apiBasePath)).permitAll()
                             .requestMatchers(GET, String.format("/%s/profiles/friends/{pathname}/{my_profile_id}", apiBasePath)).permitAll()
                             .requestMatchers(GET, String.format("/%s/profiles/check-pathname/{pathname}", apiBasePath)).permitAll()
-                            .requestMatchers(GET, String.format("/%s/profiles/fullname/{pathname}", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/profiles/info/{pathname}", apiBasePath)).permitAll()
 //                            .requestMatchers(GET, String.format("/%s/profiles/avatar_image/{imageName}", apiBasePath)).permitAll()
 //                            .requestMatchers(GET, String.format("/%s/profiles/cover_photo_image/{imageName}", apiBasePath)).permitAll()
 //                            .requestMatchers(GET,

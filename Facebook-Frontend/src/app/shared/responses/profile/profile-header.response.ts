@@ -1,6 +1,7 @@
 import { ImageResponse } from '../common/image.response';
 
 export class ProfileHeaderResponse {
+  profile_id: number = 0;
   avatar: string = '';
   cover_photo: string = '';
   fullname: string = '';
