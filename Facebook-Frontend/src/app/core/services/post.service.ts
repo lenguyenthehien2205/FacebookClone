@@ -6,31 +6,22 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Post } from '../../shared/models/post.model';
 import { Media } from '../../shared/models/media.model';
 import { PostFetchData } from '../../shared/models/post.model';
+import { apiConfig } from 'src/app/shared/utils/api.utils';
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
   private apiPosts = `${environment.apiBaseUrl}/posts/random-authors-latest`;
-  private apiConfig = {
-    headers: this.createHeaders(),
-  };
 
   private fetchedIds: Set<number> = new Set();
   posts = signal<Post[]>([]);
 
   constructor(private http: HttpClient) {}
 
-  private createHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept-Language': 'vi',
-    });
-  }
-
   fetchPosts(postFetchData: PostFetchData): Observable<ApiResponse> {
     // console.log(this.posts);
     return this.http
-      .post<ApiResponse>(this.apiPosts, postFetchData, this.apiConfig)
+      .post<ApiResponse>(this.apiPosts, postFetchData, apiConfig)
       .pipe(
         map((response: ApiResponse) => {
           if (

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/app/environments/environment';
 import { ApiResponse } from 'src/app/shared/responses/api.response';
+import { apiConfig } from 'src/app/shared/utils/api.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -10,20 +11,11 @@ import { ApiResponse } from 'src/app/shared/responses/api.response';
 export class InteractionService {
   private interactionUrl = `${environment.apiBaseUrl}/interactions/post/detail`;
   private interactionByTypeUrl = `${environment.apiBaseUrl}/interactions/post`;
-  private createHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept-Language': 'vi',
-    });
-  }
-  private apiConfig = {
-    headers: this.createHeaders(),
-  };
   constructor(private http: HttpClient) {}
   getInteractionPost(postId: number): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(
       `${this.interactionUrl}/${postId}`,
-      this.apiConfig
+      apiConfig
     );
   }
   getInteractionByTypePost(
@@ -32,7 +24,7 @@ export class InteractionService {
   ): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(
       `${this.interactionByTypeUrl}/${postId}/${interactionType}`,
-      this.apiConfig
+      apiConfig
     );
   }
 }

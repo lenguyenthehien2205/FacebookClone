@@ -6,6 +6,7 @@ import { environment } from 'src/app/environments/environment';
 import { LoginDTO } from 'src/app/shared/dtos/login.dto';
 import { ApiResponse } from 'src/app/shared/responses/api.response';
 import { TokenService } from './token.service';
+import { apiConfig, createHeaders } from 'src/app/shared/utils/api.utils';
 
 @Injectable({
   providedIn: 'root',
@@ -16,30 +17,21 @@ export class UserService {
   private apiLogin = `${environment.apiBaseUrl}/users/login`;
   private apiUrl = 'http://localhost:8088/api/v1/users'; // Thay thế bằng URL API thực tế
   private apiContacts = `${environment.apiBaseUrl}/friends/contacts/`;
-  private apiConfig = {
-    headers: this.createHeaders(),
-  };
-  private createHeaders(): HttpHeaders {
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Accept-Language': 'vi',
-    });
-  }
 
   constructor(private http: HttpClient) {}
 
   getContacts(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(
       `${this.apiContacts}${this.tokenService.getProfileId()}`,
-      this.apiConfig
+      apiConfig
     );
   }
   register(registerData: RegisterDTO): Observable<any> {
-    const headers = this.createHeaders();
+    const headers = createHeaders();
     return this.http.post(this.apiRegister, registerData, { headers });
   }
   login(loginData: LoginDTO): Observable<any> {
-    const headers = this.createHeaders();
+    const headers = createHeaders();
     return this.http.post(this.apiLogin, loginData, { headers });
   }
 }

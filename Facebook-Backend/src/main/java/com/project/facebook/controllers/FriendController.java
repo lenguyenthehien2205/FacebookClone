@@ -1,10 +1,8 @@
 package com.project.facebook.controllers;
 
 import com.project.facebook.components.LocalizationUtils;
-import com.project.facebook.models.Friend;
-import com.project.facebook.models.PageBase;
-import com.project.facebook.models.Profile;
-import com.project.facebook.models.User;
+import com.project.facebook.models.*;
+import com.project.facebook.repositories.ConversationRepository;
 import com.project.facebook.repositories.ProfileRepository;
 import com.project.facebook.responses.ResponseObject;
 import com.project.facebook.responses.profile.ProfileTagResponse;
@@ -12,6 +10,7 @@ import com.project.facebook.responses.user.UserResponse;
 import com.project.facebook.responses.user.UserTagResponse;
 import com.project.facebook.services.FriendService;
 import com.project.facebook.services.IFriendService;
+import com.project.facebook.services.IProfileService;
 import com.project.facebook.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,11 +29,22 @@ public class FriendController {
     private final IFriendService friendService;
     private final LocalizationUtils localizationUtils;
     private final ProfileRepository profileRepository;
+    private final ConversationRepository conversationRepository;
+    private final IProfileService profileService;
     @PostMapping("/{first_profile_id}/{second_profile_id}")
     public ResponseEntity<?> addFriend(
             @PathVariable("first_profile_id") Long firstProfileId,
-            @PathVariable("second_profile_id") Long secondProfileId){
+            @PathVariable("second_profile_id") Long secondProfileId,
+            Authentication authentication){
         try{
+            User currentUser = (User) authentication.getPrincipal();
+            // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
+            Profile currentProfile = profileService.getProfileById(firstProfileId);
+            if (!currentUser.getUserId().equals(currentProfile.getUser().getUserId())) {
+                return ResponseEntity.ok(ResponseObject.builder()
+                        .message("Unauthorized")
+                        .status(HttpStatus.FORBIDDEN).build());
+            }
             if(firstProfileId.equals(secondProfileId)){
                 return ResponseEntity.badRequest().body("Invalid senderId and receiverId");
             }

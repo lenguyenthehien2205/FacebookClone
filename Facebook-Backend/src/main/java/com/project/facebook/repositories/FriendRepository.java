@@ -1,7 +1,9 @@
 package com.project.facebook.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
+import com.project.facebook.models.Conversation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -57,4 +59,10 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
             @Param("profileId1") Long profileId1,
             @Param("profileId2") Long profileId2
     );
+
+    // neu dung native query thi phai dung projection moi tra ve duoc entity, hoac dung JPQL
+    @Query("SELECT f FROM Friend f WHERE " +
+            "(f.firstProfile.id = :profileId1 AND f.secondProfile.id = :profileId2) " +
+            "OR (f.secondProfile.id = :profileId1 AND f.firstProfile.id = :profileId2)")
+    Optional<Friend> findFriendshipByUsers(@Param("profileId1") Long profileId1, @Param("profileId2") Long profileId2);
 }

@@ -48,8 +48,8 @@ public class WebSecurityConfig {
                                     String.format("/%s/profiles/avatar_image/{image_name}",apiBasePath),
                                     String.format("/%s/profiles/cover_photo_image/{image_name}",apiBasePath),
                                     String.format("/%s/medias/image_post/{image_name}", apiBasePath),
-                                    String.format("/%s/medias/video_post/{video_name}", apiBasePath)
-
+                                    String.format("/%s/medias/video_post/{video_name}", apiBasePath),
+                                    String.format("/%s/ws", apiBasePath)
                             )
                             .permitAll()
                             .requestMatchers(GET, String.format("/%s/users/{phone}", apiBasePath)).hasRole("ADMIN")
@@ -85,6 +85,10 @@ public class WebSecurityConfig {
 //                            .requestMatchers(GET, String.format("/%s/profiles/cover_photo_image/{imageName}", apiBasePath)).permitAll()
 //                            .requestMatchers(GET,
 //                                    String.format("/%s/users", apiBasePath)).hasRole("ADMIN")
+
+                            .requestMatchers(GET, String.format("/%s/messages/{conversation_id}", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/conversations/{profile_id}", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/conversations/{profile_id1}/{profile_id2}", apiBasePath)).permitAll()
                             .anyRequest().authenticated();
                 });
         http.cors(new Customizer<CorsConfigurer<HttpSecurity>>() {

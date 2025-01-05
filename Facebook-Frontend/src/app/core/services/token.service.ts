@@ -6,16 +6,36 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class TokenService {
     private readonly TOKEN_KEY = 'access_token';
     private jwtHelperService = new JwtHelperService();
+    private readonly TAB_ID_KEY = 'tab_id';
+
+    // Lấy hoặc tạo Tab ID duy nhất
+    getTabId(): string {
+        let tabId = sessionStorage.getItem(this.TAB_ID_KEY);
+        if (!tabId) {
+            tabId = Math.random().toString(36).substr(2, 9); // Tạo ID ngẫu nhiên
+            sessionStorage.setItem(this.TAB_ID_KEY, tabId);
+        }
+        return tabId;
+    }
+
+    // Lưu token vào cookie kèm Tab ID
+    setToken(token: string): void {
+        const tabId = this.getTabId();
+        document.cookie = `${this.TOKEN_KEY}_${tabId}=${token}; path=/; Secure`;
+    }
+    // Lấy token từ cookie dựa trên Tab ID
     getToken(): string | null {
-        // console.log(localStorage.getItem(this.TOKEN_KEY));
-        return localStorage.getItem(this.TOKEN_KEY);
+        const tabId = this.getTabId();
+        const cookies = document.cookie.split('; ');
+        const tokenCookie = cookies.find(row => row.startsWith(`${this.TOKEN_KEY}_${tabId}=`));
+        return tokenCookie ? tokenCookie.split('=')[1] : null;
     }
-    setToken(token: string) {
-        localStorage.setItem(this.TOKEN_KEY, token);
+    // Xóa token từ cookie dựa trên Tab ID
+    removeToken(): void {
+        const tabId = this.getTabId();
+        document.cookie = `${this.TOKEN_KEY}_${tabId}=; max-age=0; path=/; Secure`;
     }
-    removeToken() {
-        localStorage.removeItem(this.TOKEN_KEY);
-    }
+        
     getUserId(): number {
         let token = this.getToken();
         if (!token) {

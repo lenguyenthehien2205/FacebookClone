@@ -2,14 +2,8 @@ package com.project.facebook.services;
 
 import com.project.facebook.exceptions.AlreadyExistsException;
 import com.project.facebook.exceptions.DataNotFoundException;
-import com.project.facebook.models.Friend;
-import com.project.facebook.models.PageBase;
-import com.project.facebook.models.Profile;
-import com.project.facebook.models.User;
-import com.project.facebook.repositories.FriendRepository;
-import com.project.facebook.repositories.PageBaseRepository;
-import com.project.facebook.repositories.ProfileRepository;
-import com.project.facebook.repositories.UserRepository;
+import com.project.facebook.models.*;
+import com.project.facebook.repositories.*;
 import com.project.facebook.responses.profile.ProfileTagResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,9 +20,11 @@ public class FriendService implements IFriendService{
     private final UserRepository userRepository;
     private final ProfileRepository profileRepository;
     private final PageBaseRepository pageBaseRepository;
+    private final ConversationRepository conversationRepository;
     @Override
     public Friend addFriend(Long firstProfileId, Long secondProfileId) throws Exception{
-        if(friendRepository.existsFriendship(firstProfileId, secondProfileId) == 0){
+        int friendship = friendRepository.existsFriendship(firstProfileId, secondProfileId);
+        if(friendship == 0){
             Profile sender = profileRepository.findById(firstProfileId).orElseThrow(() -> new DataNotFoundException("Sender not found"));
             Profile receiver = profileRepository.findById(secondProfileId).orElseThrow(() -> new DataNotFoundException("Receiver not found"));
             Friend friend = new Friend();
@@ -38,6 +34,22 @@ public class FriendService implements IFriendService{
             friend.setFirstProfile(profile1);
             friend.setSecondProfile(profile2);
             return friendRepository.save(friend);
+        }else if(friendship == 1){
+            Optional<Friend> friendOpt = friendRepository.findFriendshipByUsers(firstProfileId, secondProfileId);
+            if(friendOpt.isPresent()) {
+                Optional<Conversation> conversationOptional = conversationRepository.findConversationByUsers(firstProfileId, secondProfileId);
+                if(conversationOptional.isEmpty()){
+                    conversationRepository.save(Conversation.builder()
+                            .person1(firstProfileId)
+                            .person2(secondProfileId)
+                            .build());
+                }
+                Friend friend = friendOpt.get();
+                friend.setActive(true);
+                return friendRepository.save(friend);
+            }else{
+                throw new DataNotFoundException("Friendship not found");
+            }
         }else{
             throw new AlreadyExistsException("Friendship already exists");
         }

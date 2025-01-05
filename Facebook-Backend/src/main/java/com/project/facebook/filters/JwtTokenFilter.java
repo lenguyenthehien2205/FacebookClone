@@ -41,7 +41,9 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         try{
             //  filterChain.doFilter(request, response); // cho di qua
             if (isBypassToken(request)){
+                System.out.println("before filterChain.doFilter(request, response);");
                 filterChain.doFilter(request, response);
+                System.out.println("after filterChain.doFilter(request, response);");
                 return;
             }
             // neu co kiem tra
@@ -75,6 +77,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private boolean isBypassToken(@NonNull HttpServletRequest request){
         // cac request duoc cho qua ma khong can kiem tra token
         final List<Pair<String, String>> bypassTokens = Arrays.asList(
+                Pair.of(String.format("/%s/ws", apiBasePath),"GET"),
                 Pair.of(String.format("/%s/users/register", apiBasePath),"POST"),
                 Pair.of(String.format("/%s/users/login", apiBasePath),"POST"),
                 Pair.of(String.format("/%s/profiles/avatar_image", apiBasePath),"GET"),

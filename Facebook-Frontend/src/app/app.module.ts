@@ -11,6 +11,7 @@ import { TokenInterceptor } from './core/interceptors/token.interceptor';
 import { RouteReuseStrategy } from '@angular/router';
 import { CustomReuseStrategy } from './core/router/custom-reuse-strategy';
 import { ProfileModule } from './features/profile/profile.module';
+import { MessageModule } from './features/message/message.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ProfileModule } from './features/profile/profile.module';
     HomeModule,
     HeaderModule,
     AuthModule,
-    ProfileModule
+    ProfileModule,
+    MessageModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

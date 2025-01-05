@@ -1,0 +1,36 @@
+<div class="rounded-sm shadow-around-lg max-w-[360px] w-[360px] bg-white px-[14px] py-[8px] h-[calc(100vh-56px)]">
+    <div class="flex justify-between pb-[14px]">
+        <h1 class="text-[24px] font-bold">Đoạn chat</h1>
+        <div class="flex gap-3">
+            <span class="size-[36px] rounded-full bg-grey2 flex items-center justify-center">
+                <i class="fa-solid fa-ellipsis"></i>
+            </span>
+            <span class="size-[36px] rounded-full bg-grey2 flex items-center justify-center">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </span>
+        </div>
+    </div>
+    <div class="w-full relative">
+        <span class="absolute text-grey top-[50%] translate-y-[-50%] left-[15px]"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <input type="text" class="h-[36px] bg-background w-full rounded-full px-[20px] outline-none text-[15px] pl-[35px]" placeholder="Tìm kiếm trên Messager">
+    </div>
+        <div class="flex flex-col mt-[20px] h-[calc(100%-98px)] overflow-y-auto">
+            @for(item of conversations(); track $index) {
+                <a [routerLink]="['/message', item.id]" (click)="selectConversation(item.profile_id)">
+                    <div class="flex gap-[10px] hover:bg-hover p-[8px] rounded-lg cursor-pointer">  
+                        <img src="{{ getAvatar(item) }}" alt="" class="size-[56px] rounded-full">
+                        <div class="flex flex-col justify-center w-full">
+                            <span class="font-semibold">{{ getName(item) }}</span>
+                            <div class="flex">
+                                <span class="text-[13px] text-grey">Bạn: Mày non</span>
+                                <!-- <span class="mx-[5px] text-center">·</span> -->
+                                <span class="mx-[5px]"></span>
+                                <span class="text-[13px] text-grey">19 phút</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            }
+            
+        </div>    
+</div> 

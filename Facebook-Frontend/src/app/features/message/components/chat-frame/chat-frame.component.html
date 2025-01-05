@@ -1,0 +1,57 @@
+<div class="h-full rounded-lg shadow-around">
+    <div class="flex flex-col justify-between h-full bg-white rounded-lg">
+        <div class="flex items-center justify-between h-[64px] py-[12px] px-[16px] shadow-md">
+            <div class="flex items-center">
+                <img [src]="messageConversation.avatar" alt="" class="size-[40px] rounded-full">
+                <div class="flex flex-col ml-2">
+                    <span class="font-semibold">{{ getName(messageConversation) }}</span>
+                    <span class="text-[13px] text-grey">Hoạt động 1 giờ trước</span>
+                </div>
+            </div>
+            <div class="flex gap-[10px] text-white">
+                <span class="size-[36px] rounded-full bg-grey flex items-center justify-center">
+                    <i class="fa-solid fa-phone"></i>
+                </span>
+                <span class="size-[36px] rounded-full bg-grey flex items-center justify-center">
+                    <i class="fa-solid fa-video"></i>
+                </span>
+                <span class="size-[36px] rounded-full bg-grey flex items-center justify-center">
+                    <i class="fa-solid fa-info"></i>
+                </span>
+            </div>
+        </div>
+        <div class="flex-1 overflow-y-auto" #chatContainer>
+            <div class="flex flex-col justify-end p-[10px] gap-2 min-h-[100%]">
+                @for (message of messageConversation.messages; track $index) {
+                    @if(message.sender_id === getProfileId()) {
+                        <div class="flex items-end justify-end">
+                            <div class="rounded-3xl px-[12px] py-[7px] text-[15px] ml-[10px] text-white bg-primary max-w-[480px] break-words">{{ message.content }}</div>
+                        </div>
+                    }@else {
+                        <div class="flex items-end justify-start">
+                            <img [src]="messageConversation.avatar" alt="" class="size-[28px] rounded-full">
+                            <div class="bg-grey2 rounded-3xl px-[12px] py-[7px] text-[15px] ml-[10px] max-w-[480px] break-words">{{ message.content }}</div>
+                        </div>
+                    }
+                }
+            </div>
+    </div>
+    <div class="flex gap-[20px] items-center px-[10px] justify-between h-[60px] bg-white rounded-b-lg">
+        <div class="flex gap-[10px] text-white">
+            <span class="size-[20px] rounded-full bg-grey flex items-center justify-center">
+                <i class="fa-solid fa-plus"></i>
+            </span>
+            <span class="size-[20px] rounded-full bg-grey flex items-center justify-center">
+                <i class="fa-solid fa-plus"></i>
+            </span><span class="size-[20px] rounded-full bg-grey flex items-center justify-center">
+                <i class="fa-solid fa-plus"></i>
+            </span><span class="size-[20px] rounded-full bg-grey flex items-center justify-center">
+                <i class="fa-solid fa-plus"></i>
+            </span>
+        </div>
+        <input type="text" [(ngModel)]="message" class="h-[36px] bg-grey2 flex-1 rounded-full px-[20px] outline-none text-[15px]" placeholder="Aa" (keydown.enter)="sendMessage()">
+        <span>
+            <i class="fa-regular fa-thumbs-up"></i>
+        </span>
+    </div>
+</div>
