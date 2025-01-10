@@ -6,6 +6,7 @@ import com.project.facebook.models.Profile;
 import com.project.facebook.models.User;
 import com.project.facebook.responses.profile.ProfileFriendResponse;
 import com.project.facebook.responses.profile.ProfileHeaderResponse;
+import com.project.facebook.responses.profile.ProfileSearchedResponse;
 
 import java.util.List;
 
@@ -15,4 +16,5 @@ public interface IProfileService {
     PageBase updateProfileCoverPhoto(Long id, String avatarFileName) throws DataNotFoundException;
     ProfileHeaderResponse getProfileHeaderByPathNameAndMyProfileId(String pathname, Long myProfileId);
     ProfileFriendResponse getProfileFriendsByPathNameAndMyProfileId(String pathname, Long myProfileId);
+    List<ProfileSearchedResponse> searchProfileByKeyword(String fullName);
 }

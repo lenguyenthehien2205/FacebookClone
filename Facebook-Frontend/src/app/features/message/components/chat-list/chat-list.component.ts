@@ -14,11 +14,14 @@ export class ChatListComponent {
   conversationService = inject(ConversationService);
   imageService = inject(ImageService);
   conversations = signal<ConversationResponse[]>([]);
+  filteredConversations = signal<ConversationResponse[]>([]);
+  keyword = '';
 
   ngOnInit(){
     this.conversationService.getConversations().subscribe({
       next: (response: ApiResponse) => {
         this.conversations.set(response.data as ConversationResponse[]);
+        this.filteredConversations.set(response.data as ConversationResponse[]);
       }
     });
   }
@@ -30,5 +33,17 @@ export class ChatListComponent {
   }
   selectConversation(profileId: number){
     this.conversationService.setSelectedProfileId(profileId);
+  }
+
+  onSearch() {
+    if (!this.keyword) {
+      this.filteredConversations.set(this.conversations());
+    } else {
+      const filtered = this.conversations().filter(conversation => {
+        const name = this.getName(conversation).toLowerCase();
+        return name.includes(this.keyword.toLowerCase());
+      });
+      this.filteredConversations.set(filtered); 
+    }
   }
 }

@@ -7,14 +7,9 @@
       <span options class="text-[15px] text-primary rounded-[4px] w-[80px] h-[36px] leading-[36px] text-center cursor-pointer hover:bg-hover">Chỉnh sửa</span>
       <div content class="mt-[3px]">
         <div class="w-full">
-          <app-history-item />
-          <app-history-item />
-          <app-history-item />
-          <app-history-item />
-          <app-history-item />
-          <app-history-item />
-          <app-history-item />
-          <app-history-item />
+          @for (item of searchProfileResponse(); track $index) {
+            <app-history-item [avatar]="item.avatar" [fullName]="getName(item)" [pathname]="item.pathname" (closeHistory)="onClose()" (clearInput)="onClearInput()"/>
+          }
         </div>
       </div>
     </app-section-with-header>

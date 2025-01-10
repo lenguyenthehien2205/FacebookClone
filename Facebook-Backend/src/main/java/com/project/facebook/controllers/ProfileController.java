@@ -206,4 +206,12 @@ public class ProfileController {
                         .message("OK")
                 .build());
     }
+    @GetMapping("/search")
+    public ResponseEntity<ResponseObject> searchProfileByKeyword(@RequestParam("keyword") String keyword) {
+        return ResponseEntity.ok(ResponseObject.builder()
+                .data(profileService.searchProfileByKeyword(keyword))
+                .message("OK")
+                .status(HttpStatus.OK)
+                .build());
+    }
 }

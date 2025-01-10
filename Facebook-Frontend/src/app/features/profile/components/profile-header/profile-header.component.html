@@ -23,9 +23,13 @@
                                 }
                             </div>
                             <div class="flex lg:ml-[7px] mx-auto">
-                                @for(image of response().avatar_friends; track image.profile_id; let index = $index){
-                                    <img [src]="image.url" alt="" class="size-[34px] rounded-full mt-[6px] border-2 border-white -ml-[7px]"
-                                    [style.zIndex]="(response().avatar_friends.length || 0) - index">
+                                @if(response().avatar_friends.length === 1){
+                                    <img [src]="response().avatar_friends[0].url" alt="" class="size-[34px] rounded-full mt-[6px] border-2 border-white translate-x-[-7px]">
+                                }@else {
+                                    @for(image of response().avatar_friends; track image.profile_id; let index = $index){
+                                        <img [src]="image.url" alt="" class="size-[34px] rounded-full mt-[6px] border-2 border-white -ml-[7px]"
+                                        [style.zIndex]="(response().avatar_friends.length || 0) - index">
+                                    }
                                 }
                             </div>
                         </div>

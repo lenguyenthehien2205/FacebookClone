@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, ActivatedRouteSnapshot, ResolveFn, Router, RouterStateSnapshot } from '@angular/router';
 import { ProfileService } from 'src/app/core/services/profile.service';
 import { ApiResponse } from 'src/app/shared/responses/api.response';
@@ -10,6 +10,8 @@ import { ImageResponse, ProfileFriendsReponse } from 'src/app/shared/responses/c
 import { TokenService } from 'src/app/core/services/token.service';
 import { LOADING_TIME } from 'src/app/shared/constants/app-config';
 import { ImageService } from 'src/app/core/services/image.service';
+import { ProfilePostsComponent } from '../components/profile-posts/profile-posts.component';
+import { PostService } from 'src/app/core/services/post.service';
 
 @Component({
   selector: 'app-profile',
@@ -25,6 +27,7 @@ export class ProfileComponent implements OnInit{
   title = inject(Title);
   haveCoverPhoto: boolean = false;
   activatedRoute = inject(ActivatedRoute);
+  postService = inject(PostService);
   profileHeaderResponse = signal<ProfileHeaderResponse>(
     new ProfileHeaderResponse()
   );
@@ -96,6 +99,31 @@ export class ProfileComponent implements OnInit{
   }
   getCoverPhoto(url: string): string {
     return this.imageService.getCoverPhoto(url);
+  }
+  // handleScroll(event: Event): void {
+  //   const element = event.target as HTMLElement;
+  //   const scrollPosition = element.scrollTop + element.clientHeight;
+  //   const scrollThreshold = element.scrollHeight*0.8;
+  //   console.log('scrollPosition', scrollPosition);
+  //   console.log('scrollThreshold', scrollThreshold);
+  //   if (scrollPosition >= scrollThreshold) {
+  //     this.profilePostsComponent.loadPosts();
+  //   }
+  // }
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll(): void {
+    // Use the document’s root element to get correct scroll values
+    const element = document.documentElement;
+  
+    const scrollPosition = element.scrollTop + element.clientHeight;
+    const scrollThreshold = element.scrollHeight * 0.7;
+  
+    console.log('scrollPosition', scrollPosition);
+    console.log('scrollThreshold', scrollThreshold);
+  
+    if (scrollPosition >= scrollThreshold) {
+      this.postService.triggerLoadPosts();
+    }
   }
   // constructor() {
   //   // Lắng nghe sự kiện đóng trình duyệt

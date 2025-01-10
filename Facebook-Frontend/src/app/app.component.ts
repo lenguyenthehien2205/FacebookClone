@@ -1,4 +1,4 @@
-import { Component, inject, Injectable } from '@angular/core';
+import { Component, HostListener, inject, Injectable } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { environment } from './environments/environment';
@@ -86,6 +86,12 @@ export class AppComponent {
       }
     });
   }
+
+  // @HostListener('window:beforeunload', ['$event'])
+  // handleBeforeUnload(event: Event): void {
+  //   // Xóa token của tab hiện tại khi đóng
+  //   this.tokenService.removeToken();
+  // }
 
   ngOnDestroy(): void {
     // Hủy đăng ký để tránh rò rỉ bộ nhớ

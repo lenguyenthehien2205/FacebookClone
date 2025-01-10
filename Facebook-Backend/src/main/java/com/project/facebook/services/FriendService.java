@@ -22,26 +22,26 @@ public class FriendService implements IFriendService{
     private final PageBaseRepository pageBaseRepository;
     private final ConversationRepository conversationRepository;
     @Override
-    public Friend addFriend(Long firstProfileId, Long secondProfileId) throws Exception{
-        int friendship = friendRepository.existsFriendship(firstProfileId, secondProfileId);
+    public Friend addFriend(Long senderId, Long receiverId) throws Exception{
+        int friendship = friendRepository.existsFriendship(senderId, receiverId);
         if(friendship == 0){
-            Profile sender = profileRepository.findById(firstProfileId).orElseThrow(() -> new DataNotFoundException("Sender not found"));
-            Profile receiver = profileRepository.findById(secondProfileId).orElseThrow(() -> new DataNotFoundException("Receiver not found"));
+            Profile sender = profileRepository.findById(senderId).orElseThrow(() -> new DataNotFoundException("Sender not found"));
+            Profile receiver = profileRepository.findById(receiverId).orElseThrow(() -> new DataNotFoundException("Receiver not found"));
             Friend friend = new Friend();
-            // sap xep (id nho hon dung truoc)
-            Profile profile1 = sender.getId() < receiver.getId() ? sender : receiver;
-            Profile profile2 = sender.getId() > receiver.getId() ? sender : receiver;
-            friend.setFirstProfile(profile1);
-            friend.setSecondProfile(profile2);
+//            // sap xep (id nho hon dung truoc)
+//            Profile profile1 = sender.getId() < receiver.getId() ? sender : receiver;
+//            Profile profile2 = sender.getId() > receiver.getId() ? sender : receiver;
+            friend.setSenderProfile(sender);
+            friend.setReceiverProfile(receiver);
             return friendRepository.save(friend);
         }else if(friendship == 1){
-            Optional<Friend> friendOpt = friendRepository.findFriendshipByUsers(firstProfileId, secondProfileId);
+            Optional<Friend> friendOpt = friendRepository.findFriendshipByUsers(senderId, receiverId);
             if(friendOpt.isPresent()) {
-                Optional<Conversation> conversationOptional = conversationRepository.findConversationByUsers(firstProfileId, secondProfileId);
+                Optional<Conversation> conversationOptional = conversationRepository.findConversationByUsers(senderId, receiverId);
                 if(conversationOptional.isEmpty()){
                     conversationRepository.save(Conversation.builder()
-                            .person1(firstProfileId)
-                            .person2(secondProfileId)
+                            .person1(senderId)
+                            .person2(receiverId)
                             .build());
                 }
                 Friend friend = friendOpt.get();

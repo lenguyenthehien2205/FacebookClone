@@ -16,15 +16,22 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
     @Query(value = """
             SELECT\s
               CASE\s
-                WHEN f.first_profile_id = :profile_id THEN f.second_profile_id
-                ELSE f.first_profile_id
+                WHEN f.sender_id = :profile_id THEN f.receiver_id
+                ELSE f.sender_id
               END AS friend_id
             FROM friends f
-            WHERE (:profile_id = f.first_profile_id OR :profile_id = f.second_profile_id)\s
+            WHERE (:profile_id = f.sender_id OR :profile_id = f.receiver_id)\s
               AND f.is_active = 1
             LIMIT :limit;
             """, nativeQuery = true)
     List<Long> getProfileIdFriends(@Param("profile_id") Long profileId, @Param("limit") int limit);
     @Query(value = "SELECT pb.avatar FROM profiles p JOIN page_bases pb ON p.base_id = pb.id WHERE p.id IN :friendIds", nativeQuery = true)
     List<String> getAvatarsByFriendIds(@Param("friendIds") List<Long> friendIds);
+
+    @Query(value = "SELECT p.* FROM profiles p " +
+            "WHERE p.first_name LIKE %:keyword% " +
+            "OR p.last_name LIKE %:keyword% " +
+            "OR CONCAT(p.first_name, ' ', p.last_name) LIKE %:keyword% "+
+            "OR CONCAT(p.last_name, ' ', p.first_name) LIKE %:keyword%", nativeQuery = true)
+    List<Profile> searchByKeyWord(String keyword);
 }

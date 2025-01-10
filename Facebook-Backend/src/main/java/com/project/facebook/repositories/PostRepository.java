@@ -62,17 +62,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "    AND p.privacy != 'only me' " +
             "    AND (p.author_id = :profileId OR " +
             "         p.author_id IN ( " +
-            "             SELECT f.second_profile_id FROM friends f " +
-            "             WHERE f.first_profile_id = :profileId " +
+            "             SELECT f.receiver_id FROM friends f " +
+            "             WHERE f.sender_id = :profileId " +
             "             UNION " +
-            "             SELECT f.first_profile_id FROM friends f " +
-            "             WHERE f.second_profile_id = :profileId " +
+            "             SELECT f.sender_id FROM friends f " +
+            "             WHERE f.receiver_id = :profileId " +
             "         ) " +
             "    ) " +
             "    ORDER BY p.created_at DESC " +
             "    LIMIT :limit " +
             ") AS latest_posts " +
-            "ORDER BY RAND() LIMIT 25", nativeQuery = true)
+            "ORDER BY RAND()", nativeQuery = true)
     List<Post> getLatestRandomFetchedFriendPosts(@Param("profileId") Long profileId,
                                                  @Param("limit") int limit,
                                                  @Param("fetchedIds") List<Long> fetchedIds);
@@ -82,18 +82,49 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "        WHERE p.privacy != 'only me' \n" +
             "        AND (p.author_id = :profileId OR \n" +
             "             p.author_id IN (\n" +
-            "                 SELECT f.second_profile_id FROM friends f \n" +
-            "                 WHERE f.first_profile_id = :profileId \n" +
+            "                 SELECT f.receiver_id FROM friends f \n" +
+            "                 WHERE f.sender_id = :profileId \n" +
             "                 UNION \n" +
-            "                 SELECT f.first_profile_id FROM friends f \n" +
-            "                 WHERE f.second_profile_id = :profileId \n" +
+            "                 SELECT f.sender_id FROM friends f \n" +
+            "                 WHERE f.receiver_id = :profileId \n" +
             "             )\n" +
             "        )\n" +
             "    ORDER BY p.created_at DESC " +
             "    LIMIT :limit " +
             ") AS latest_posts " +
-            "ORDER BY RAND() LIMIT 25", nativeQuery = true)
+            "ORDER BY RAND()", nativeQuery = true)
     List<Post> getLatestRandomFriendPosts(@Param("profileId") Long profileId, @Param("limit") int limit);
 
+    @Query(value = "SELECT p.* FROM posts p " +
+            "WHERE p.author_id = :authorId " +
+            "AND p.privacy != 'only me' " +
+            "ORDER BY p.created_at DESC " +
+            "LIMIT :limit", nativeQuery = true)
+    List<Post> getPostsByAuthorId(@Param("authorId") Long authorId, @Param("limit") int limit);
+
+    @Query(value = "SELECT p.* FROM posts p " +
+            "WHERE p.author_id = :authorId " +
+            "AND p.privacy != 'only me' " +
+            "AND p.id NOT IN (:fetchedIds) " +
+            "ORDER BY p.created_at DESC " +
+            "LIMIT :limit", nativeQuery = true)
+    List<Post> getPostsFetchedByAuthorId(@Param("authorId") Long authorId,
+                                         @Param("limit") int limit,
+                                         @Param("fetchedIds") List<Long> fetchedIds);
+
+    @Query(value = "SELECT p.* FROM posts p " +
+            "WHERE p.author_id = :myId " +
+            "ORDER BY p.created_at DESC " +
+            "LIMIT :limit", nativeQuery = true)
+    List<Post> getMyPosts(@Param("myId") Long myId, @Param("limit") int limit);
+
+    @Query(value = "SELECT p.* FROM posts p " +
+            "WHERE p.author_id = :myId " +
+            "AND p.id NOT IN (:fetchedIds) " +
+            "ORDER BY p.created_at DESC " +
+            "LIMIT :limit", nativeQuery = true)
+    List<Post> getMyPostsFetched(@Param("myId") Long myId,
+                                 @Param("limit") int limit,
+                                 @Param("fetchedIds") List<Long> fetchedIds);
 }
 

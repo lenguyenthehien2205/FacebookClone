@@ -43,6 +43,9 @@ public class PostResponse extends BaseResponse {
     @JsonProperty("medias")
     private List<MediaResponse> mediaResponses;
 
+    @JsonProperty("total_medias")
+    private int totalMedias;
+
     @JsonProperty("interaction_response")
     private InteractionResponse interactionResponses;
 

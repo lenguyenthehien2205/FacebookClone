@@ -29,4 +29,10 @@ export class ProfileService {
   getFriends(pathname: string, myProfileId: number){
     return this.http.get<ApiResponse>(`${this.profileApiUrl}/friends/${pathname}/${myProfileId}`, apiConfig);
   }
+  searchProfiles(keyword: string) {
+    return this.http.get<ApiResponse>(`${this.profileApiUrl}/search`, {
+      params: { keyword: keyword}, // Truyền params vào request
+      ...apiConfig // Giữ lại cấu hình khác nếu cần
+    });
+  }
 }

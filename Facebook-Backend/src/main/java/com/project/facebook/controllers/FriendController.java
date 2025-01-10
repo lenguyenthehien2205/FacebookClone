@@ -31,24 +31,24 @@ public class FriendController {
     private final ProfileRepository profileRepository;
     private final ConversationRepository conversationRepository;
     private final IProfileService profileService;
-    @PostMapping("/{first_profile_id}/{second_profile_id}")
+    @PostMapping("/{sender_id}/{receiver_id}")
     public ResponseEntity<?> addFriend(
-            @PathVariable("first_profile_id") Long firstProfileId,
-            @PathVariable("second_profile_id") Long secondProfileId,
+            @PathVariable("sender_id") Long senderId,
+            @PathVariable("receiver_id") Long receiverId,
             Authentication authentication){
         try{
             User currentUser = (User) authentication.getPrincipal();
             // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
-            Profile currentProfile = profileService.getProfileById(firstProfileId);
+            Profile currentProfile = profileService.getProfileById(senderId);
             if (!currentUser.getUserId().equals(currentProfile.getUser().getUserId())) {
                 return ResponseEntity.ok(ResponseObject.builder()
                         .message("Unauthorized")
                         .status(HttpStatus.FORBIDDEN).build());
             }
-            if(firstProfileId.equals(secondProfileId)){
+            if(senderId.equals(receiverId)){
                 return ResponseEntity.badRequest().body("Invalid senderId and receiverId");
             }
-            Friend newFriend = friendService.addFriend(firstProfileId, secondProfileId);
+            Friend newFriend = friendService.addFriend(senderId, receiverId);
             return ResponseEntity.ok(newFriend);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());

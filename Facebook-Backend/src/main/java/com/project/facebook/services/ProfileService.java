@@ -7,16 +7,14 @@ import com.project.facebook.repositories.FriendRepository;
 import com.project.facebook.repositories.MediaRepository;
 import com.project.facebook.repositories.PageBaseRepository;
 import com.project.facebook.repositories.ProfileRepository;
-import com.project.facebook.responses.profile.ProfileAvatarResponse;
-import com.project.facebook.responses.profile.ProfileAvatarWithFullnameResponse;
-import com.project.facebook.responses.profile.ProfileFriendResponse;
-import com.project.facebook.responses.profile.ProfileHeaderResponse;
+import com.project.facebook.responses.profile.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -85,8 +83,8 @@ public class ProfileService implements IProfileService{
         // Lấy avatar của bạn bè
         List<ProfileAvatarWithFullnameResponse> profileAvatarFriendsResponseList = new ArrayList<>();
         List<Long> profileIdFriends = profileRepository.getProfileIdFriends(profile.getId(), 9);
+        profileIdFriends.sort(Long::compareTo);
         List<String> avatarFriends = profileRepository.getAvatarsByFriendIds(profileIdFriends);
-
         for (int i = 0; i < profileIdFriends.size(); i++) {
             Long friendId = profileIdFriends.get(i);
             String avatarFriend = avatarFriends.get(i);
@@ -135,5 +133,22 @@ public class ProfileService implements IProfileService{
         PageBase pageBase = pageBaseService.getPageBaseById(existingProfile.getPageBase().getId());
         pageBase.setCoverPhoto(avatarFileName);
         return pageBaseRepository.save(pageBase);
+    }
+    @Override
+    public List<ProfileSearchedResponse> searchProfileByKeyword(String keyword) {
+        keyword = keyword.trim();
+        if(keyword.equals("")){
+            return new ArrayList<>();
+        }
+        List<Profile> profiles = profileRepository.searchByKeyWord(keyword);
+        List<ProfileSearchedResponse> profileSearchedResponses = profiles.stream().map(profile -> {
+            ProfileSearchedResponse response = ProfileSearchedResponse.fromProfile(profile);
+            response.setAvatar(profile.getPageBase().getAvatar());
+            response.setPathname(profile.getPageBase().getPathName());
+            return response;
+        })
+                .limit(8)
+                .collect(Collectors.toList());
+        return profileSearchedResponses;
     }
 }

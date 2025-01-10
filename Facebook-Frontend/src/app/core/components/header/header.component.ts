@@ -11,6 +11,9 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TokenService } from '../../services/token.service';
 import { ImageService } from '../../services/image.service';
+import { ProfileSearchResponse } from 'src/app/shared/responses/profile/profile-search.response';
+import { ProfileService } from '../../services/profile.service';
+import { ApiResponse } from 'src/app/shared/responses/api.response';
 
 @Component({
   selector: 'app-header',
@@ -19,8 +22,10 @@ import { ImageService } from '../../services/image.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit, OnDestroy {
+  keyword = '';
   tokenService = inject(TokenService);
   avatarService = inject(ImageService);
+  profileService = inject(ProfileService);
   cdr = inject(ChangeDetectorRef);
   roundedButtons = [
     {
@@ -44,11 +49,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { name: 'Trò chơi', icon: 'fa-solid fa-gamepad', url: 'game' },
   ];
 
+  searchProfiles: ProfileSearchResponse[] = [];
+
   activeItemNavItem: string | null = null;
   activeButton: string | null = null;
 
   getAvatar(): string {
-    return this.avatarService.getAvatar(this.tokenService.getAvatar());
+    if(this.tokenService.getAvatar()){
+      return this.avatarService.getAvatar(this.tokenService.getAvatar());
+    }
+    return 'assets/avatars/default-avatar.png';
   }
   onSelectNavItem(name: string) {
     this.activeItemNavItem = name;
@@ -115,5 +125,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
         break;
     }
     this.cdr.detectChanges(); // Đảm bảo giao diện được cập nhật
+  }
+  onLogOut(){
+    this.tokenService.removeToken();
+    this.router.navigate(['/login']);
+  }
+  onClearInput(){
+    this.keyword = '';
+    this.searchProfiles = [];
+  }
+  onSearch() {
+    this.profileService.searchProfiles(this.keyword).subscribe({
+      next: (response: ApiResponse) => {
+        this.searchProfiles = response.data as ProfileSearchResponse[];
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Lỗi khi tìm kiếm:', error);
+      },
+    });
   }
 }

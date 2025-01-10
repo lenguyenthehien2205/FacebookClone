@@ -9,6 +9,8 @@ import { environment } from 'src/app/environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class YourMindComponent {
+  isShowNewPostForm = false;
+
   tokenService = inject(TokenService);
   getAvatar(): string{
     if(this.tokenService.getAvatar()){
@@ -21,8 +23,14 @@ export class YourMindComponent {
     if(this.pageType === "profile"){
       return this.tokenService.getFirstName();
     }else if(this.pageType === "page"){
-      return this.tokenService.getFullName();
+      return this.tokenService.getFullNamePage();
     }
     return "";
+  }
+  onShowNewPostForm(){
+    this.isShowNewPostForm = true;
+  }
+  onHideNewPostForm(){
+    this.isShowNewPostForm = false;
   }
 }

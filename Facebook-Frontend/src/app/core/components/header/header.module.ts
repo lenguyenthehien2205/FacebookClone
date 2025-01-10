@@ -6,6 +6,7 @@ import { CommonModule } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { SharedModule } from "src/app/shared/shared.module"; 
 import { HistoryItemComponent } from "./history/history-item/history-item.component";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { HistoryItemComponent } from "./history/history-item/history-item.compon
     imports: [
         CommonModule,
         RouterModule,
-        SharedModule // Import SharedModule để sử dụng CustomTitleComponent
+        SharedModule, // Import SharedModule để sử dụng CustomTitleComponent
+        FormsModule
     ],
     exports: [
         HeaderComponent

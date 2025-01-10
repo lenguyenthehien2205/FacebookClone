@@ -44,7 +44,7 @@ export class TagsComponent {
         this.tokenService.getDisplayFormat()
       );
     } else if (this.tokenService.getPageType() === 'page') {
-      return this.tokenService.getFullName();
+      return this.tokenService.getFullNamePage();
     }
     return '';
   }

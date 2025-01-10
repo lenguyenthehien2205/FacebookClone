@@ -22,6 +22,8 @@ import { BirthdayComponent } from './components/right-panel/birthday/birthday.co
 import { GroupChatComponent } from './components/right-panel/group-chat/group-chat.component';
 import { GroupChatItemComponent } from './components/right-panel/group-chat/group-chat-item/group-chat-item.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { NewPostComponent } from './components/post-panel/your-mind/new-post/new-post.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -45,8 +47,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     BirthdayComponent,
     GroupChatComponent,
     GroupChatItemComponent,
+    NewPostComponent
   ],
-  imports: [CommonModule, RouterModule, SharedModule],
+  imports: [CommonModule, RouterModule, SharedModule, ReactiveFormsModule],
   exports: [HomeComponent],
 })
 export class HomeModule {}

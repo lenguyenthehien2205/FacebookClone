@@ -1,14 +1,57 @@
+<!-- <div class="px-4 pb-3 border-[#e0e3e7]">
+    {{ content() }}
+</div>
+@if(medias()){
+    <div class="pb-3 flex flex-col gap-[2px]">
+        @for (media of medias(); track media.media_id) {
+            @if (media.media_type === "image") {
+                <img [src]="media.url" alt="" class="object-cover w-full">
+            } @else if(media.media_type === "video"){
+                <video [src]="media.url" alt="" class="video-post object-cover w-full" controls></video>
+            }
+        }        
+    </div>
+} -->
 <div class="px-4 pb-3 border-[#e0e3e7]">
     {{ content() }}
 </div>
-@if(media()){
-    <div class="pb-3">
-        @for (media of media(); track media.media_id) {
+
+@if(medias()){
+    <div class="pb-3 grid gap-[2px]" [ngClass]="{
+        'grid-cols-1': medias().length === 1,
+        'gtc-2': medias().length === 2,
+        'grid-rows-2 grid-cols-2': medias().length === 3 || medias().length === 4
+    }">
+        @for (media of medias(); track media.media_id) {
             @if (media.media_type === "image") {
-                <img [src]="media.url" alt="" class="w-full object-contain">
+                @if(media !== medias()[3] || totalMedias() <= 4){
+                    <img [src]="media.url" alt="" class="object-cover w-full" [ngClass]="{
+                        'aspect-square col-span-1': medias().length === 2 || (medias().length === 3 && media !== medias()[0]) || medias().length === 4,
+                        'aspect-[2/1] col-span-2': medias().length === 3 && media === medias()[0]
+                    }">
+                }@else if(media === medias()[3] && totalMedias() > 4){
+                    <div class="relative aspect-square col-span-1">
+                        <img [src]="media.url" alt="" class="object-cover w-full aspect-square col-span-1">
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                            <span class="text-white text-[25px] font-medium">+{{ totalMedias() - 4 }}</span>
+                        </div>
+                    </div>
+                }
             } @else if(media.media_type === "video"){
-                <video [src]="media.url" alt="" class="w-full object-contain" controls class="video-post"></video>
+                @if(media !== medias()[3] || totalMedias() <= 4){
+                    <video [src]="media.url" alt="" class="video-post object-cover w-full" controls [ngClass]="{
+                        'aspect-square col-span-1': medias().length === 2 || (medias().length === 3 && media !== medias()[0]) || medias().length === 4,
+                        'aspect-[2/1] col-span-2': medias().length === 3 && media === medias()[0]
+                    }" [attr.controls]="media === medias()[0] ? '' : null"></video>
+                }@else if(media === medias()[3] && totalMedias() > 4){
+                    <div class="relative aspect-square col-span-1">
+                        <video [src]="media.url" alt="" class="video-post object-cover w-full aspect-square col-span-1"></video>
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                            <span class="text-white text-[25px] font-medium">+{{ totalMedias() - 4 }}</span>
+                        </div>
+                    </div>
+                }
             }
-        }
+        }        
     </div>
 }

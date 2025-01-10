@@ -47,13 +47,14 @@
         >
         @for (item of profileFriendsResponse().profile_avatar_friends; track $index) {
           <div class="text-[13px]">
-            <a [routerLink]="['/', item.pathname, 'posts']">  
+            <a [href]="[item.pathname, 'posts'].join('/')" class="cursor-pointer">
               <img
                 [src]="item.url"
                 alt=""
                 class="object-cover rounded-lg object-center aspect-[1/1] w-full"
               />
             </a>
+            
             <div class="font-semibold mt-1">{{ item.fullname }}</div>
             @if (item.mutual_friends) {
               <div class="text-grey">{{ item.mutual_friends }} bạn chung</div>
@@ -123,22 +124,25 @@
         </button>
       </div>
       <div class="flex flex-col gap-4">
-        <app-post
-          username="Thế Hiển"
-          pathname="thehienn08"
-          [media]="[]"
-          content="Hello"
-          privacy="public"
-          avatar="assets/avatars/thehien.jpg"
-          time="10/12/2024"
-          timeAgo="2 ngày"
-          [isOnline]="true"
-          [postId]="1"
-          [totalInteractions]="12"
-          highestInteraction="like"
-          secondHighestInteraction="love"
-          [hiddenIcon]="false"
-        />
+        @for(post of posts; track post.id){
+            <app-post
+            [username]="post.author_name"
+            [pathname]="post.path_name"
+            [media]="post.medias"
+            [totalMedias]="post.total_medias"
+            [content]="post.content"
+            [privacy]="post.privacy"
+            [avatar]="post.avatar"
+            [time]="formatDate(post.created_at)"
+            [timeAgo]="getTimeAgo(post.created_at) || ''"
+            [isOnline]="post.is_online"
+            [postId]="post.id"
+            [totalInteractions]="post.interaction_response.total_interactions"
+            [highestInteraction]="post.interaction_response.highest_interaction"
+            [secondHighestInteraction]="post.interaction_response.second_highest_interaction"
+            [hiddenIcon]="false"
+          />
+        }
       </div>
     </div>
   </div>

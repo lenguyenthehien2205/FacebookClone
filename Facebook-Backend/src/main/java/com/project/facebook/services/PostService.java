@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PostService implements IPostService{
+public class PostService implements IPostService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final FriendRepository friendRepository;
@@ -41,23 +41,24 @@ public class PostService implements IPostService{
     private final PageRepository pageRepository;
     private final PageBaseRepository pageBaseRepository;
     private final InteractionService interactionService;
+
     // ok
     @Override
     public Post createPost(PostDTO postDTO) throws Exception {
         Long authorId = postDTO.getAuthorId();
-        if(postDTO.getAuthorType().equals(User.PROFILE)){
+        if (postDTO.getAuthorType().equals(User.PROFILE)) {
             Profile profile = profileRepository.findById(authorId)
                     .orElseThrow(() -> new DataNotFoundException(String.format("Not found profile with id = %s", authorId)));
-        }else if(postDTO.getAuthorType().equals(User.PAGE)){
+        } else if (postDTO.getAuthorType().equals(User.PAGE)) {
             Page page = pageRepository.findById(authorId)
                     .orElseThrow(() -> new DataNotFoundException(String.format("Not found page with id = %s", authorId)));
         }
         String authorType = postDTO.getAuthorType();
-        if(!authorType.equals(User.PROFILE) && !authorType.equals(User.PAGE)){
+        if (!authorType.equals(User.PROFILE) && !authorType.equals(User.PAGE)) {
             throw new DataNotFoundException("Author type not found");
         }
         String privacy = postDTO.getPrivacy();
-        if(!privacy.equals(Post.PUBLIC) && !privacy.equals(Post.FRIENDS) && !privacy.equals(Post.PRIVATE)){
+        if (!privacy.equals(Post.PUBLIC) && !privacy.equals(Post.FRIENDS) && !privacy.equals(Post.PRIVATE)) {
             throw new DataNotFoundException("Privacy not found");
         }
         Post newPost = Post
@@ -71,37 +72,41 @@ public class PostService implements IPostService{
                 .build();
         return postRepository.save(newPost);
     }
+
     // chua xong
     @Override
-    public Post updatePost(Long postId, PostDTO postDTO) throws Exception{
+    public Post updatePostById(Long postId, PostDTO postDTO) throws Exception {
         Post existingPost = postRepository.findById(postId)
                 .orElseThrow(() -> new DataNotFoundException("Post not found"));
-        if(!postDTO.getPrivacy().equals(Post.PUBLIC) && !postDTO.getPrivacy().equals(Post.FRIENDS) && !postDTO.getPrivacy().equals(Post.PRIVATE)){
+        if (!postDTO.getPrivacy().equals(Post.PUBLIC) && !postDTO.getPrivacy().equals(Post.FRIENDS) && !postDTO.getPrivacy().equals(Post.PRIVATE)) {
             throw new DataNotFoundException("Privacy not found");
         }
         existingPost.setContent(postDTO.getContent());
         existingPost.setPrivacy(postDTO.getPrivacy());
         return postRepository.save(existingPost);
     }
+
     // ok
     @Override
-    public void deletePost(Long postId) throws Exception{
+    public void deletePostById(Long postId) throws Exception {
         Post existingPost = postRepository.findById(postId)
                 .orElseThrow(() -> new DataNotFoundException("Post not found"));
-        if(!existingPost.isActive()){
+        if (!existingPost.isActive()) {
             throw new DataNotFoundException("Post not found");
         }
         existingPost.setActive(false);
         postRepository.save(existingPost);
     }
+
     // ok
     @Override
-    public Post getPostById(Long postId) throws Exception{
+    public Post getPostById(Long postId) throws Exception {
         Post existingPost = postRepository.findById(postId)
                 .orElseThrow(() -> new DataNotFoundException("Post not found"));
         return existingPost;
     }
-//    @Override
+
+    //    @Override
 //    public List<PostResponse> getFriendPosts(Long userId) throws Exception {
 //        User existingUser = userRepository.findById(userId)
 //                .orElseThrow(() -> new DataNotFoundException("Không tìm thấy người dùng"));
@@ -136,8 +141,8 @@ public class PostService implements IPostService{
                 .mediaType(mediaDTO.getMediaType())
                 .build();
         int size = mediaRepository.findByPostId(postId).size();
-        if(size >= Media.MAXIMUM_MEDIA_PER_POST){
-            throw new InvalidParamException("Number of media must be <= "+size);
+        if (size >= Media.MAXIMUM_MEDIA_PER_POST) {
+            throw new InvalidParamException("Number of media must be <= " + size);
         }
         return mediaRepository.save(postMedia);
     }
@@ -179,7 +184,37 @@ public class PostService implements IPostService{
         } else {
             posts = postRepository.getLatestRandomFetchedFriendPosts(userId, limit, fetchedIds);
         }
+        List<PostResponse> postResponses = fetchPosts(posts);
+        return postResponses;
+    }
 
+    @Override
+    public List<PostResponse> getPostsFetchedByAuthorId(Long authorId, int limit, List<Long> fetchedIds) {
+        List<Post> posts;
+        if (fetchedIds == null || fetchedIds.isEmpty()) {
+            posts = postRepository.getPostsByAuthorId(authorId, limit);
+        } else {
+            posts = postRepository.getPostsFetchedByAuthorId(authorId, limit, fetchedIds);
+        }
+
+        List<PostResponse> postResponses = fetchPosts(posts);
+        return postResponses;
+    }
+
+    @Override
+    public List<PostResponse> getMyPostsFetched(Long authorId, int limit, List<Long> fetchedIds) {
+        List<Post> posts;
+        if (fetchedIds == null || fetchedIds.isEmpty()) {
+            posts = postRepository.getMyPosts(authorId, limit);
+        } else {
+            posts = postRepository.getMyPostsFetched(authorId, limit, fetchedIds);
+        }
+
+        List<PostResponse> postResponses = fetchPosts(posts);
+        return postResponses;
+    }
+
+    private List<PostResponse> fetchPosts(List<Post> posts) {
         List<PostResponse> postResponses = posts.stream().map(post -> {
             PostResponse postResponse = PostResponse.fromPost(post);
             Long baseId = null;
@@ -214,7 +249,9 @@ public class PostService implements IPostService{
             List<Media> medias = mediaRepository.findByPostId(post.getId());
             List<MediaResponse> mediaResponses = medias.stream()
                     .map(MediaResponse::fromMedia)
+                    .limit(4)
                     .collect(Collectors.toList());
+            postResponse.setTotalMedias(medias.size());
             postResponse.setMediaResponses(mediaResponses);
 
             InteractionResponse interactionResponses = interactionService.getInteractionPost(post.getId());

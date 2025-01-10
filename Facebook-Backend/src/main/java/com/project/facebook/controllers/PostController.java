@@ -4,12 +4,12 @@ import com.project.facebook.components.LocalizationUtils;
 import com.project.facebook.dtos.PostDTO;
 import com.project.facebook.dtos.PostFetchDTO;
 import com.project.facebook.models.Post;
+import com.project.facebook.models.Profile;
 import com.project.facebook.models.User;
 import com.project.facebook.responses.ResponseObject;
-import com.project.facebook.responses.media.MediaPostResponse;
 import com.project.facebook.responses.post.PostResponse;
 import com.project.facebook.services.IPostService;
-import com.project.facebook.services.PostService;
+import com.project.facebook.services.IProfileService;
 import com.project.facebook.utils.MessageKeys;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +26,7 @@ import java.util.*;
 public class PostController {
     private final LocalizationUtils localizationUtils;
     private final IPostService postService;
+    private final IProfileService profileService;
     // ok
     @PostMapping("")
     public ResponseEntity<ResponseObject> createPost(
@@ -34,7 +35,8 @@ public class PostController {
         try {
             User currentUser = (User) authentication.getPrincipal();
             // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
-            if (!currentUser.getUserId().equals(postDTO.getAuthorId())) {
+            Profile currentProfile = profileService.getProfileById(postDTO.getAuthorId());
+            if (!currentUser.getUserId().equals(currentProfile.getUser().getUserId())) {
                 return ResponseEntity.ok(ResponseObject.builder()
                         .message("Unauthorized")
                         .status(HttpStatus.FORBIDDEN).build());
@@ -261,19 +263,63 @@ public class PostController {
     // còn get 5 media and remain media
     @PostMapping("/random-authors-latest")
     public ResponseEntity<ResponseObject> getLatestRandomFriendPosts(@RequestBody PostFetchDTO postFetchDTO, Authentication authentication) {
-        User currentUser = (User) authentication.getPrincipal();
-        // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
-        if (!currentUser.getUserId().equals(postFetchDTO.getAuthorId())) {
-            return ResponseEntity.badRequest().body((ResponseObject.builder()
-                    .message("Unauthorized")
-                    .status(HttpStatus.FORBIDDEN).build()));
+        try {
+            User currentUser = (User) authentication.getPrincipal();
+            // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
+            Profile currentProfile = profileService.getProfileById(postFetchDTO.getAuthorId());
+            if (!currentUser.getUserId().equals(currentProfile.getUser().getUserId())) {
+                return ResponseEntity.badRequest().body((ResponseObject.builder()
+                        .message("Unauthorized")
+                        .status(HttpStatus.FORBIDDEN).build()));
+            }
+            List<PostResponse> posts = postService.getLatestRandomFetchedFriendPosts(postFetchDTO.getAuthorId(), postFetchDTO.getLimit(), postFetchDTO.getFetchedIds());
+            return ResponseEntity.ok().body(ResponseObject.builder()
+                    .status(HttpStatus.OK)
+                    .data(posts)
+                    .message(localizationUtils.getLocalizedMessage(MessageKeys.GET_FRIEND_POSTS_SUCCESSFULLY))
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build());
         }
-        List<PostResponse> posts = postService.getLatestRandomFetchedFriendPosts(postFetchDTO.getAuthorId(), postFetchDTO.getLimit(), postFetchDTO.getFetchedIds());
-        return ResponseEntity.ok().body(ResponseObject.builder()
-                .status(HttpStatus.OK)
-                .data(posts)
-                .message(localizationUtils.getLocalizedMessage(MessageKeys.GET_FRIEND_POSTS_SUCCESSFULLY))
-                .build());
+
     }
 
+    @PostMapping("/profile-posts")
+    public ResponseEntity<ResponseObject> getPostByAuthorId(@RequestBody PostFetchDTO postFetchDTO) {
+        try {
+            List<PostResponse> posts = postService.getPostsFetchedByAuthorId(
+                    postFetchDTO.getAuthorId(), postFetchDTO.getLimit(), postFetchDTO.getFetchedIds());
+            return ResponseEntity.ok().body(ResponseObject.builder()
+                    .status(HttpStatus.OK)
+                    .data(posts)
+                    .message("OK")
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    @PostMapping("/profile-my-posts")
+    public ResponseEntity<ResponseObject> getMyPost(@RequestBody PostFetchDTO postFetchDTO) {
+        try {
+            List<PostResponse> posts = postService.getMyPostsFetched(
+                    postFetchDTO.getAuthorId(), postFetchDTO.getLimit(), postFetchDTO.getFetchedIds());
+            return ResponseEntity.ok().body(ResponseObject.builder()
+                    .status(HttpStatus.OK)
+                    .data(posts)
+                    .message("OK")
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
 }

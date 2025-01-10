@@ -9,6 +9,7 @@ import com.project.facebook.repositories.ProfileRepository;
 import com.project.facebook.responses.ResponseObject;
 import com.project.facebook.responses.media.MediaImageProfileResponse;
 import com.project.facebook.responses.media.MediaPostResponse;
+import com.project.facebook.responses.media.MediaResponse;
 import com.project.facebook.services.IMediaService;
 import com.project.facebook.services.IPostService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.base-path}/medias")
@@ -147,7 +149,19 @@ public class MediaController {
                 );
                 postMedias.add(postMedia);
             }
-            return ResponseEntity.ok(postMedias);
+            List<MediaResponse> mediaResponses = postMedias.stream()
+                    .map(MediaResponse::fromMedia)
+                    .collect(Collectors.toList());
+            MediaPostResponse mediaPostResponse = MediaPostResponse.builder()
+                    .postId(postId)
+                    .mediaResponses(mediaResponses)
+                    .totalMedias(postMedias.size())
+                    .build();
+            return ResponseEntity.ok(ResponseObject.builder()
+                            .data(mediaPostResponse)
+                            .message("Upload media successfully")
+                            .status(HttpStatus.OK)
+                    .build());
         }catch (Exception e){
             throw new RuntimeException(e);
         }

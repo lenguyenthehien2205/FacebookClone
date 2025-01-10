@@ -6,7 +6,9 @@
   <app-history
     class="absolute w-[320px] min-h-[135px] max-h-[600px] bg-white shadow-lg rounded-md top-0 left-0 z-20"
     (closeHistory)="isHistoryVisible = false"
+    (clearInput)="onClearInput()"
     id="history"
+    [searchProfileResponse]="searchProfiles"
   />
   }
   <div class="flex w-[360px]">
@@ -36,8 +38,11 @@
           'pl-10 xl:block hidden': !isHistoryVisible,
           'pl-5 absolute': isHistoryVisible
         }"
+        [(ngModel)]="keyword"
         placeholder="Tìm kiếm trên Facebook"
         (focus)="isHistoryVisible = true"
+        (keyup)="onSearch()"
+        autocomplete="off"
       />
     </div>
   </div>
@@ -82,7 +87,7 @@
     <app-custom-title titleCustom="Tài khoản" [y]="10" [center]="true">
       <div
         class="h-[40px] w-[40px] leading-14 flex items-center justify-center rounded-full overflow-hidden hover:brightness-75"
-      >
+      (click)="onLogOut()">
         <img [src]="getAvatar()" alt="" />
       </div>
     </app-custom-title>

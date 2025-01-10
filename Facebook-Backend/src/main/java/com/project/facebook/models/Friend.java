@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "friends")
 @Getter
@@ -21,16 +23,25 @@ public class Friend {
     private Long friendId;
 
     @ManyToOne
-    @JsonProperty("first_profile_id")
-    @JoinColumn(name = "first_profile_id")
-    private Profile firstProfile;
+    @JsonProperty("sender_id")
+    @JoinColumn(name = "sender_id")
+    private Profile senderProfile;
 
     @ManyToOne
-    @JoinColumn(name = "second_profile_id")
-    @JsonProperty("second_profile_id")
-    private Profile secondProfile;
+    @JoinColumn(name = "receiver_id")
+    @JsonProperty("receiver_id")
+    private Profile receiverProfile;
+
+    @JsonProperty("created_at")
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Column(name = "is_active")
     @JsonProperty("is_active")
     private boolean isActive;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
 }

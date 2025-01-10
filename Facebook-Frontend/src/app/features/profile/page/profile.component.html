@@ -1,4 +1,6 @@
-<app-profile-header 
-[pathname]="pathname" [response]="profileHeaderResponse()" [isLoading]="isLoading()" [delay]="delay()" [haveCoverPhoto]="haveCoverPhoto"
-/>
-<router-outlet/>
+<div (scroll)="onWindowScroll()">
+    <app-profile-header 
+    [pathname]="pathname" [response]="profileHeaderResponse()" [isLoading]="isLoading()" [delay]="delay()" [haveCoverPhoto]="haveCoverPhoto"
+    />
+    <router-outlet/>
+</div>

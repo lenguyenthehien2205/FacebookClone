@@ -9,5 +9,6 @@ import { Media } from 'src/app/shared/models/media.model';
 })
 export class PostContentComponent {
   content = input.required<string>();
-  media = input.required<Media[]>();
+  medias = input.required<Media[]>();
+  totalMedias = input.required<number>();
 }

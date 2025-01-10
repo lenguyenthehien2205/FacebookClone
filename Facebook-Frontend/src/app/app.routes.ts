@@ -10,6 +10,7 @@ import {
 import { profileRoutes } from './features/profile/profile.routes';
 import { MessageComponent } from './features/message/page/message.component';
 import { messageRoutes } from './features/message/message.routes';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,7 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+    canActivate: [AuthGuard],
     // loadComponent: () =>
     //   import('./components/shared/header/history/history.component').then(
     //     (mod) => mod.HistoryComponent

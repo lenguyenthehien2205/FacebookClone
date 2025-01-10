@@ -14,6 +14,7 @@ export interface Post {
     created_at: number[];
     updated_at: number[];
     medias: Media[];
+    total_medias: number;
     interaction_response: Interaction;
     is_active: boolean;
     is_online: boolean;

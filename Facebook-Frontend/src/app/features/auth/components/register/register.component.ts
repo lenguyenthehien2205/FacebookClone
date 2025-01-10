@@ -88,16 +88,20 @@ export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
   onSubmit() {
     if (this.registerForm.valid) {
+      const year = this.registerForm.value.year;
+      const month = this.registerForm.value.month.toString().padStart(2, '0');
+      const day = this.registerForm.value.day.toString().padStart(2, '0');
       const formData = {
-        username:
-          this.registerForm.value.firstName +
-          ' ' +
-          this.registerForm.value.lastName,
+        path_name: Math.random().toString(36).substring(2, 15),
+        first_name: this.registerForm.value.firstName,
+        last_name: this.registerForm.value.lastName,
         password: this.registerForm.value.password,
-        avatar: 'myduyen.jpg',
         phone_number: this.registerForm.value.phoneNumberOrEmail,
         role_id: 1,
+        gender: this.registerForm.value.gender,
+        date_of_birth: `${year}-${month}-${day}`,
       };
+      
       const registerDTO: RegisterDTO = new RegisterDTO(formData);
       this.userService.register(registerDTO).subscribe({
         next: (response: ApiResponse) => {

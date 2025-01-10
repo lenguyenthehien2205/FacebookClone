@@ -42,24 +42,6 @@ export function getDayOfWeek(date: Date): string {
     const now = new Date();
     const diff = Math.floor((now.getTime() - createdAtDate.getTime()) / 1000);
   
-    // if (diff < 60) {
-    //   return 'Vừa xong';
-    // } else if (diff < 3600) {
-    //   const minutes = Math.floor(diff / 60);
-    //   return `${minutes} phút`;
-    // } else if (diff < 86400) {
-    //   const hours = Math.floor(diff / 3600);
-    //   return `${hours} giờ`;
-    // } else if (diff < 604800) {
-    //   const days = Math.floor(diff / 86400);
-    //   return `${days} ngày`;
-    // } else if (diff < 2592000){
-    //     return `${date} Tháng ${month}, lúc ${hour}:${minute}`;
-    // }else if (now.getFullYear() > createdAtDate.getFullYear()){
-    //     return `${date} Tháng ${month}, ${year}`;
-    // } else {
-    //     return `${date} Tháng ${month}`;
-    // }
     switch (true) {
       case (diff < 60):
         return 'Vừa xong';

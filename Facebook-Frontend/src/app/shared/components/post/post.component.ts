@@ -11,6 +11,7 @@ export class PostComponent {
   username = input.required<string>();
   pathname = input.required<string>();
   media = input.required<Media[]>();
+  totalMedias = input.required<number>();
   content = input.required<string>();
   privacy = input.required<string>();
   avatar = input.required<string>();

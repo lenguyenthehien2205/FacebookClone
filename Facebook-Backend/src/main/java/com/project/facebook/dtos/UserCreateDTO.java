@@ -12,7 +12,6 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @Builder
-@NoArgsConstructor(force = true) // có thể khởi tạo LocalizationUtils mà không cần gán giá trị mặc định
 public class UserCreateDTO {
     @JsonProperty("phone_number")
     @NotBlank(message = "Phone number is required")

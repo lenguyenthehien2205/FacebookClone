@@ -11,6 +11,9 @@ import java.util.List;
 @Getter
 @Setter
 public class MediaPostResponse {
+    @JsonProperty("post_id")
+    private Long postId;
+
     @JsonProperty("media_responses")
     private List<MediaResponse> mediaResponses;
 

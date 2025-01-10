@@ -36,7 +36,7 @@ export class PostsComponent implements OnInit {
   postService = inject(PostService);
   postFetchData: PostFetchData = {
     author_id: this.tokenService.getProfileId(),
-    limit: 3,
+    limit: 4,
     fetched_ids: [],
   };
   posts = signal<Post[]>([]);

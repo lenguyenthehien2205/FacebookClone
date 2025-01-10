@@ -27,9 +27,11 @@ public class MediaService implements IMediaService{
         List<Media> medias = mediaRepository.findByPostId(postId);
         List<MediaResponse> mediaResponses = medias.stream()
                 .map(MediaResponse::fromMedia)
+                .limit(4)
                 .collect(Collectors.toList());
 
         return MediaPostResponse.builder()
+                .postId(postId)
                 .mediaResponses(mediaResponses)
                 .totalMedias(medias.size())
                 .build();

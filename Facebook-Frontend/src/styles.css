@@ -52,3 +52,26 @@ body {
     background-position: 200% 0;
   }
 }
+.gtc-2{
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.overlay-image {
+  position: relative; /* Tạo vùng định vị cho pseudo-element */
+  display: block; /* Đảm bảo ảnh là block-level */
+  width: 100%; /* Chiều rộng ảnh */
+  height: auto; /* Đảm bảo giữ nguyên tỷ lệ ảnh */
+}
+
+.overlay-image::after {
+  content: attr(data-content); /* Lấy nội dung từ thuộc tính data-content */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Căn giữa nội dung */
+  background-color: rgba(0, 0, 0, 0.5); /* Lớp phủ mờ */
+  color: white; /* Màu chữ */
+  font-size: 24px; /* Kích thước chữ */
+  padding: 10px 20px; /* Khoảng cách bên trong lớp phủ */
+  border-radius: 10px; /* Bo góc lớp phủ */
+  pointer-events: none; /* Không ảnh hưởng tới thao tác chuột */
+}

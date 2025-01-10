@@ -10,10 +10,14 @@ import com.project.facebook.responses.post.PostResponse;
 
 public interface IPostService {
     Post createPost(PostDTO postDTO) throws Exception;
-    Post updatePost(Long postId, PostDTO postDTO) throws Exception;
-    void deletePost(Long postId) throws Exception;
+    Post updatePostById(Long postId, PostDTO postDTO) throws Exception;
+    void deletePostById(Long postId) throws Exception;
     Post getPostById(Long postId) throws Exception;
 //    List<PostResponse> getFriendPosts(Long userId) throws Exception;
     Media createPostMedia(Long id, MediaDTO mediaDTO) throws Exception;
     List<PostResponse> getLatestRandomFetchedFriendPosts(Long userId, int limit, List<Long> fetchedIds);
+
+    List<PostResponse> getPostsFetchedByAuthorId(Long authorId, int limit, List<Long> fetchedIds);
+
+    List<PostResponse> getMyPostsFetched(Long authorId, int limit, List<Long> fetchedIds);
 }

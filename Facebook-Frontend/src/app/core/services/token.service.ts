@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { getName } from 'src/app/shared/utils/name-format-utils';
 @Injectable({
     providedIn: 'root'
 })
 export class TokenService {
-    private readonly TOKEN_KEY = 'access_token';
     private jwtHelperService = new JwtHelperService();
+    private readonly TOKEN_KEY = 'access_token';
     private readonly TAB_ID_KEY = 'tab_id';
 
     // Lấy hoặc tạo Tab ID duy nhất
@@ -22,6 +23,9 @@ export class TokenService {
     setToken(token: string): void {
         const tabId = this.getTabId();
         document.cookie = `${this.TOKEN_KEY}_${tabId}=${token}; path=/; Secure`;
+        // const expires = new Date();
+        // expires.setDate(expires.getDate() + 7); // Thêm 7 ngày từ hôm nay
+        // document.cookie = `${this.TOKEN_KEY}_${tabId}=${token}; path=/; expires=${expires.toUTCString()}; Secure`;
     }
     // Lấy token từ cookie dựa trên Tab ID
     getToken(): string | null {
@@ -35,7 +39,7 @@ export class TokenService {
         const tabId = this.getTabId();
         document.cookie = `${this.TOKEN_KEY}_${tabId}=; max-age=0; path=/; Secure`;
     }
-        
+    
     getUserId(): number {
         let token = this.getToken();
         if (!token) {
@@ -60,13 +64,17 @@ export class TokenService {
         let userObject = this.jwtHelperService.decodeToken(token);
         return 'avatar' in userObject ? userObject['avatar'] : "";
     }
-    getFullName(){
+    // fullnam for fanpage
+    getFullNamePage(){
         let token = this.getToken();
         if(!token){
             return "";
         }
         let userObject = this.jwtHelperService.decodeToken(token);
         return 'fullName' in userObject ? userObject['fullName'] : "";
+    }
+    getFullNameProfile(){
+        return getName(this.getFirstName(), this.getLastName(), this.getDisplayFormat());
     }
     getFirstName(){
         let token = this.getToken();
