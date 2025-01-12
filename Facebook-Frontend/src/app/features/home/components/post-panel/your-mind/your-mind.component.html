@@ -3,7 +3,7 @@
         <a routerLink="/account" class="group">
             <img [src]="getAvatar()" alt="" class="w-[40px] h-[40px] rounded-full group-hover:brightness-[0.85]">
         </a>
-        <div class="h-[40px] flex-grow bg-[#f0f2f5] rounded-full text-grey text-[17px] leading-[40px] px-3 cursor-pointer hover:bg-hover" (click)="onShowNewPostForm()">
+        <div class="h-[40px] flex-grow bg-[#f0f2f5] rounded-full text-grey text-[17px] leading-[40px] px-3 cursor-pointer hover:bg-hover" (click)="onShowPostForm()">
             {{ getName() }} ơi, bạn đang nghĩ gì thế?</div>
     </div>
     <div class="w-full h-[1px] bg-[#e0e3e7] mt-[12px] mb-[9px]"></div>
@@ -22,6 +22,6 @@
         </app-card>
     </div>
 </div>
-@if(isShowNewPostForm){
-    <app-new-post (closeNewPost)="onHideNewPostForm()"/>
+@if(isShowPostForm){
+    <app-post-form title="Tạo bài viết" type="create" (closePostForm)="onHidePostForm()"/>
 }

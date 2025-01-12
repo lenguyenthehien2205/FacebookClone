@@ -15,6 +15,7 @@ import com.project.facebook.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class FriendController {
     private final ProfileRepository profileRepository;
     private final ConversationRepository conversationRepository;
     private final IProfileService profileService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
     @PostMapping("/{sender_id}/{receiver_id}")
     public ResponseEntity<?> addFriend(
             @PathVariable("sender_id") Long senderId,
@@ -49,6 +51,7 @@ public class FriendController {
                 return ResponseEntity.badRequest().body("Invalid senderId and receiverId");
             }
             Friend newFriend = friendService.addFriend(senderId, receiverId);
+            simpMessagingTemplate.convertAndSend("/topic/friends/" + receiverId, newFriend);
             return ResponseEntity.ok(newFriend);
         }catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());

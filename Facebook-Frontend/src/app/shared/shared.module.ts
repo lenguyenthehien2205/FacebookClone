@@ -14,6 +14,9 @@ import { PostHeaderComponent } from "./components/post/post-header/post-header.c
 import { PostActionsComponent } from "./components/post/post-actions/post-actions.component";
 import { PostContentComponent } from "./components/post/post-content/post-content.component";
 import { PostInteractionsComponent } from "./components/post/post-interactions/post-interactions.component";
+import { PostOptionsComponent } from "./components/post/post-options/post-options.component";
+import { PostFormComponent } from "./components/post-form/post-form.component";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -29,11 +32,14 @@ import { PostInteractionsComponent } from "./components/post/post-interactions/p
     PostHeaderComponent,
     PostActionsComponent,
     PostContentComponent,
-    PostInteractionsComponent
+    PostInteractionsComponent,
+    PostOptionsComponent,
+    PostFormComponent
   ],
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   exports: [
     CardComponent,
@@ -48,7 +54,8 @@ import { PostInteractionsComponent } from "./components/post/post-interactions/p
     PostActionsComponent,
     PostHeaderComponent,
     PostContentComponent,
-    PostInteractionsComponent
+    PostInteractionsComponent,
+    PostFormComponent
   ]
 })
 export class SharedModule {}

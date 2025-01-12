@@ -1,6 +1,10 @@
 <div class="w-full max-w-[1120px] mx-auto">
   <div class="flex mt-[16px] gap-[16px] mx-[40px]">
-    <div class="flex flex-col gap-[16px] w-[40%] sticky bottom-0 self-end">
+    <div class="flex flex-col gap-[16px] w-[40%] sticky" [ngClass]="{
+      'top-[80px] self-start' : profileFriendsResponse().total_friends + profileImageResponses().length < 4,
+      'bottom-0 self-end': profileFriendsResponse().total_friends + profileImageResponses().length >= 4 
+    }
+    ">
       <!-- Giới thiệu -->
       <div class="bg-white shadow-md rounded-lg px-4 py-3">
         <h1 class="text-[20px] font-bold">Giới thiệu</h1>
@@ -25,7 +29,7 @@
         </div>
       </div>
       <!-- Bạn bè -->
-      <div class="bg-white shadow-md rounded-lg px-4 py-3">
+      <div class="bg-white shadow-md rounded-lg px-4 py-3 mb-[10px]">
         <div class="flex justify-between items-center">
           <div class="flex flex-col items-start">
             <h1 class="text-[20px] font-bold">Bạn bè</h1>
@@ -141,6 +145,7 @@
             [highestInteraction]="post.interaction_response.highest_interaction"
             [secondHighestInteraction]="post.interaction_response.second_highest_interaction"
             [hiddenIcon]="false"
+            [options]="canChooseOption()"
           />
         }
       </div>

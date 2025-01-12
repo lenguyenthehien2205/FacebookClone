@@ -167,12 +167,12 @@ export class ProfilePostsComponent implements OnInit{
   getTimeAgo(inputDate: number[]): string {
     return getTimeAgo(inputDate);
   }
-  // getAuthorIdAndRedirect(profileId: number, pathname: string): void {
-  //   this.authorId.set(profileId);
-  //   console.log('AuthorId:', this.authorId());
-    
-  //   setTimeout(() => {
-  //     window.location.href = `${pathname}/posts`;
-  //   }, 100);
-  // }
+
+  canChooseOption(): boolean {
+    return this.tokenService.getProfileId() === this.profileId();
+  }
+
+  savePosts(posts: Post[]): void {
+    this.postService.postsProfile.set(posts);
+  }
 }

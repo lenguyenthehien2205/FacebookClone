@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { PostService } from 'src/app/core/services/post.service';
 import { Media } from 'src/app/shared/models/media.model';
 
 @Component({
@@ -23,4 +24,8 @@ export class PostComponent {
   highestInteraction = input.required<string>();
   secondHighestInteraction = input.required<string>();
   hiddenIcon = input.required<boolean>();
+  options = input.required<boolean>();
+
+  postService = inject(PostService);
+
 }

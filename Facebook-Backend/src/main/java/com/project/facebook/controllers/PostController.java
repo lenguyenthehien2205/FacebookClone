@@ -3,11 +3,13 @@ package com.project.facebook.controllers;
 import com.project.facebook.components.LocalizationUtils;
 import com.project.facebook.dtos.PostDTO;
 import com.project.facebook.dtos.PostFetchDTO;
+import com.project.facebook.dtos.PostUpdateDTO;
 import com.project.facebook.models.Post;
 import com.project.facebook.models.Profile;
 import com.project.facebook.models.User;
 import com.project.facebook.responses.ResponseObject;
 import com.project.facebook.responses.post.PostResponse;
+import com.project.facebook.responses.post.PostUpdateResponse;
 import com.project.facebook.services.IPostService;
 import com.project.facebook.services.IProfileService;
 import com.project.facebook.utils.MessageKeys;
@@ -54,58 +56,107 @@ public class PostController {
                     .build());
         }
     }
-//    @PutMapping("/{post_id}")
-//    public ResponseEntity<ResponseObject> updatePost(
-//            @PathVariable("post_id") Long postId,
-//            @Valid @RequestBody PostDTO postDTO,
-//            Authentication authentication
-//    ){
-//        try{
-//            User currentUser = (User) authentication.getPrincipal();
-//            // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
-//            if (!currentUser.getUserId().equals(postDTO.getAuthorId())) {
-//                return ResponseEntity.ok(ResponseObject.builder()
-//                        .message("Unauthorized")
-//                        .status(HttpStatus.FORBIDDEN).build());
-//            }
-//            Post updatedPost = postService.updatePost(postId, postDTO);
-//            return ResponseEntity.ok().body(ResponseObject.builder()
-//                    .data(updatedPost)
-//                    .status(HttpStatus.OK)
-//                    .message(localizationUtils.getLocalizedMessage(MessageKeys.UPDATE_POST_SUCCESSFULLY))
-//                    .build());
-//        }catch (Exception e){
-//            return ResponseEntity.badRequest().body(ResponseObject.builder()
-//                    .data(null)
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .message(e.getMessage())
-//                    .build());
-//        }
-//    }
-//    @DeleteMapping("/{post_id}")
-//    public ResponseEntity<ResponseObject> deletePost(@PathVariable("post_id") Long postId, Authentication authentication){
-//        try{
-//            User currentUser = (User) authentication.getPrincipal();
-//            Post existingPost = postService.getPostById(postId);
-//            // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
-//            if (!currentUser.getUserId().equals(existingPost.getAuthor().getUserId())) {
-//                return ResponseEntity.ok(ResponseObject.builder()
-//                        .message("Unauthorized")
-//                        .status(HttpStatus.FORBIDDEN).build());
-//            }
-//            postService.deletePost(postId);
-//            return ResponseEntity.ok().body(ResponseObject.builder()
-//                    .status(HttpStatus.OK)
-//                    .message(localizationUtils.getLocalizedMessage(MessageKeys.DELETE_POST_SUCCESSFULLY))
-//                    .build());
-//        }catch (Exception e){
-//            return ResponseEntity.badRequest().body(ResponseObject.builder()
-//                    .data(null)
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .message(e.getMessage())
-//                    .build());
-//        }
-//    }
+    @PutMapping("/{post_id}")
+    public ResponseEntity<ResponseObject> updatePost(
+            @PathVariable("post_id") Long postId,
+            @Valid @RequestBody PostUpdateDTO postUpdateDTO,
+            Authentication authentication
+    ){
+        try{
+            User currentUser = (User) authentication.getPrincipal();
+            Post existingPost = postService.getPostById(postId);
+            // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
+            Profile currentProfile = profileService.getProfileById(existingPost.getAuthorId());
+            if (!currentUser.getUserId().equals(currentProfile.getUser().getUserId())) {
+                return ResponseEntity.ok(ResponseObject.builder()
+                        .message("Unauthorized")
+                        .status(HttpStatus.FORBIDDEN).build());
+            }
+            Post updatedPost = postService.updatePostById(postId, postUpdateDTO);
+            return ResponseEntity.ok().body(ResponseObject.builder()
+                    .data(updatedPost)
+                    .status(HttpStatus.OK)
+                    .message(localizationUtils.getLocalizedMessage(MessageKeys.UPDATE_POST_SUCCESSFULLY))
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .data(null)
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+    @GetMapping("/post-response/{post_id}")
+    public ResponseEntity<ResponseObject> getPostResponseById(
+            @PathVariable("post_id") Long postId,
+            Authentication authentication
+    ){
+        try{
+            User currentUser = (User) authentication.getPrincipal();
+            Post existingPost = postService.getPostById(postId);
+            Profile currentProfile = profileService.getProfileById(existingPost.getAuthorId());
+            if(!currentUser.getUserId().equals(currentProfile.getUser().getUserId())){
+                return ResponseEntity.ok(ResponseObject.builder()
+                        .message("Unauthorized")
+                        .status(HttpStatus.FORBIDDEN).build());
+            }
+            PostUpdateResponse postUpdateResponse = postService.getPostResponseById(postId);
+            return ResponseEntity.ok().body(ResponseObject.builder()
+                    .status(HttpStatus.OK)
+                    .data(postUpdateResponse)
+                    .message("OK")
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .data(null)
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+
+    @DeleteMapping("/{post_id}")
+    public ResponseEntity<ResponseObject> deletePost(@PathVariable("post_id") Long postId, Authentication authentication){
+        try{
+            User currentUser = (User) authentication.getPrincipal();
+            Post existingPost = postService.getPostById(postId);
+            // Kiểm tra xem userId có khớp với người dùng đang đăng nhập không
+            Profile currentProfile = profileService.getProfileById(existingPost.getAuthorId());
+            if (!currentUser.getUserId().equals(currentProfile.getUser().getUserId())) {
+                return ResponseEntity.ok(ResponseObject.builder()
+                        .message("Unauthorized")
+                        .status(HttpStatus.FORBIDDEN).build());
+            }
+            postService.deletePostById(postId);
+            return ResponseEntity.ok().body(ResponseObject.builder()
+                    .status(HttpStatus.OK)
+                    .message(localizationUtils.getLocalizedMessage(MessageKeys.DELETE_POST_SUCCESSFULLY))
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .data(null)
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
+    @GetMapping("/{post_id}")
+    public ResponseEntity<ResponseObject> getPostById(@PathVariable("post_id") Long postId){
+        try{
+            Post post = postService.getPostById(postId);
+            return ResponseEntity.ok().body(ResponseObject.builder()
+                    .status(HttpStatus.OK)
+                    .data(post)
+                    .message("OK")
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(ResponseObject.builder()
+                    .data(null)
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message(e.getMessage())
+                    .build());
+        }
+    }
 //    @GetMapping("/friend_posts/{user_id}")
 //    public ResponseEntity<ResponseObject> getFriendPosts(
 //        @PathVariable("user_id") Long userId,

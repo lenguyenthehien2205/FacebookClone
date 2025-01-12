@@ -9,6 +9,7 @@ import { PostFetchData } from '../../shared/models/post.model';
 import { apiConfig, apiConfigForm } from 'src/app/shared/utils/api.utils';
 import { CreatePostDTO } from 'src/app/shared/dtos/create-post.dto';
 import { LoadPostDTO } from 'src/app/shared/dtos/load-post.dto';
+import { UpdatePostDTO } from 'src/app/shared/dtos/update-post.dto';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,6 +18,11 @@ export class PostService {
 
   private fetchedIds: Set<number> = new Set();
   posts = signal<Post[]>([]);
+  postsProfile = signal<Post[]>([]);
+
+  getPostProfileById(id: number): Post{
+    return this.postsProfile().find((post) => post.id === id) as Post;
+  }
 
   // Observable để thông báo cho các component khác biết rằng cần load thêm bài viết, trong load bài viết cá nhân
   private loadPostsSource = new Subject<void>();
@@ -73,7 +79,13 @@ export class PostService {
   }
 
   createPost(createPostDTO: CreatePostDTO): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(`${environment.apiBaseUrl}/posts`,createPostDTO,apiConfig);
+    return this.http.post<ApiResponse>(`${environment.apiBaseUrl}/posts`, createPostDTO, apiConfig);
+  }
+  updatePost(postId: number, updatePostDTO: UpdatePostDTO): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(`${environment.apiBaseUrl}/posts/${postId}`, updatePostDTO, apiConfig);
+  }
+  deletePost(postId: number): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${environment.apiBaseUrl}/posts/${postId}`, apiConfig);
   }
 
   uploadMedia(postId: number, files: File[]): Observable<ApiResponse> {
@@ -90,5 +102,8 @@ export class PostService {
   }
   loadMyPosts(loadPostDTO: LoadPostDTO): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(`${environment.apiBaseUrl}/posts/profile-my-posts`, loadPostDTO, apiConfig);
+  }
+  loadPostResponseById(postId: number): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${environment.apiBaseUrl}/posts/post-response/${postId}`, apiConfig);
   }
 }

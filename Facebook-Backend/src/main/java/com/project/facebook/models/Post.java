@@ -47,4 +47,8 @@ public class Post extends BaseEntity{
     public static String PUBLIC = "public";
     public static String FRIENDS = "friends";
     public static String PRIVATE = "only me";
+
+    // Quan hệ với Media (One-to-Many)
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Media> medias;
 }

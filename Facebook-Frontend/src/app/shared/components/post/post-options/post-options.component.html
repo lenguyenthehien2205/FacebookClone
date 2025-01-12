@@ -1,0 +1,11 @@
+<div class="relative inline-flex flex-col w-[350px] bg-white rounded-tl-lg rounded-bl-lg rounded-br-lg shadow-around p-[10px] z-30" (click)="onOptionsClick($event)">
+    <div class="triangle"></div>
+    <div class="flex items-center gap-3 p-[8px] rounded-lg hover:bg-hover cursor-pointer z-30" (click)="onEdit()">
+        <i class="fa-solid fa-pen w-[20px]"></i>
+        <span class="text-[15px] font-semibold block">Chỉnh sửa bài viết</span>
+    </div>
+    <div class="flex items-center gap-3 p-[8px] rounded-lg hover:bg-hover cursor-pointer z-30" (click)="onDelete()">
+        <i class="fa-solid fa-trash w-[20px]"></i>
+        <span class="text-[15px] font-semibold block">Xóa bài viết</span>
+    </div>
+</div>

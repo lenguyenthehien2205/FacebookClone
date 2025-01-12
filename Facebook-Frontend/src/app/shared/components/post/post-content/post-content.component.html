@@ -17,7 +17,7 @@
 </div>
 
 @if(medias()){
-    <div class="pb-3 grid gap-[2px]" [ngClass]="{
+    <div class="pb-3 grid gap-[2px] relative" [ngClass]="{
         'grid-cols-1': medias().length === 1,
         'gtc-2': medias().length === 2,
         'grid-rows-2 grid-cols-2': medias().length === 3 || medias().length === 4
@@ -38,11 +38,19 @@
                     </div>
                 }
             } @else if(media.media_type === "video"){
-                @if(media !== medias()[3] || totalMedias() <= 4){
+                @if(media === medias()[0]){
                     <video [src]="media.url" alt="" class="video-post object-cover w-full" controls [ngClass]="{
                         'aspect-square col-span-1': medias().length === 2 || (medias().length === 3 && media !== medias()[0]) || medias().length === 4,
                         'aspect-[2/1] col-span-2': medias().length === 3 && media === medias()[0]
                     }" [attr.controls]="media === medias()[0] ? '' : null"></video>
+                }@else if(media !== medias()[3] || totalMedias() <= 4){
+                    <div class="relative">
+                        <video [src]="media.url" alt="" class="video-post object-cover w-full" [ngClass]="{
+                            'aspect-square col-span-1': medias().length === 2 || (medias().length === 3 && media !== medias()[0]) || medias().length === 4,
+                            'aspect-[2/1] col-span-2': medias().length === 3 && media === medias()[0]
+                        }"></video>
+                        <i class="fa-solid fa-play text-[30px] text-white absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"></i>
+                    </div>
                 }@else if(media === medias()[3] && totalMedias() > 4){
                     <div class="relative aspect-square col-span-1">
                         <video [src]="media.url" alt="" class="video-post object-cover w-full aspect-square col-span-1"></video>

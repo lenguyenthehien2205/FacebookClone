@@ -7,8 +7,11 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.project.facebook.dtos.PostUpdateDTO;
 import com.project.facebook.models.*;
 import com.project.facebook.responses.interaction.InteractionResponse;
+import com.project.facebook.responses.post.PostUpdateResponse;
+import com.project.facebook.utils.StringFormatUtils;
 import org.springframework.stereotype.Service;
 
 import com.project.facebook.dtos.MediaDTO;
@@ -73,17 +76,60 @@ public class PostService implements IPostService {
         return postRepository.save(newPost);
     }
 
-    // chua xong
     @Override
-    public Post updatePostById(Long postId, PostDTO postDTO) throws Exception {
+    public Post updatePostById(Long postId, PostUpdateDTO postUpdateDTO) throws Exception {
         Post existingPost = postRepository.findById(postId)
                 .orElseThrow(() -> new DataNotFoundException("Post not found"));
-        if (!postDTO.getPrivacy().equals(Post.PUBLIC) && !postDTO.getPrivacy().equals(Post.FRIENDS) && !postDTO.getPrivacy().equals(Post.PRIVATE)) {
+        if (!postUpdateDTO.getPrivacy().equals(Post.PUBLIC) && !postUpdateDTO.getPrivacy().equals(Post.FRIENDS) && !postUpdateDTO.getPrivacy().equals(Post.PRIVATE)) {
             throw new DataNotFoundException("Privacy not found");
         }
-        existingPost.setContent(postDTO.getContent());
-        existingPost.setPrivacy(postDTO.getPrivacy());
+        List<Media> medias = mediaRepository.findByPostId(postId);
+        List<Long> existingMediaIds = medias.stream()// Lấy ra danh sách media id đã tồn tại
+                .map(Media::getMediaId)
+                .collect(Collectors.toList());
+        List<Long> updatedMediaIds = postUpdateDTO.getMediaIds();// Lấy ra danh sách media id mới
+        List<Long> newMediaIds = updatedMediaIds.stream()// Lấy ra danh sách media id mới có id = 0
+                .filter(id -> id == 0) // ID mới là 0
+                .collect(Collectors.toList());
+        List<Long> existingUpdatedMediaIds = updatedMediaIds.stream()// Lấy ra danh sách media id đã tồn tại và có id > 0
+                .filter(id -> id > 0) // ID đã tồn tại
+                .collect(Collectors.toList());
+        List<Long> removedMediaIds = existingMediaIds.stream() // Xóa media có id = 0
+                .filter(id -> !existingUpdatedMediaIds.contains(id))
+                .collect(Collectors.toList());
+
+        boolean hasChanges = !newMediaIds.isEmpty() || !removedMediaIds.isEmpty();
+        if(hasChanges) {
+            // Thêm media mới (đã thêm mới khi upload file)
+
+            // Xóa media không còn trong danh sách
+            removedMediaIds.forEach(id -> {
+                mediaRepository.deleteById(id);
+            });
+        }else{
+            System.out.println("Medias no changes");
+        }
+
+        existingPost.setContent(postUpdateDTO.getContent());
+        existingPost.setPrivacy(postUpdateDTO.getPrivacy());
         return postRepository.save(existingPost);
+    }
+
+    @Override
+    public PostUpdateResponse getPostResponseById(Long postId) throws Exception {
+        Post existingPost = postRepository.findById(postId)
+                .orElseThrow(() -> new DataNotFoundException("Post not found"));
+        Profile profile = profileRepository.findById(existingPost.getAuthorId())
+                .orElseThrow(() -> new DataNotFoundException("Profile not found"));
+        List<MediaResponse> mediaResponses = mediaRepository.findByPostId(postId)
+                .stream()
+                .map(MediaResponse::fromMedia)
+                .collect(Collectors.toList());
+        String authorName = StringFormatUtils.getProfileFullName(profile);
+        PostUpdateResponse postUpdateResponse = PostUpdateResponse.fromPost(existingPost);
+        postUpdateResponse.setMedias(mediaResponses);
+        postUpdateResponse.setAuthorName(authorName);
+        return postUpdateResponse;
     }
 
     // ok

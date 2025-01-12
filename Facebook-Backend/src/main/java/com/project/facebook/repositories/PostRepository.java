@@ -69,6 +69,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "             WHERE f.receiver_id = :profileId " +
             "         ) " +
             "    ) " +
+            "    AND p.is_active = 1 " +
             "    ORDER BY p.created_at DESC " +
             "    LIMIT :limit " +
             ") AS latest_posts " +
@@ -88,7 +89,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "                 SELECT f.sender_id FROM friends f \n" +
             "                 WHERE f.receiver_id = :profileId \n" +
             "             )\n" +
-            "        )\n" +
+            "        ) " +
+            "        AND p.is_active = 1 " +
             "    ORDER BY p.created_at DESC " +
             "    LIMIT :limit " +
             ") AS latest_posts " +
@@ -98,6 +100,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT p.* FROM posts p " +
             "WHERE p.author_id = :authorId " +
             "AND p.privacy != 'only me' " +
+            "AND p.is_active = 1 " +
             "ORDER BY p.created_at DESC " +
             "LIMIT :limit", nativeQuery = true)
     List<Post> getPostsByAuthorId(@Param("authorId") Long authorId, @Param("limit") int limit);
@@ -106,6 +109,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "WHERE p.author_id = :authorId " +
             "AND p.privacy != 'only me' " +
             "AND p.id NOT IN (:fetchedIds) " +
+            "AND p.is_active = 1 " +
             "ORDER BY p.created_at DESC " +
             "LIMIT :limit", nativeQuery = true)
     List<Post> getPostsFetchedByAuthorId(@Param("authorId") Long authorId,
@@ -114,6 +118,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     @Query(value = "SELECT p.* FROM posts p " +
             "WHERE p.author_id = :myId " +
+            "AND p.is_active = 1 " +
             "ORDER BY p.created_at DESC " +
             "LIMIT :limit", nativeQuery = true)
     List<Post> getMyPosts(@Param("myId") Long myId, @Param("limit") int limit);
@@ -121,6 +126,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "SELECT p.* FROM posts p " +
             "WHERE p.author_id = :myId " +
             "AND p.id NOT IN (:fetchedIds) " +
+            "AND p.is_active = 1 " +
             "ORDER BY p.created_at DESC " +
             "LIMIT :limit", nativeQuery = true)
     List<Post> getMyPostsFetched(@Param("myId") Long myId,

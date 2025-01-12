@@ -9,7 +9,7 @@ import { environment } from 'src/app/environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class YourMindComponent {
-  isShowNewPostForm = false;
+  isShowPostForm = false;
 
   tokenService = inject(TokenService);
   getAvatar(): string{
@@ -27,10 +27,14 @@ export class YourMindComponent {
     }
     return "";
   }
-  onShowNewPostForm(){
-    this.isShowNewPostForm = true;
+  onShowPostForm(){
+    this.isShowPostForm = true;
   }
-  onHideNewPostForm(){
-    this.isShowNewPostForm = false;
+  onHidePostForm(){
+    this.isShowPostForm = false;
   }
+  get postId(): number {
+    return this.tokenService.getProfileId();
+  }
+
 }

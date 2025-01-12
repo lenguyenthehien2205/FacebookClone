@@ -66,6 +66,8 @@ public class WebSecurityConfig {
                             .requestMatchers(POST, String.format("/%s/posts/random-authors-latest", apiBasePath)).permitAll()
                             .requestMatchers(POST, String.format("/%s/posts/profile-posts", apiBasePath)).permitAll()
                             .requestMatchers(POST, String.format("/%s/posts/profile-my-posts", apiBasePath)).permitAll()
+                            .requestMatchers(GET, String.format("/%s/posts/post-response/{post_id}", apiBasePath)).permitAll()
+
 
                             .requestMatchers(GET, String.format("/%s/medias/post/{post_id}", apiBasePath)).hasRole("USER")
                             .requestMatchers(POST, String.format("/%s/medias/upload_medias_post/{post_id}/{note}", apiBasePath)).hasRole("USER")
