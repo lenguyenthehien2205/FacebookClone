@@ -46,11 +46,6 @@ This is a Facebook clone project using Spring Boot, built with Java 17 and MySQL
   - `application.yml`: Main application configuration file
   - `i18n`: Language files
 
-## API Endpoints
-- Register: POST `/api/v1/users/register`
-- Login: POST `/api/v1/users/login`
-- View user information: GET `/api/v1/users/{phone}`
-
 ## Security
 The project uses Spring Security and JWT for authentication and authorization. The main security configuration is defined in the `WebSecurityConfig` class.
 
