@@ -18,8 +18,10 @@ export class WebSocketService {
         console.log('Connected');
         // Subscribe vào topic '/topic/messages' để nhận message từ server
         this.client.subscribe('/topic/messages', (message: Message) => {
+          console.log('Message received: ', message.body);
+          
           this.messageSubject.next(JSON.parse(message.body));
-          console.log(message);
+          console.log(this.messageSubject);
         });
       },
       onStompError: (frame) => {
@@ -37,7 +39,7 @@ export class WebSocketService {
   public sendMessage(message: any) {
     // Gửi message lên server thông qua endpoint '/app/send'
     this.client.publish({
-      destination: '/app/send',
+      destination: '/app/send-message',
       body: JSON.stringify(message),
     });
     console.log('Message sent: ', message);

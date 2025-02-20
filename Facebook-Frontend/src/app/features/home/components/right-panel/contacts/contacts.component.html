@@ -10,7 +10,9 @@
     </div>
     <div content class="mb-[10px]">
         @for (user of users | async; track user.user_id) {
-            <app-contact-item [image]="user.avatar" [username]="getDisplayName(user)" [isOnline]="user.is_online"></app-contact-item>
+            <a [routerLink]="['/message', user.conversation_id]">
+                <app-contact-item [image]="user.avatar" [username]="getDisplayName(user)" [isOnline]="user.is_online" [conversationId]="user.conversation_id"></app-contact-item>
+            </a>
         }
         @if(isLoading()){
             <app-contact-skeleton/>

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ImageService } from 'src/app/core/services/image.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { environment } from 'src/app/environments/environment';
 
@@ -9,11 +10,11 @@ import { environment } from 'src/app/environments/environment';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewStoryComponent {
+  imageService = inject(ImageService);
   tokenService = inject(TokenService);
-  getAvatar(): string{
-    if(this.tokenService.getAvatar()){
-      return `${environment.apiBaseUrl}/profiles/avatar_image/${this.tokenService.getAvatar()}`;
-    }
-    return 'assets/avatars/default-avatar.png';
+  getMyAvatar(): string {
+    return this.imageService.getUrlAvatarByProfileId(
+      this.tokenService.getProfileId()
+    );
   }
 }

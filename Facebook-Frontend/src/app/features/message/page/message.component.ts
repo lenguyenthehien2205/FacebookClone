@@ -13,14 +13,14 @@ import { ActivatedRoute } from '@angular/router';
 export class MessageComponent implements OnInit{
   conversationId = signal<number>(0);
   route = inject(ActivatedRoute);
+
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('conversationId'));
-    if (isNaN(id)) {
-      console.error('Invalid Conversation ID');
-      return;
-    }
-    this.conversationId.set(id);
-    console.log('Conversation ID: ', this.conversationId());
-    
+    this.route.params.subscribe(params => {
+      const id = Number(params['conversationId']);
+      if (!isNaN(id)) {
+        this.conversationId.set(id);
+        console.log('Updated Conversation ID:', this.conversationId());
+      }
+    });
   }
 }

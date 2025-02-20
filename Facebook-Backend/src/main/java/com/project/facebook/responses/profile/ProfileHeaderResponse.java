@@ -27,6 +27,9 @@ public class ProfileHeaderResponse {
     @JsonProperty("total_friends")
     private int totalFriends;
 
+    @JsonProperty("conversation_id")
+    private Long conversationId;
+
     @JsonProperty("mutual_friends")
     private int mutualFriends;
 

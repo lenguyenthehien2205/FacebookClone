@@ -69,9 +69,20 @@ public class FriendService implements IFriendService{
                         PageBase pageBase = pageBaseOpt.get();
                         profileTagResponse.setAvatar(pageBase.getAvatar());
                     }
+                    Optional<Conversation> conversation = conversationRepository.findConversationByUsers(profileId, profile.getId());
+                    if(conversation.isPresent()){
+                        profileTagResponse.setConversationId(conversation.get().getId());
+                        System.out.println(conversation.get().getId());
+                    }
                     return profileTagResponse;
                 })
                 .collect(Collectors.toList());
         return profileTagResponses;
     }
+
+    @Override
+    public Boolean existsFriendship(Long profileId1, Long profileId2) {
+        return friendRepository.isFriend(profileId1, profileId2) > 0;
+    }
+
 }

@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class ChatController {
+public class SocketController {
     private final MessageService messageService;
-    @MessageMapping("/send")
+    @MessageMapping("/send-message")
     @SendTo("/topic/messages")
     public MessageDTO sendMessage(MessageDTO message) {
         messageService.sendMessage(message);

@@ -14,18 +14,20 @@
         <span class="absolute text-grey top-[50%] translate-y-[-50%] left-[15px]"><i class="fa-solid fa-magnifying-glass"></i></span>
         <input type="text" class="h-[36px] bg-background w-full rounded-full px-[20px] outline-none text-[15px] pl-[35px]" placeholder="Tìm kiếm trên Messager" [(ngModel)]="keyword" (keyup)="onSearch()">
     </div>
-        <div class="flex flex-col mt-[20px] h-[calc(100%-98px)] overflow-y-auto">
+        <div class="flex flex-col mt-[20px] h-[calc(100%-98px)] overflow-y-auto scroll-container">
             @for(item of filteredConversations(); track $index) {
                 <a [routerLink]="['/message', item.id]" (click)="selectConversation(item.profile_id)">
-                    <div class="flex gap-[10px] hover:bg-hover p-[8px] rounded-lg cursor-pointer">  
-                        <img [src]="getAvatar(item)" alt="" class="size-[56px] rounded-full">
+                    <div class="flex gap-[10px] hover:bg-hover p-[8px] rounded-lg cursor-pointer" 
+                    [ngClass]="{
+                        'bg-hover': item.profile_id === selectedConversationByProfileId()
+                        }">  
+                        <img [src]="getAvatar(item)" alt="" class="size-[56px] rounded-full object-cover">
                         <div class="flex flex-col justify-center w-full">
                             <span class="font-semibold">{{ getName(item) }}</span>
-                            <div class="flex">
+                            <div class="flex items-center">
                                 <span class="text-[13px] text-grey">Bạn: Alo</span>
-                                <!-- <span class="mx-[5px] text-center">·</span> -->
-                                <span class="mx-[5px]"></span>
-                                <span class="text-[13px] text-grey">19 phút</span>
+                                <span class="mx-[5px]">·</span>
+                                <span class="text-[13px] text-grey">{{ getTimeAgo(item.updated_at) }}</span>
                             </div>
                         </div>
                     </div>

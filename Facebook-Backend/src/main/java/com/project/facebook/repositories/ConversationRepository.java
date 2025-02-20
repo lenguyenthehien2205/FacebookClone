@@ -11,7 +11,8 @@ import java.util.Optional;
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
     @Query(value = "SELECT * FROM conversations c " +
             "WHERE (c.person1 = :person1 AND c.person2 = :person2) " +
-            "   OR (c.person2 = :person1 AND c.person1 = :person2)",
+            "   OR (c.person2 = :person1 AND c.person1 = :person2) " +
+            "ORDER BY c.updated_at DESC LIMIT 1",
             nativeQuery = true)
     Optional<Conversation> findConversationByUsers(@Param("person1") Long person1, @Param("person2") Long person2);
 }

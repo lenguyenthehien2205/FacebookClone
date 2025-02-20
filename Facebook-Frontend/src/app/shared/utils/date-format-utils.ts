@@ -32,7 +32,6 @@ export function getDayOfWeek(date: Date): string {
       inputDate[4],
       inputDate[5]
     );
-    const day = getDayOfWeek(createdAtDate);
     const date = createdAtDate.getDate().toString();
     const month = (createdAtDate.getMonth() + 1).toString();
     const year = createdAtDate.getFullYear();
@@ -60,5 +59,37 @@ export function getDayOfWeek(date: Date): string {
         return `${date} Tháng ${month}, ${year}`;
       default:
         return `${date} Tháng ${month}`;
+    }
+  }
+
+  export function getTimeAgoForConversation(inputDate: number[]): string {
+    const createdAtDate = new Date(
+      inputDate[0],
+      inputDate[1] - 1,
+      inputDate[2],
+      inputDate[3],
+      inputDate[4],
+      inputDate[5]
+    );
+    const now = new Date();
+    const diff = Math.floor((now.getTime() - createdAtDate.getTime()) / 1000);
+  
+    switch (true) {
+      case diff < 60:
+        return 'Vừa xong';
+      case diff < 3600:
+        return `${Math.floor(diff / 60)} phút`;
+      case diff < 86400:
+        return `${Math.floor(diff / 3600)} giờ`;
+      case diff < 604800:
+        return `${Math.floor(diff / 86400)} ngày`;
+      case diff < 2592000:
+        return `${Math.floor(diff / 604800)} tuần`;
+      case diff < 31536000:
+        const months = Math.floor(diff / 2592000);
+        return `${months} tháng`;
+      default:
+        const years = Math.floor(diff / 31536000);
+        return `${years} năm`;
     }
   }

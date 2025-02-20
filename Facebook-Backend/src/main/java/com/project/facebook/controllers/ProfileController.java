@@ -44,7 +44,9 @@ public class ProfileController {
     @PostMapping(value = "/upload_avatar/{profile_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseObject> uploadProfileAvatar(
             @PathVariable("profile_id") Long profileId,
-            @ModelAttribute("file") MultipartFile file,
+//            @ModelAttribute("file") MultipartFile file,
+            @RequestParam("file") MultipartFile file,
+
             Authentication authentication
     ){
         try{
@@ -88,7 +90,7 @@ public class ProfileController {
     @PostMapping(value = "/upload_cover_photo/{profile_id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ResponseObject> uploadProfileCoverPhoto(
             @PathVariable("profile_id") Long profileId,
-            @ModelAttribute("file") MultipartFile file,
+            @RequestParam("file") MultipartFile file,
             Authentication authentication
     ){
         try{
@@ -213,5 +215,23 @@ public class ProfileController {
                 .message("OK")
                 .status(HttpStatus.OK)
                 .build());
+    }
+    @GetMapping("avatar_image/id/{profile_id}")
+    public ResponseEntity<?> viewAvatarImageById(@PathVariable("profile_id") Long profileId){
+        try {
+            String imageName = profileService.getAvatarByProfileId(profileId);
+            Path imagePath = Paths.get("uploads/user_images/avatars/profiles/avatar/"+imageName);
+            // dung de truy cap tep hinh anh    
+            UrlResource resource = new UrlResource(imagePath.toUri());
+            if(resource.exists()){
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
     }
 }

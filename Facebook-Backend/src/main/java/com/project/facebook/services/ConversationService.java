@@ -14,7 +14,9 @@ import com.project.facebook.responses.profile.ProfileTagResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,11 +43,15 @@ public class ConversationService implements IConversationService{
                             PageBase pageBase = pageBaseOpt.get();
                             conversationResponse.setAvatar(pageBase.getAvatar());
                         }
+                        conversationResponse.setCreatedAt(conversation.get().getCreatedAt());
+                        conversationResponse.setUpdatedAt(conversation.get().getUpdatedAt());
                         conversationResponse.setProfileId(profile.getId());
                         return conversationResponse;
                     }
                     return null;
                 })
+                .filter(Objects::nonNull) // Loại bỏ các giá trị null
+                .sorted(Comparator.comparing(ConversationResponse::getUpdatedAt, Comparator.nullsLast(Comparator.reverseOrder()))) // Sắp xếp giảm dần
                 .collect(Collectors.toList());
         return conversationResponses;
     }
@@ -77,5 +83,12 @@ public class ConversationService implements IConversationService{
         }else {
             throw new DataNotFoundException("Conversation not found");
         }
+    }
+
+    @Override
+    public Long getConversationIdByUsers(Long profileId1, Long profileId2) throws Exception {
+        return conversationRepository.findConversationByUsers(profileId1, profileId2)
+                .orElseThrow(() -> new DataNotFoundException("Conversation not found"))
+                .getId();
     }
 }

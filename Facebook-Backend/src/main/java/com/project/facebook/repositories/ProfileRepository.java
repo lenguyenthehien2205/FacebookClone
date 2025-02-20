@@ -34,4 +34,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
             "OR CONCAT(p.first_name, ' ', p.last_name) LIKE %:keyword% "+
             "OR CONCAT(p.last_name, ' ', p.first_name) LIKE %:keyword%", nativeQuery = true)
     List<Profile> searchByKeyWord(String keyword);
+
+    @Query("SELECT pb.avatar FROM Profile p JOIN p.pageBase pb WHERE p.id = :profileId")
+    String findAvatarByProfileId(@Param("profileId") Long profileId);
+
 }

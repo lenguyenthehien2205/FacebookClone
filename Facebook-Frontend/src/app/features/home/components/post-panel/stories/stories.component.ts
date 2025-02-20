@@ -1,4 +1,6 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { ImageService } from 'src/app/core/services/image.service';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-stories',

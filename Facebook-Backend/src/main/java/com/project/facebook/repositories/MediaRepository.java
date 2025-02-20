@@ -17,6 +17,7 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
             WHERE m.media_type = 'image'
             AND p.author_type = 'profile'
             AND p.author_id = :profile_id
+            AND p.is_active != 0
             ORDER BY p.created_at DESC, m.media_id ASC
             LIMIT :limit;
             """, nativeQuery = true)

@@ -73,6 +73,17 @@ function dateValidator(): ValidatorFn {
       return { invalidLeapYear: true };
     }
 
+    const today = new Date();
+    const birthDate = new Date(year, month - 1, day); // Tháng trong JS bắt đầu từ 0
+    // Kiểm tra nếu người dùng dưới 13 tuổi
+    const age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const dayDiff = today.getDate() - birthDate.getDate();
+
+    if (age < 13 || (age === 13 && monthDiff < 0) || (age === 13 && monthDiff === 0 && dayDiff < 0)) {
+      return { underAge: true }; // Không hợp lệ
+    }
+
     return null; // Hợp lệ
   };
 }
@@ -83,10 +94,12 @@ function dateValidator(): ValidatorFn {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit {
+  submitted = false;
   userService = inject(UserService);
   router = inject(Router);
   registerForm!: FormGroup;
   onSubmit() {
+    this.submitted = true;
     if (this.registerForm.valid) {
       const year = this.registerForm.value.year;
       const month = this.registerForm.value.month.toString().padStart(2, '0');
@@ -106,19 +119,23 @@ export class RegisterComponent implements OnInit {
       this.userService.register(registerDTO).subscribe({
         next: (response: ApiResponse) => {
           alert(response.message);
-          // this.onCloseRegisterForm();
-          this.router.navigate(['/home']);
+          this.onCloseRegisterForm();
+          // this.router.navigate(['/home']);
         },
         error: (error: any) => {
           alert(`Cannot register, error: ${error.message}`);
         },
       });
+    }else{
+      this.registerForm.markAllAsTouched(); // Đánh dấu toàn bộ form là touched để hiển thị lỗi
+      return;
     }
   }
 
   closeRegisterForm = output<void>();
 
   onCloseRegisterForm() {
+    this.submitted = false;
     this.registerForm.reset({
       day: this.selectedDay,
       month: this.selectedMonth,

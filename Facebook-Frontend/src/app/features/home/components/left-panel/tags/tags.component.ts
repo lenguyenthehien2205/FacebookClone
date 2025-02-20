@@ -7,6 +7,7 @@ import {
 import { TokenService } from 'src/app/core/services/token.service';
 import { getName } from 'src/app/shared/utils/name-format-utils';
 import { environment } from 'src/app/environments/environment';
+import { ImageService } from 'src/app/core/services/image.service';
 
 @Component({
   selector: 'app-tags',
@@ -33,6 +34,19 @@ export class TagsComponent {
     }
     return 'assets/avatars/default-avatar.png';
   }
+  imageService = inject(ImageService);
+  getMyAvatar(): string {
+    if (this.tokenService.getAvatar()) {
+      return this.imageService.getUrlAvatarByProfileId(
+        this.tokenService.getProfileId()
+      );
+    }
+    return 'assets/avatars/default-avatar.png';
+  }
+  getPathname(): string {
+    return this.tokenService.getPathname();
+  }
+  
   avatar = `${
     environment.apiBaseUrl
   }/profiles/avatar_image/${this.tokenService.getAvatar()}`;

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ImageService } from 'src/app/core/services/image.service';
 import { TokenService } from 'src/app/core/services/token.service';
 import { environment } from 'src/app/environments/environment';
 
@@ -12,9 +13,12 @@ export class YourMindComponent {
   isShowPostForm = false;
 
   tokenService = inject(TokenService);
-  getAvatar(): string{
-    if(this.tokenService.getAvatar()){
-      return `${environment.apiBaseUrl}/profiles/avatar_image/${this.tokenService.getAvatar()}`;
+  imageService = inject(ImageService);
+  getMyAvatar(): string {
+    if (this.tokenService.getAvatar()) {
+      return this.imageService.getUrlAvatarByProfileId(
+        this.tokenService.getProfileId()
+      );
     }
     return 'assets/avatars/default-avatar.png';
   }
@@ -26,6 +30,9 @@ export class YourMindComponent {
       return this.tokenService.getFullNamePage();
     }
     return "";
+  }
+  getPathname(): string {
+    return this.tokenService.getPathname();
   }
   onShowPostForm(){
     this.isShowPostForm = true;

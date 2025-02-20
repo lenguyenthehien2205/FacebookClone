@@ -3,10 +3,7 @@ package com.project.facebook.services;
 import com.project.facebook.exceptions.DataNotFoundException;
 import com.project.facebook.models.PageBase;
 import com.project.facebook.models.Profile;
-import com.project.facebook.repositories.FriendRepository;
-import com.project.facebook.repositories.MediaRepository;
-import com.project.facebook.repositories.PageBaseRepository;
-import com.project.facebook.repositories.ProfileRepository;
+import com.project.facebook.repositories.*;
 import com.project.facebook.responses.profile.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +21,7 @@ public class ProfileService implements IProfileService{
     private final PageBaseService pageBaseService;
     private final FriendRepository friendRepository;
     private final MediaRepository mediaRepository;
+    private final ConversationService conversationService;
     @Override
     public Profile getProfileById(Long id) throws DataNotFoundException {
         return profileRepository.findById(id).orElseThrow(
@@ -59,6 +57,13 @@ public class ProfileService implements IProfileService{
         } else {
             isFriend = false;
         }
+        Long conversationId;
+        try {
+            conversationId = conversationService.getConversationIdByUsers(myProfileId, profile.getId());
+        } catch (Exception e) {
+            throw new RuntimeException("Error while getting conversation id");
+        }
+
         // Tạo ProfileHeaderResponse và trả về
         return ProfileHeaderResponse.builder()
                 .profileId(profile.getId())
@@ -67,6 +72,7 @@ public class ProfileService implements IProfileService{
                 .fullname(getFullName(profile))
                 .totalFriends(totalFriends)
                 .mutualFriends(mutualFriends)
+                .conversationId(conversationId)
                 .isFriends(isFriend)
                 .isOnline(profile.getIsOnline())
                 .avatarFriends(profileAvatarFriendsResponseList)
@@ -150,5 +156,10 @@ public class ProfileService implements IProfileService{
                 .limit(8)
                 .collect(Collectors.toList());
         return profileSearchedResponses;
+    }
+
+    @Override
+    public String getAvatarByProfileId(Long id) throws DataNotFoundException {
+        return profileRepository.findAvatarByProfileId(id);
     }
 }

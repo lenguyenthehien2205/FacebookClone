@@ -10,4 +10,5 @@ export class ContactItemComponent {
   image = input.required<string>();
   username = input.required<string>();
   isOnline = input.required<boolean>();
+  conversationId = input.required<number>();
 }

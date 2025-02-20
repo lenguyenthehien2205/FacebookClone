@@ -2,6 +2,7 @@ package com.project.facebook.responses.conversation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.facebook.models.Profile;
+import com.project.facebook.responses.BaseResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ConversationResponse {
+public class ConversationResponse extends BaseResponse {
     private Long id;
 
     @JsonProperty("first_name")

@@ -46,9 +46,11 @@ public class WebSecurityConfig {
                                     String.format("/%s/users/login", apiBasePath),
                                     String.format("/%s/friends/{user_id}", apiBasePath),
                                     String.format("/%s/profiles/avatar_image/{image_name}",apiBasePath),
+                                    String.format("/%s/profiles/avatar_image/id/{profile_id}",apiBasePath),
                                     String.format("/%s/profiles/cover_photo_image/{image_name}",apiBasePath),
                                     String.format("/%s/medias/image_post/{image_name}", apiBasePath),
                                     String.format("/%s/medias/video_post/{video_name}", apiBasePath),
+                                    String.format("/%s/friends/is-friend/{profile_id1}/{profile_id2}", apiBasePath),
                                     String.format("/%s/ws", apiBasePath)
                             )
                             .permitAll()

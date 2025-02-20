@@ -1,24 +1,43 @@
 @if(!isLoading()){
     <div class="flex flex-col items-center bg-white shadow-sm">
-        <div class="w-full max-w-[1100px] lg:h-[400px] h-[300px] bg-grey2 rounded-b-lg">
+        <div class="w-full max-w-[1100px] lg:h-[400px] h-[300px] bg-grey2 rounded-b-lg hover:brightness-90 cursor-pointer">
             @if(haveCoverPhoto()){
-                <img [src]="response().cover_photo" alt="" class="w-full h-full object-cover object-center rounded-b-lg">
+                @if(isMyProfile()){
+                    <img [src]="response().cover_photo" alt="" class="w-full h-full object-cover object-center rounded-b-lg" (click)="triggerFileCoverPhotoInput()">
+                    <input type="file" id="fileCoverPhotoInput" class="hidden" (change)="onFileCoverPhotoSelected($event)" accept="image/*">
+                }@else {
+                    <img [src]="response().cover_photo" alt="" class="w-full h-full object-cover object-center rounded-b-lg">
+                }
             }
         </div>
         <div class="w-full max-w-[1100px]">
             <div class="mx-[50px]">
                 <div class="flex lg:flex-row flex-col justify-between w-full lg:items-end items-center">
                     <div class="flex lg:flex-row flex-col">
-                        <div class="relative mx-auto lg:m-0">
-                            <img [src]="response().avatar" alt="" class="size-[172px] rounded-full lg:translate-y-[-35px] translate-y-[-85px] border-4 border-white">
-                            <span class="size-[32px] border-4 border-white bg-green absolute left-[130px] rounded-full lg:top-[95px] top-[45px]"></span>
-                        </div>
+                        @if(isMyProfile()){
+                            <div class="relative mx-auto lg:m-0">
+                                <img [src]="response().avatar" alt="Avatar" 
+                                     class="size-[172px] rounded-full lg:translate-y-[-35px] translate-y-[-85px] border-4 border-white cursor-pointer hover:brightness-90" 
+                                     (click)="triggerFileAvatarInput()">
+                                <span class="size-[40px] border-4 border-white bg-grey2 absolute left-[125px] rounded-full lg:top-[90px] top-[40px] flex items-center justify-center">
+                                    <i class="fa-solid fa-camera"></i>
+                                </span>
+                                <input type="file" id="fileAvatarInput" class="hidden" (change)="onFileAvatarSelected($event)" accept="image/*">
+                            </div>
+                        }@else {
+                            <div class="relative mx-auto lg:m-0">
+                                <img [src]="response().avatar" alt="Avatar" 
+                                     class="size-[172px] rounded-full lg:translate-y-[-35px] translate-y-[-85px] border-4 border-white cursor-pointer hover:brightness-75">
+                                <span class="size-[32px] border-4 border-white bg-green absolute left-[130px] rounded-full lg:top-[95px] top-[45px]"></span>
+                            </div>
+                        }
+                        
                         <div class="flex flex-col mt-[14px] ml-[10px] translate-y-[-90px] lg:translate-y-[0px]">
                             <span class="text-[32px] text-black font-bold lg:ml-1 text-center lg:text-left">{{ response().fullname }}</span>
                             <div class="flex flex-row gap-1 text-grey font-semibold justify-center lg:justify-start">
                                 <span class="lg:ml-1 ml-0">{{ response().total_friends }} người bạn</span>
                                 @if(response().mutual_friends){
-                                    <span>•</span>
+                                    <span>•</span> 
                                     <span>{{ response().mutual_friends }} bạn chung</span>
                                 }
                             </div>
@@ -34,17 +53,51 @@
                             </div>
                         </div>
                     </div>
-                    <div class="lg:mb-[50px] lg:mr-[50px] flex gap-2 translate-y-[-50px] lg:translate-y-[0px]">
-                        <button class="h-[36px] px-3 bg-grey2 rounded-md hover:brightness-95">
-                            <i class="fa-solid fa-user-check"></i>
-                            <span class="ml-[5px] font-semibold">Bạn bè</span>
-                        </button>
-                        <button class="h-[36px] bg-primary text-white rounded-md px-3 hover:brightness-95">
-                            <i class="fa-brands fa-facebook-messenger"></i>
-                            <span class="ml-[5px] font-semibold">Nhắn tin</span>
-                        </button>
-                        <button class="h-[36px] px-3 bg-grey2 rounded-md my-auto hover:brightness-95"><i class="fa-solid fa-angle-down"></i></button>
-                    </div>
+                    @if(isMyProfile()){
+                        <div class="lg:mb-[50px] lg:mr-[50px] flex flex-col items-end gap-2 translate-y-[-50px] lg:translate-y-[0px]">
+                            <div class="flex gap-2">
+                                <button class="h-[36px] bg-primary text-white rounded-md px-3 hover:brightness-95">
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span class="ml-[5px] font-semibold">Thêm vào tin</span>
+                                </button>
+                                <button class="h-[36px] px-3 bg-grey2 rounded-md hover:brightness-95">
+                                    <i class="fa-solid fa-pen"></i>
+                                    <span class="ml-[5px] font-semibold">Chỉnh sửa trang cá nhân</span>
+                                </button>
+                            </div>
+                            <button class="w-[48px] h-[36px] px-3 bg-grey2 rounded-md my-auto hover:brightness-95"><i class="fa-solid fa-angle-down"></i></button>
+                        </div>
+                    }@else {
+                        @if(isFriend){
+                            <div class="lg:mb-[50px] lg:mr-[50px] flex gap-2 translate-y-[-50px] lg:translate-y-[0px]">
+                                <button class="h-[36px] px-3 bg-grey2 rounded-md hover:brightness-95">
+                                    <i class="fa-solid fa-user-check"></i>
+                                    <span class="ml-[5px] font-semibold">Bạn bè</span>
+                                </button>
+                                <a [routerLink]="'/message/'+response().conversation_id">
+                                    <button class="h-[36px] bg-primary text-white rounded-md px-3 hover:brightness-95">
+                                        <i class="fa-brands fa-facebook-messenger"></i>
+                                        <span class="ml-[5px] font-semibold">Nhắn tin</span>
+                                    </button>
+                                </a>
+                                <button class="h-[36px] px-3 bg-grey2 rounded-md my-auto hover:brightness-95"><i class="fa-solid fa-angle-down"></i></button>
+                            </div>
+                        }@else {
+                            <div class="lg:mb-[50px] lg:mr-[50px] flex gap-2 translate-y-[-50px] lg:translate-y-[0px]">
+                                <button class="h-[36px] px-3 bg-primary rounded-md hover:brightness-95">
+                                    <i class="fa-solid fa-user-plus text-white"></i>
+                                    <span class="ml-[5px] font-semibold text-white">Thêm bạn bè</span>
+                                </button>
+                                <button class="h-[36px] bg-grey text-white rounded-md px-3 hover:brightness-95">
+                                    <i class="fa-brands fa-facebook-messenger"></i>
+                                    <span class="ml-[5px] font-semibold">Nhắn tin</span>
+                                </button>
+                                <button class="h-[36px] px-3 bg-grey2 rounded-md my-auto hover:brightness-95"><i class="fa-solid fa-angle-down" aria-disabled="true"></i></button>
+                            </div>
+                        }
+                        
+                    }
+                    
                 </div>
                 <div class="w-full h-[1px] bg-gray-300"></div>
                 <div class="flex mt-1">

@@ -10,4 +10,5 @@ import java.util.List;
 public interface IFriendService {
     Friend addFriend(Long senderId, Long receiverId) throws Exception;
     List<ProfileTagResponse> getAllFriendsByProfileId(Long userId) throws Exception;
+    Boolean existsFriendship(Long profileId1, Long profileId2);
 }

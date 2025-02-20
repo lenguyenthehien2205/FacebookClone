@@ -59,6 +59,13 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
             @Param("profileId1") Long profileId1,
             @Param("profileId2") Long profileId2
     );
+    @Query(value = "SELECT COUNT(*) FROM friends f " +
+            "WHERE (f.sender_id = :profileId1 AND f.receiver_id = :profileId2 AND f.is_active = 1) " +
+            "   OR (f.sender_id = :profileId2 AND f.receiver_id = :profileId1 AND f.is_active = 1)",
+            nativeQuery = true)
+    int isFriend(@Param("profileId1") Long profileId1, @Param("profileId2") Long profileId2);
+
+
 
     // neu dung native query thi phai dung projection moi tra ve duoc entity, hoac dung JPQL
     @Query("SELECT f FROM Friend f WHERE " +

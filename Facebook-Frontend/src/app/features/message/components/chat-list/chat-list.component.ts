@@ -1,8 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ConversationService } from 'src/app/core/services/conversation.service';
 import { ImageService } from 'src/app/core/services/image.service';
 import { ApiResponse } from 'src/app/shared/responses/api.response';
 import { ConversationResponse } from 'src/app/shared/responses/conversation/conversation.reponse';
+import { getTimeAgoForConversation } from 'src/app/shared/utils/date-format-utils';
 import { getName } from 'src/app/shared/utils/name-format-utils';
 
 @Component({
@@ -10,11 +12,14 @@ import { getName } from 'src/app/shared/utils/name-format-utils';
   templateUrl: './chat-list.component.html',
   styleUrl: './chat-list.component.css'
 })
-export class ChatListComponent {
+export class ChatListComponent implements OnInit {
+  conversationId = input<number | null>(null);
   conversationService = inject(ConversationService);
   imageService = inject(ImageService);
   conversations = signal<ConversationResponse[]>([]);
   filteredConversations = signal<ConversationResponse[]>([]);
+  selectedConversationByProfileId = signal<number | null>(null);
+  route = inject(ActivatedRoute);
   keyword = '';
 
   ngOnInit(){
@@ -23,8 +28,9 @@ export class ChatListComponent {
         this.conversations.set(response.data as ConversationResponse[]);
         this.filteredConversations.set(response.data as ConversationResponse[]);
       }
-    });
+    }); 
   }
+  
   getName(conversation: ConversationResponse): string {
     return getName(conversation.first_name, conversation.last_name, conversation.display_format);
   }
@@ -32,6 +38,7 @@ export class ChatListComponent {
     return this.imageService.getAvatar(conversation.avatar);
   }
   selectConversation(profileId: number){
+    this.selectedConversationByProfileId.set(profileId);
     this.conversationService.setSelectedProfileId(profileId);
   }
 
@@ -45,5 +52,9 @@ export class ChatListComponent {
       });
       this.filteredConversations.set(filtered); 
     }
+  }
+
+  getTimeAgo(inputDate: number[]): string {
+    return getTimeAgoForConversation(inputDate);
   }
 }

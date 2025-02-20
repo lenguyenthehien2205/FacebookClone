@@ -37,6 +37,8 @@ export class ContactsComponent implements OnInit {
         const users = response?.data as UserTag[];
         if (users) {
           users.forEach((user: UserTag) => {
+            console.log('User:', user);
+            
             if (user) {
               if (user.avatar === '') {
                 user.avatar = `${environment.apiBaseUrl}/users/images/default_image.png`;

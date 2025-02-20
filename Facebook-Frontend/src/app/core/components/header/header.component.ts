@@ -8,7 +8,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { debounceTime, Subject, Subscription, switchMap } from 'rxjs';
 import { TokenService } from '../../services/token.service';
 import { ImageService } from '../../services/image.service';
 import { ProfileSearchResponse } from 'src/app/shared/responses/profile/profile-search.response';
@@ -23,6 +23,7 @@ import { ApiResponse } from 'src/app/shared/responses/api.response';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   keyword = '';
+  private searchSubject: Subject<string> = new Subject<string>(); // Subject để phát các từ khóa tìm kiếm
   tokenService = inject(TokenService);
   avatarService = inject(ImageService);
   profileService = inject(ProfileService);
@@ -56,7 +57,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   getAvatar(): string {
     if(this.tokenService.getAvatar()){
-      return this.avatarService.getAvatar(this.tokenService.getAvatar());
+      return this.avatarService.getUrlAvatarByProfileId(this.tokenService.getProfileId());
     }
     return 'assets/avatars/default-avatar.png';
   }
@@ -95,6 +96,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
         const updatedPathAfterHostname = this.router.url;
         this.updateActiveNavItem(updatedPathAfterHostname);
       }
+    });
+    this.searchSubject.pipe(
+      debounceTime(300), // 300ms trì hoãn sau mỗi lần gõ
+      switchMap((keyword: string) => this.profileService.searchProfiles(keyword)) // Gọi API với từ khóa tìm kiếm
+    ).subscribe({
+      next: (response: ApiResponse) => {
+        this.searchProfiles = response.data as ProfileSearchResponse[];
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Lỗi khi tìm kiếm:', error);
+      },
     });
   }
 
@@ -135,14 +148,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.searchProfiles = [];
   }
   onSearch() {
-    this.profileService.searchProfiles(this.keyword).subscribe({
-      next: (response: ApiResponse) => {
-        this.searchProfiles = response.data as ProfileSearchResponse[];
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Lỗi khi tìm kiếm:', error);
-      },
-    });
+    this.searchSubject.next(this.keyword);
   }
 }

@@ -1,5 +1,5 @@
 <div class="flex w-full h-[calc(100vh-56px)]">
-  <app-chat-list class="lg:block hidden"/>
+  <app-chat-list class="lg:block hidden" [conversationId]="conversationId()"/>
   <div class="flex-1 p-4">
     <router-outlet/>
   </div>

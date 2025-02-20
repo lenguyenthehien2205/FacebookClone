@@ -101,4 +101,20 @@ public class FriendController {
                     .build());
         }
     }
+    @GetMapping("is-friend/{profile_id1}/{profile_id2}")
+    public ResponseEntity<ResponseObject> isFriend(@PathVariable("profile_id1") Long profileId1, @PathVariable("profile_id2") Long profileId2){
+        try{
+            Boolean isFriend = friendService.existsFriendship(profileId1, profileId2);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .data(isFriend)
+                    .status(HttpStatus.OK)
+                    .message("Success")
+                    .build());
+        }catch (Exception e){
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .status(HttpStatus.BAD_REQUEST)
+                    .message("Failed")
+                    .build());
+        }
+    }
 }

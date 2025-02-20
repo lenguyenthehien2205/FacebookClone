@@ -29,6 +29,9 @@ public class ProfileTagResponse {
     @JsonProperty("is_online")
     private boolean isOnline;
 
+    @JsonProperty("conversation_id")
+    private Long conversationId;
+
     public static ProfileTagResponse fromProfile(Profile profile) {
         ProfileTagResponse profileTagResponse = ProfileTagResponse.builder()
                 .profileId(profile.getUser().getUserId())

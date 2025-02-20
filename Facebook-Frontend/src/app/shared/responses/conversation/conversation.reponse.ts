@@ -5,4 +5,6 @@ export interface ConversationResponse {
     display_format: string;
     avatar: string;
     profile_id: number; 
+    created_at: number[];
+    updated_at: number[];
 }

@@ -1,4 +1,4 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center justify-center h-screen bg-white/50" [ngClass]="{'invalid-date': registerForm.errors?.['invalidDate'] || registerForm.errors?.['invalidLeapYear'] }">
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center justify-center h-screen bg-white/50" [ngClass]="{'invalid-date': registerForm.errors?.['invalidDate'] || registerForm.errors?.['invalidLeapYear'], 'submitted': submitted  }">
     <div class="w-[432px] h-[550px] bg-white rounded-lg shadow-around">
         <div class="flex justify-between px-[16px] py-[10px] pb-[12px] border-b border-slate-200">
             <div>
@@ -33,6 +33,9 @@
                         }
                     </select>
                 </div>
+                @if(registerForm.hasError('underAge') && (registerForm.touched || registerForm.dirty)) {
+                    <span class="text-[12px] text-red-500 mb-1">Bạn phải đủ 13 tuổi để đăng ký</span>
+                }
             </div>
             <div class="w-full h-[40px] rounded-lg flex flex-col justify-center mt-[12px] mb-[6px]">
                 <label for="" class="text-[12px] font-normal text-grey mb-[2px]">Giới tính</label>

@@ -82,6 +82,8 @@ export class ProfilePostsComponent implements OnInit{
       if (newPathname && newPathname !== this.pathname) {
         this.pathname = newPathname;
         
+        this.posts = [];
+        this.loadPostDTO.fetched_ids = [];
         // Reload data
         this.loadImages();
         this.loadFriends();
@@ -106,6 +108,14 @@ export class ProfilePostsComponent implements OnInit{
 
   getAvatar(url: string): string {
     return this.imageService.getAvatar(url);
+  }
+
+  getAvatarMyAvatar(): string {
+    return this.imageService.getUrlAvatarByProfileId(this.tokenService.getProfileId());
+  }
+
+  isMyProfile(): boolean {
+    return this.tokenService.getProfileId() === this.profileId();
   }
   
   loadPosts() {

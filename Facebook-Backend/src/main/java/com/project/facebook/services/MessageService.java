@@ -30,6 +30,9 @@ public class MessageService implements IMessageService {
                 .conversation(conversation)
                 .content(messageDTO.getContent())
                 .build();
+        // updated_at của conversation sẽ được cập nhật khi có tin nhắn mới
+        conversation.setUpdatedAt(message.getCreatedAt());
+        conversationRepository.save(conversation);
         messageRepository.save(message);
     }
 

@@ -17,4 +17,5 @@ public interface IProfileService {
     ProfileHeaderResponse getProfileHeaderByPathNameAndMyProfileId(String pathname, Long myProfileId);
     ProfileFriendResponse getProfileFriendsByPathNameAndMyProfileId(String pathname, Long myProfileId);
     List<ProfileSearchedResponse> searchProfileByKeyword(String fullName);
+    String getAvatarByProfileId(Long id) throws DataNotFoundException;
 }

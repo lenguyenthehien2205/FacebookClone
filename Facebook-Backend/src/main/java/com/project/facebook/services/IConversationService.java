@@ -11,4 +11,5 @@ public interface IConversationService {
     List<ConversationResponse> getConversationsByProfileId(Long profileId) throws Exception;
     ConversationResponse getConversationByUsers(Long profileId1, Long profileId2) throws Exception;
     Conversation getConversationById(Long conversationId) throws Exception;
+    Long getConversationIdByUsers(Long profileId1, Long profileId2) throws Exception;
 }

@@ -35,7 +35,7 @@ export class ChatFrameComponent implements OnInit, OnDestroy {
       const newConversationId = Number(params['conversationId']);
       if (newConversationId !== this.conversationId()) {
         this.conversationId.set(newConversationId); // Cập nhật conversationId
-        this.conversationService.setSelectedProfileId(this.conversationId()); // Cập nhật profileId
+        console.log('Conversation ID changed: ', newConversationId);
         this.getMessages(); // Tải lại tin nhắn
       }
     });

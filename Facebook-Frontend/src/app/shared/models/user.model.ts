@@ -18,4 +18,5 @@ export interface UserTag {
   display_format: string;
   avatar: string;
   is_online: boolean;
+  conversation_id: number;
 }
