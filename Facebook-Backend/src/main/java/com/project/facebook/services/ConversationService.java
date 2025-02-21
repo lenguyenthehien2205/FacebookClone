@@ -87,6 +87,9 @@ public class ConversationService implements IConversationService{
 
     @Override
     public Long getConversationIdByUsers(Long profileId1, Long profileId2) throws Exception {
+        if(profileId1.equals(profileId2)){
+            return 0L;
+        }
         return conversationRepository.findConversationByUsers(profileId1, profileId2)
                 .orElseThrow(() -> new DataNotFoundException("Conversation not found"))
                 .getId();

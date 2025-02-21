@@ -1,6 +1,7 @@
 package com.project.facebook.controllers;
 
 
+import com.project.facebook.components.LocalizationUtils;
 import com.project.facebook.models.Profile;
 import com.project.facebook.models.User;
 import com.project.facebook.responses.ResponseObject;
@@ -9,6 +10,7 @@ import com.project.facebook.services.ConversationService;
 import com.project.facebook.services.IConversationService;
 import com.project.facebook.services.IProfileService;
 import com.project.facebook.services.ProfileService;
+import com.project.facebook.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,7 @@ import java.util.List;
 public class ConversationController {
     private final IConversationService conversationService;
     private final IProfileService profileService;
+    private final LocalizationUtils localizationUtils;
     @GetMapping("/{profile_id}") // Lấy tất cả các cuộc trò chuyện của một người dùng
     public ResponseEntity<ResponseObject> getConversationsByProfileId(@PathVariable("profile_id") Long profileId, Authentication authentication){
         try{
@@ -39,7 +42,7 @@ public class ConversationController {
             }
             List<ConversationResponse> conversationResponses = conversationService.getConversationsByProfileId(profileId);
             return ResponseEntity.ok(ResponseObject.builder()
-                            .message("Conversations retrieved successfully")
+                            .message(localizationUtils.getLocalizedMessage(MessageKeys.GET_CONVERSATIONS_SUCCESSFULLY))
                             .data(conversationResponses)
                             .status(HttpStatus.OK)
                     .build());
@@ -66,7 +69,7 @@ public class ConversationController {
             }
             ConversationResponse conversationResponse = conversationService.getConversationByUsers(profileId1, profileId2);
             return ResponseEntity.ok(ResponseObject.builder()
-                            .message("Conversation retrieved successfully")
+                            .message(localizationUtils.getLocalizedMessage(MessageKeys.GET_CONVERSATIONS_BETWEEN_2_USERS_SUCCESSFULLY))
                             .data(conversationResponse)
                             .status(HttpStatus.OK)
                     .build());

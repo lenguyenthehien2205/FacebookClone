@@ -27,4 +27,8 @@ public class MessageKeys {
     public static final String DELETE_POST_SUCCESSFULLY = "post.delete_post.successfully";
     public static final String GET_FRIEND_POSTS_SUCCESSFULLY = "post.get_friend_posts.successfully";
 
+    //conversations
+    public static final String GET_CONVERSATIONS_SUCCESSFULLY = "conversation.get_conversations.successfully";
+    public static final String GET_CONVERSATIONS_BETWEEN_2_USERS_SUCCESSFULLY = "conversation.get_conversations_between_users.successfully";
+
 }
